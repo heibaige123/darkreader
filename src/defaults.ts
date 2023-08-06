@@ -1,11 +1,6 @@
 import type { ParsedColorSchemeConfig } from './utils/colorscheme-parser';
 import type { Theme, UserSettings } from './definitions';
 import { ThemeEngine } from './generators/theme-engines';
-import {
-    isMacOS,
-    isWindows,
-    isCSSColorSchemePropSupported,
-} from './utils/platform';
 import { AutomationMode } from './utils/automation';
 
 export const DEFAULT_COLORS = {
@@ -26,9 +21,9 @@ export const DEFAULT_THEME: Theme = {
     grayscale: 0,
     sepia: 0,
     useFont: false,
-    fontFamily: isMacOS
+    fontFamily: false
         ? 'Helvetica Neue'
-        : isWindows
+        : false
             ? 'Segoe UI'
             : 'Open Sans',
     textStroke: 0,
@@ -38,9 +33,9 @@ export const DEFAULT_THEME: Theme = {
     darkSchemeTextColor: DEFAULT_COLORS.darkScheme.text,
     lightSchemeBackgroundColor: DEFAULT_COLORS.lightScheme.background,
     lightSchemeTextColor: DEFAULT_COLORS.lightScheme.text,
-    scrollbarColor: isMacOS ? '' : 'auto',
+    scrollbarColor: false ? '' : 'auto',
     selectionColor: 'auto',
-    styleSystemControls: !isCSSColorSchemePropSupported,
+    styleSystemControls: !true,
     lightColorScheme: 'Default',
     darkColorScheme: 'Default',
     immediateModify: false,

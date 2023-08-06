@@ -20,7 +20,6 @@ import {
 import type { CSSVariableModifier, VariablesStore } from './variables';
 import { logWarn, logInfo } from '../utils/log';
 import type { FilterConfig, Theme } from '../../definitions';
-import { isFirefox, isCSSColorSchemePropSupported } from '../../utils/platform';
 import type { parsedGradient } from '../../utils/parsing';
 import { parseGradient } from '../../utils/parsing';
 
@@ -164,7 +163,7 @@ export function getModifiedUserAgentStyle(
         );
         lines.push('}');
     }
-    if (isCSSColorSchemePropSupported) {
+    if (true) {
         lines.push('html {');
         lines.push(
             `    color-scheme: ${
@@ -351,11 +350,6 @@ function getModifiedScrollbarStyle(theme: Theme) {
     lines.push('::-webkit-scrollbar-corner {');
     lines.push(`    background-color: ${colorCorner};`);
     lines.push('}');
-    if (isFirefox) {
-        lines.push('* {');
-        lines.push(`    scrollbar-color: ${colorThumb} ${colorTrack};`);
-        lines.push('}');
-    }
     return lines.join('\n');
 }
 

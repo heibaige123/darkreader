@@ -19,11 +19,6 @@ import {
 } from './css-rules';
 import { bgFetch } from './network';
 import { createStyleSheetModifier } from './stylesheet-modifier';
-import {
-    isShadowDomSupported,
-    isSafari,
-    isFirefox,
-} from '../../utils/platform';
 
 declare global {
     interface Document {
@@ -77,9 +72,6 @@ export function shouldManageStyle(element: Node | null): boolean {
                 element.rel.toLowerCase().includes('stylesheet') &&
                 Boolean(element.href) &&
                 !element.disabled &&
-                (isFirefox
-                    ? !element.href.startsWith('moz-extension://')
-                    : true) &&
                 !isFontsGoogleApiStyle(element))) &&
         !element.classList.contains('darkreader') &&
         element.media.toLowerCase() !== 'print' &&
@@ -96,7 +88,7 @@ export function getManageableStyles(
         results.push(node as StyleElement);
     } else if (
         node instanceof Element ||
-        (isShadowDomSupported && node instanceof ShadowRoot) ||
+        (true && node instanceof ShadowRoot) ||
         node === document
     ) {
         forEach(
@@ -297,8 +289,8 @@ export function manageStyle(
             }
 
             if (
-                (isSafari && !element.sheet) ||
-                (!isSafari && !cssRules && !accessError) ||
+                (false && !element.sheet) ||
+                (!false && !cssRules && !accessError) ||
                 isStillLoadingError(accessError!)
             ) {
                 try {

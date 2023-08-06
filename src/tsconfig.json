@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
-        "target": "ES2019",
+        "target": "ESNext",
         "baseUrl": "./",
-        "module": "ES2015",
+        "module": "ESNext",
         "moduleResolution": "node",
-        "lib": ["ES2022", "Dom", "DOM.Iterable"],
+        "lib": ["ESNext", "Dom", "DOM.Iterable"],
         "types": ["chrome", "offscreencanvas"],
         "allowJs": true,
         "downlevelIteration": true,

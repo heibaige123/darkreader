@@ -1,5 +1,4 @@
 import { forEach } from '../../utils/array';
-import { isSafari } from '../../utils/platform';
 import { parseURL, getAbsoluteURL } from '../../utils/url';
 import { logInfo, logWarn } from '../utils/log';
 
@@ -72,13 +71,6 @@ const shorthandVarDependantProperties = [
     'outline-color',
 ];
 
-const shorthandVarDepPropRegexps = isSafari
-    ? shorthandVarDependantProperties.map((prop) => {
-          const regexp = new RegExp(`${prop}:\\s*(.*?)\\s*;`);
-          return [prop, regexp] as [string, RegExp];
-      })
-    : null;
-
 export function iterateCSSDeclarations(
     style: CSSStyleDeclaration,
     iterate: (property: string, value: string) => void,
@@ -96,23 +88,12 @@ export function iterateCSSDeclarations(
     // Against the bigger sites that saves around ~150ms+ it's a good win.
     const cssText = style.cssText;
     if (cssText.includes('var(')) {
-        if (isSafari) {
-            // Safari doesn't show shorthand properties' values
-            shorthandVarDepPropRegexps!.forEach(([prop, regexp]) => {
-                const match = cssText.match(regexp);
-                if (match && match[1]) {
-                    const val = match[1].trim();
-                    iterate(prop, val);
-                }
-            });
-        } else {
-            shorthandVarDependantProperties.forEach((prop) => {
-                const val = style.getPropertyValue(prop);
-                if (val && val.includes('var(')) {
-                    iterate(prop, val);
-                }
-            });
-        }
+        shorthandVarDependantProperties.forEach((prop) => {
+            const val = style.getPropertyValue(prop);
+            if (val && val.includes('var(')) {
+                iterate(prop, val);
+            }
+        });
     }
 }
 

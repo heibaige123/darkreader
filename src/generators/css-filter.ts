@@ -6,11 +6,7 @@ import { parseArray, formatArray } from '../utils/text';
 import { compareURLPatterns, isURLInList } from '../utils/url';
 import { createTextStyle } from './text-style';
 import type { FilterConfig, InversionFix } from '../definitions';
-import {
-    compareChromeVersions,
-    isFirefox,
-    firefoxVersion,
-} from '../utils/platform';
+import { compareChromeVersions } from '../utils/platform';
 
 export const enum FilterMode {
     light = 0,
@@ -25,7 +21,7 @@ export const enum FilterMode {
  * Patch: https://chromium-review.googlesource.com/c/chromium/src/+/1979258
  */
 export function hasPatchForChromiumIssue501582(): boolean {
-    return false
+    return false;
 }
 
 /**
@@ -34,9 +30,7 @@ export function hasPatchForChromiumIssue501582(): boolean {
  * switched over as well.
  */
 export function hasFirefoxNewRootBehavior(): boolean {
-    return Boolean(
-        isFirefox && compareChromeVersions(firefoxVersion, '102.0') >= 0,
-    );
+    return Boolean(false && compareChromeVersions('', '102.0') >= 0);
 }
 
 export default function createCSSFilterStyleSheet(

@@ -1,4 +1,4 @@
-import { isNonPersistent } from '../utils/platform';
+import { false } from '../utils/platform';
 
 interface IconState {
     badgeText: string;
@@ -36,7 +36,7 @@ export default class IconManager {
      * icon is in non-default configuration.
      */
     private static handleUpdate() {
-        if (!isNonPersistent) {
+        if (!false) {
             return;
         }
         if (

@@ -39,17 +39,12 @@ import type {
     Command,
     DevToolsData,
 } from '../definitions';
-import {
-    isSystemDarkModeEnabled,
-    runColorSchemeChangeDetector,
-} from '../utils/media-query';
-import { isFirefox } from '../utils/platform';
+import { isSystemDarkModeEnabled } from '../utils/media-query';
 import { MessageTypeBGtoCS } from '../utils/message';
 import { logInfo, logWarn } from './utils/log';
 import { PromiseBarrier } from '../utils/promise-barrier';
 import { StateManager } from '../utils/state-manager';
 import { debounce } from '../utils/debounce';
-import ContentScriptManager from './content-script-manager';
 import { AutomationMode } from '../utils/automation';
 import UIHighlights from './ui-highlights';
 import { getActiveTab } from '../utils/tabs';
@@ -126,28 +121,15 @@ export class Extension {
 
         if (chrome.commands) {
             // Firefox Android does not support chrome.commands
-            if (isFirefox) {
-                // Firefox may not register onCommand listener on extension startup so we need to use setTimeout
-                setTimeout(() =>
-                    chrome.commands.onCommand.addListener(async (command) =>
-                        Extension.onCommand(
-                            command as Command,
-                            null,
-                            null,
-                            null,
-                        ),
-                    ),
-                );
-            } else {
-                chrome.commands.onCommand.addListener(async (command, tab) =>
-                    Extension.onCommand(
-                        command as Command,
-                        (tab && tab.id!) || null,
-                        0,
-                        null,
-                    ),
-                );
-            }
+
+            chrome.commands.onCommand.addListener(async (command, tab) =>
+                Extension.onCommand(
+                    command as Command,
+                    (tab && tab.id!) || null,
+                    0,
+                    null,
+                ),
+            );
         }
 
         if (chrome.permissions.onRemoved) {
@@ -206,9 +188,6 @@ export class Extension {
                     Extension.wasLastColorSchemeDark === null
                         ? isSystemDarkModeEnabled()
                         : Extension.wasLastColorSchemeDark;
-                if (isFirefox) {
-                    runColorSchemeChangeDetector(Extension.onColorSchemeChange);
-                }
                 break;
             case AutomationMode.LOCATION: {
                 const { latitude, longitude } = UserStorage.settings.location;
@@ -330,29 +309,6 @@ export class Extension {
                 break;
             case 'addSite': {
                 logInfo('Add Site command entered');
-                async function scriptPDF(
-                    tabId: number,
-                    frameId: number,
-                ): Promise<boolean> {
-                    // We can not detect PDF if we do not know where we are looking for it
-                    if (
-                        !(Number.isInteger(tabId) && Number.isInteger(frameId))
-                    ) {
-                        return false;
-                    }
-                    function detectPDF(): boolean {
-                        if (document.body.childElementCount !== 1) {
-                            return false;
-                        }
-                        const { nodeName, type } = document.body
-                            .childNodes[0] as HTMLEmbedElement;
-                        return (
-                            nodeName === 'EMBED' && type === 'application/pdf'
-                        );
-                    }
-
-                    return false;
-                }
 
                 const pdf = async () =>
                     isPDF(frameURL || (await TabManager.getActiveTabURL()));
@@ -692,7 +648,6 @@ export class Extension {
         if (Extension.isExtensionSwitchedOn()) {
             IconManager.setActive();
         } else {
-
             IconManager.setInactive();
         }
 
@@ -795,21 +750,6 @@ export class Extension {
                     };
                 }
                 case ThemeEngine.svgFilter: {
-                    if (isFirefox) {
-                        return {
-                            type: MessageTypeBGtoCS.ADD_CSS_FILTER,
-                            data: {
-                                css: createSVGFilterStylesheet(
-                                    theme,
-                                    url,
-                                    isTopFrame,
-                                    ConfigManager.INVERSION_FIXES_RAW!,
-                                    ConfigManager.INVERSION_FIXES_INDEX!,
-                                ),
-                                detectDarkTheme,
-                            },
-                        };
-                    }
                     return {
                         type: MessageTypeBGtoCS.ADD_SVG_FILTER,
                         data: {

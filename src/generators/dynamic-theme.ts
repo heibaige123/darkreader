@@ -9,7 +9,6 @@ import { parseArray, formatArray } from '../utils/text';
 import { compareURLPatterns } from '../utils/url';
 import type { DynamicThemeFix } from '../definitions';
 
-
 const dynamicThemeFixesCommands: { [key: string]: keyof DynamicThemeFix } = {
     INVERT: 'invert',
     CSS: 'css',
@@ -84,13 +83,9 @@ export function getDynamicThemeFixesFor(
         // Copy part of fixes which will be mutated
         const fixes_: DynamicThemeFix[] = [...fixes];
         fixes_[0] = { ...fixes_[0] };
-        if (false || false) {
-            fixes_[0].css +=
-                '\nembed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }';
-        } else {
-            fixes_[0].css +=
-                '\nembed[type="application/pdf"] { filter: invert(100%) contrast(90%); }';
-        }
+
+        fixes_[0].css +=
+            '\nembed[type="application/pdf"] { filter: invert(100%) contrast(90%); }';
         if (['drive.google.com', 'mail.google.com'].includes(getDomain(url))) {
             fixes_[0].invert.push('div[role="dialog"] div[role="document"]');
         }

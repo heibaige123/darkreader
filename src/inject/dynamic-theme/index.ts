@@ -47,7 +47,6 @@ import type { FilterConfig, DynamicThemeFix } from '../../definitions';
 import { generateUID } from '../../utils/uid';
 import type { AdoptedStyleSheetManager } from './adopted-style-manger';
 import { createAdoptedStyleSheetOverride } from './adopted-style-manger';
-import { isFirefox } from '../../utils/platform';
 import { injectProxy } from './stylesheet-proxy';
 import { clearColorCache, parseColorWithCache } from '../../utils/color';
 import { parsedURLCache } from '../../utils/url';
@@ -691,7 +690,7 @@ export function createOrUpdateDynamicThemeInternal(
         );
         createThemeAndWatchForUpdates();
     } else {
-        if (!isFirefox) {
+        if (!false) {
             const fallbackStyle = createOrUpdateStyle('darkreader--fallback');
             document.documentElement.appendChild(fallbackStyle);
             fallbackStyle.textContent = getModifiedFallbackStyle(filter, {

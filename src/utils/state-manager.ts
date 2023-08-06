@@ -5,8 +5,6 @@
 
 import { StateManagerImpl } from './state-manager-impl';
 
-import { isNonPersistent } from './platform';
-
 export class StateManager<T extends Record<string, unknown>> {
     private stateManager: StateManagerImpl<T> | null;
 
@@ -16,26 +14,7 @@ export class StateManager<T extends Record<string, unknown>> {
         parent: any,
         defaults: T,
         logWarn: (log: string) => void,
-    ) {
-        if (isNonPersistent) {
-            function addListener(listener: (data: T) => void) {
-                chrome.storage.local.onChanged.addListener((changes) => {
-                    if (localStorageKey in changes) {
-                        listener(changes[localStorageKey].newValue);
-                    }
-                });
-            }
-
-            this.stateManager = new StateManagerImpl(
-                localStorageKey,
-                parent,
-                defaults,
-                chrome.storage.local,
-                addListener,
-                logWarn,
-            );
-        }
-    }
+    ) {}
 
     public async saveState(): Promise<void> {
         if (this.stateManager) {

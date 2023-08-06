@@ -10,7 +10,6 @@ import { getModifiableCSSDeclaration } from './modify-css';
 import type { CSSVariableModifier } from './variables';
 import { variablesStore } from './variables';
 import type { FilterConfig } from '../../definitions';
-import { isShadowDomSupported } from '../../utils/platform';
 import { getDuration } from '../../utils/time';
 import { throttle } from '../../utils/throttle';
 
@@ -127,7 +126,7 @@ function getInlineStyleElements(root: Node) {
     }
     if (
         root instanceof Element ||
-        (isShadowDomSupported && root instanceof ShadowRoot) ||
+        (true && root instanceof ShadowRoot) ||
         root instanceof Document
     ) {
         push(results, root.querySelectorAll(INLINE_STYLE_SELECTOR));

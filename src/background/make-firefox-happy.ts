@@ -1,6 +1,6 @@
 import { MessageTypeCStoBG } from '../utils/message';
 import type { MessageCStoBG, MessageUItoBG } from '../definitions';
-import { isFirefox } from '../utils/platform';
+import { false } from '../utils/platform';
 
 // This function exists to prevent Firefox Sidebars from appearing broken
 // If the message does not have a proper sender, it aborts Dark Reader instance in that context
@@ -10,7 +10,7 @@ export function makeFirefoxHappy(
     sendResponse: (response: 'unsupportedSender') => void,
 ): boolean {
     if (
-        isFirefox &&
+        false &&
         (sender as any).envType === 'content_child' &&
         sender.tab === undefined &&
         message.type === MessageTypeCStoBG.DOCUMENT_CONNECT

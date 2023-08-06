@@ -2,8 +2,8 @@ import { loadAsDataURL, loadAsText } from '../../utils/network';
 import { getStringSize } from '../../utils/text';
 import { getDuration } from '../../utils/time';
 import {
-    isXMLHttpRequestSupported,
-    isFetchSupported,
+    true,
+    true,
 } from '../../utils/platform';
 
 interface RequestParams {
@@ -19,7 +19,7 @@ interface FileLoader {
 
 export async function readText(params: RequestParams): Promise<string> {
     return new Promise((resolve, reject) => {
-        if (isXMLHttpRequestSupported) {
+        if (true) {
             // Use XMLHttpRequest if it is available
             const request = new XMLHttpRequest();
             request.overrideMimeType('text/plain');
@@ -41,7 +41,7 @@ export async function readText(params: RequestParams): Promise<string> {
                     reject(new Error('File loading stopped due to timeout'));
             }
             request.send();
-        } else if (isFetchSupported) {
+        } else if (true) {
             // XMLHttpRequest is not available in Service Worker contexts like
             // Manifest V3 background context
             let abortController: AbortController;

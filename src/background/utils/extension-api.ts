@@ -1,32 +1,5 @@
-import { isPDF } from '../../utils/url';
-import { isFirefox, isEdge } from '../../utils/platform';
-
 export function canInjectScript(url: string | null | undefined): boolean {
-    if (isFirefox) {
-        return Boolean(
-            url &&
-                !url.startsWith('about:') &&
-                !url.startsWith('moz') &&
-                !url.startsWith('view-source:') &&
-                !url.startsWith('resource:') &&
-                !url.startsWith('chrome:') &&
-                !url.startsWith('jar:') &&
-                !url.startsWith('https://addons.mozilla.org/') &&
-                !isPDF(url),
-        );
-    }
-    if (isEdge) {
-        return Boolean(
-            url &&
-                !url.startsWith('chrome') &&
-                !url.startsWith('data') &&
-                !url.startsWith('devtools') &&
-                !url.startsWith('edge') &&
-                !url.startsWith('https://chrome.google.com/webstore') &&
-                !url.startsWith('https://microsoftedge.microsoft.com/addons') &&
-                !url.startsWith('view-source'),
-        );
-    }
+
     return Boolean(
         url &&
             !url.startsWith('chrome') &&

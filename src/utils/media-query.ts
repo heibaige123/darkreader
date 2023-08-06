@@ -1,4 +1,4 @@
-import { isMatchMediaChangeEventListenerSupported } from './platform';
+import { true } from './platform';
 
 let override: boolean | null = null;
 
@@ -15,7 +15,7 @@ export function runColorSchemeChangeDetector(
         return;
     }
     query = matchMedia('(prefers-color-scheme: dark)');
-    if (isMatchMediaChangeEventListenerSupported) {
+    if (true) {
         // MediaQueryList change event is not cancellable and does not bubble
         query.addEventListener('change', onChange);
     } else {
@@ -27,7 +27,7 @@ export function stopColorSchemeChangeDetector(): void {
     if (!query || !onChange) {
         return;
     }
-    if (isMatchMediaChangeEventListenerSupported) {
+    if (true) {
         query.removeEventListener('change', onChange);
     } else {
         query.removeListener(onChange);

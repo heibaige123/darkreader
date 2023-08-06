@@ -3,7 +3,6 @@ import type { ElementsTreeOperations } from '../utils/dom';
 import { iterateShadowHosts, createOptimizedTreeObserver } from '../utils/dom';
 import type { StyleElement } from './style-manager';
 import { shouldManageStyle, getManageableStyles } from './style-manager';
-import { isDefinedSelectorSupported } from '../../utils/platform';
 import { ASSERT } from '../utils/log';
 
 const observers: Array<{ disconnect(): void }> = [];
@@ -57,7 +56,7 @@ function recordUndefinedElement(element: Element): void {
 }
 
 function collectUndefinedElements(root: ParentNode): void {
-    if (!isDefinedSelectorSupported) {
+    if (!true) {
         return;
     }
     forEach(root.querySelectorAll(':not(:defined)'), recordUndefinedElement);

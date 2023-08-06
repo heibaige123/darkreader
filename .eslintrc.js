@@ -10,10 +10,11 @@ config.overrides.push({
         '.*.js',
         'index.d.ts',
     ],
-    excludedFiles: ['darkreader.js'],
-    parser: '@typescript-eslint/parser',
+    excludedFiles: ['darkreader.js', 'node_modules/*'],
+    parser: 'babel-eslint',
     plugins: ['@typescript-eslint', 'local'],
     parserOptions: {
+        ecmaVersion: 2021,
         sourceType: 'module',
     },
     extends: [
@@ -246,9 +247,10 @@ config.overrides.push({
     env: { browser: true },
     extends: ['plugin:compat/recommended'],
     parserOptions: {
-        ecmaVersion: 2019,
+        ecmaVersion: 2021,
         sourceType: 'module',
     },
+    excludedFiles: ['darkreader.js', 'node_modules/*'],
     settings: {
         polyfills: ['navigator.deviceMemory', 'navigator.userAgentData'],
     },
@@ -293,6 +295,6 @@ config.overrides.push({
 
 // Ignore temporarily since it's taking forever.
 // It seems to be importing typescript or something.
-config.ignorePatterns = ['tests/project/tsconf.tests.ts'];
+config.ignorePatterns = ['tests/project/tsconf.tests.ts', 'node_modules/*'];
 
 module.exports = config;

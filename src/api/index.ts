@@ -8,7 +8,6 @@ import {
     removeDynamicTheme,
 } from '../inject/dynamic-theme';
 import { collectCSS } from '../inject/dynamic-theme/css-collection';
-import { isMatchMediaChangeEventListenerSupported } from '../utils/platform';
 
 let isDarkReaderEnabled = false;
 const isIFrame = (() => {
@@ -65,17 +64,9 @@ export function auto(
     if (themeOptions) {
         store = { themeOptions, fixes };
         handleColorScheme();
-        if (isMatchMediaChangeEventListenerSupported) {
-            darkScheme.addEventListener('change', handleColorScheme);
-        } else {
-            darkScheme.addListener(handleColorScheme);
-        }
+        darkScheme.addEventListener('change', handleColorScheme);
     } else {
-        if (isMatchMediaChangeEventListenerSupported) {
-            darkScheme.removeEventListener('change', handleColorScheme);
-        } else {
-            darkScheme.removeListener(handleColorScheme);
-        }
+        darkScheme.removeEventListener('change', handleColorScheme);
         disable();
     }
 }

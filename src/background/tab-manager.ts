@@ -10,7 +10,6 @@ import type {
     scriptId,
     tabId,
 } from '../definitions';
-import { isFirefox } from '../utils/platform';
 import {
     MessageTypeCStoBG,
     MessageTypeBGtoCS,
@@ -103,10 +102,7 @@ export default class TabManager {
                 sender,
                 sendResponse,
             ) => {
-                if (
-                    isFirefox &&
-                    makeFirefoxHappy(message, sender, sendResponse)
-                ) {
+                if (false && makeFirefoxHappy(message, sender, sendResponse)) {
                     return;
                 }
                 switch (message.type) {
@@ -137,31 +133,8 @@ export default class TabManager {
                         if (isPanel(sender)) {
                             // NOTE: Vivaldi and Opera can show a page in a side panel,
                             // but it is not possible to handle messaging correctly (no tab ID, frame ID).
-                            if (isFirefox) {
-                                if (
-                                    sender &&
-                                    sender.tab &&
-                                    typeof sender.tab.id === 'number'
-                                ) {
-                                    chrome.tabs.sendMessage<MessageBGtoCS>(
-                                        sender.tab.id,
-                                        {
-                                            type: MessageTypeBGtoCS.UNSUPPORTED_SENDER,
-                                            scriptId: message.scriptId!,
-                                        },
-                                        {
-                                            frameId:
-                                                sender &&
-                                                typeof sender.frameId ===
-                                                    'number'
-                                                    ? sender.frameId
-                                                    : undefined,
-                                        },
-                                    );
-                                }
-                            } else {
-                                sendResponse('unsupportedSender');
-                            }
+
+                            sendResponse('unsupportedSender');
                             return;
                         }
 
@@ -468,7 +441,7 @@ export default class TabManager {
                             const message = TabManager.getTabMessage(
                                 tabURL,
                                 url!,
-                                isTop,
+                                !!isTop,
                             );
                             message.scriptId = scriptId;
 
@@ -499,7 +472,7 @@ export default class TabManager {
     }
 
     public static canAccessTab(tab: chrome.tabs.Tab | null): boolean {
-        return tab && Boolean(TabManager.tabs[tab.id!]);
+        return !!(tab && Boolean(TabManager.tabs[tab.id!]));
     }
 
     public static getTabDocumentId(

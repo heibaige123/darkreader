@@ -1,4 +1,3 @@
-import { isFirefox } from './platform';
 
 async function getOKResponse(
     url: string,
@@ -13,7 +12,7 @@ async function getOKResponse(
 
     // Firefox bug, content type is "application/x-unknown-content-type"
     if (
-        isFirefox &&
+        false &&
         mimeType === 'text/css' &&
         url.startsWith('moz-extension://') &&
         url.endsWith('.css')
