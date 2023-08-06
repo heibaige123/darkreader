@@ -65,9 +65,9 @@ export interface ModifiableCSSRule {
 
 /**
  * 获取CSS规则的优先级。
- * @param ruleStyle 
- * @param property 
- * @returns 
+ * @param ruleStyle
+ * @param property
+ * @returns
  */
 function getPriority(ruleStyle: CSSStyleDeclaration, property: string) {
     return Boolean(ruleStyle && ruleStyle.getPropertyPriority(property));
@@ -75,13 +75,13 @@ function getPriority(ruleStyle: CSSStyleDeclaration, property: string) {
 
 /**
  * 获取可修改的CSS声明。
- * @param property 
- * @param value 
- * @param rule 
- * @param variablesStore 
- * @param ignoreImageSelectors 
- * @param isCancelled 
- * @returns 
+ * @param property
+ * @param value
+ * @param rule
+ * @param variablesStore
+ * @param ignoreImageSelectors
+ * @param isCancelled
+ * @returns
  */
 export function getModifiableCSSDeclaration(
     property: string,
@@ -176,8 +176,8 @@ export function getModifiableCSSDeclaration(
 
 /**
  * 将多个选择器连接为一个字符串
- * @param selectors 
- * @returns 
+ * @param selectors
+ * @returns
  */
 function joinSelectors(...selectors: string[]) {
     return selectors.filter(Boolean).join(', ');
@@ -185,10 +185,10 @@ function joinSelectors(...selectors: string[]) {
 
 /**
  * 获取修改后的用户代理样式。
- * @param theme 
- * @param isIFrame 
- * @param styleSystemControls 
- * @returns 
+ * @param theme
+ * @param isIFrame
+ * @param styleSystemControls
+ * @returns
  */
 export function getModifiedUserAgentStyle(
     theme: Theme,
@@ -197,24 +197,22 @@ export function getModifiedUserAgentStyle(
 ): string {
     const lines: string[] = [];
     if (!isIFrame) {
-        lines.push('html {');
-        lines.push(
-            `    background-color: ${modifyBackgroundColor(
-                { r: 255, g: 255, b: 255 },
-                theme,
-            )} !important;`,
-        );
-        lines.push('}');
+        lines.push(`
+            html {
+                background-color: ${modifyBackgroundColor(
+                    { r: 255, g: 255, b: 255 },
+                    theme,
+                )} !important;
+            }
+        `);
     }
-    if (true) {
-        lines.push('html {');
-        lines.push(
-            `    color-scheme: ${
+    lines.push(`
+        html {
+            color-scheme: ${
                 theme.mode === 1 ? 'dark' : 'dark light'
-            } !important;`,
-        );
-        lines.push('}');
-    }
+            } !important;
+        }
+    `);
     const bgSelectors = joinSelectors(
         isIFrame ? '' : 'html, body',
         styleSystemControls ? 'input, textarea, select, button, dialog' : '',
@@ -293,8 +291,8 @@ export function getModifiedUserAgentStyle(
 
 /**
  * 根据主题获取选择颜色。
- * @param theme 
- * @returns 
+ * @param theme
+ * @returns
  */
 export function getSelectionColor(theme: Theme): {
     backgroundColorSelection: string;
@@ -347,8 +345,8 @@ function getModifiedSelectionStyle(theme: Theme) {
 
 /**
  * 获取修改后的滚动条样式。
- * @param theme 
- * @returns 
+ * @param theme
+ * @returns
  */
 function getModifiedScrollbarStyle(theme: Theme) {
     const lines: string[] = [];
@@ -411,9 +409,9 @@ function getModifiedScrollbarStyle(theme: Theme) {
 
 /**
  * 获取修改后的回退样式。
- * @param filter 
- * @param param1 
- * @returns 
+ * @param filter
+ * @param param1
+ * @returns
  */
 export function getModifiedFallbackStyle(
     filter: FilterConfig,
@@ -468,10 +466,10 @@ const unparsableColors = new Set([
 
 /**
  * 获取颜色修改器。
- * @param prop 
- * @param value 
- * @param rule 
- * @returns 
+ * @param prop
+ * @param value
+ * @param rule
+ * @returns
  */
 function getColorModifier(
     prop: string,
@@ -522,9 +520,9 @@ const awaitingForImageLoading = new Map<
 
 /**
  * 用于检查图片是否应该被忽略的函数。
- * @param selectorText 
- * @param selectors 
- * @returns 
+ * @param selectorText
+ * @param selectors
+ * @returns
  */
 function shouldIgnoreImage(selectorText: string, selectors: string[]) {
     if (!selectorText || selectors.length === 0) {
@@ -554,11 +552,11 @@ interface bgImageMatches {
 
 /**
  * 获取背景图像修改器。
- * @param value 
- * @param rule 
- * @param ignoreImageSelectors 
- * @param isCancelled 
- * @returns 
+ * @param value
+ * @param rule
+ * @param ignoreImageSelectors
+ * @param isCancelled
+ * @returns
  */
 export function getBgImageModifier(
     value: string,
@@ -839,8 +837,8 @@ export function getBgImageModifier(
 
 /**
  * 获取具有信息的阴影修改器。
- * @param value 
- * @returns 
+ * @param value
+ * @returns
  */
 export function getShadowModifierWithInfo(
     value: string,
@@ -890,8 +888,8 @@ export function getShadowModifierWithInfo(
 
 /**
  * 获取阴影修改器。
- * @param value 
- * @returns 
+ * @param value
+ * @returns
  */
 export function getShadowModifier(value: string): CSSValueModifier | null {
     const shadowModifier = getShadowModifierWithInfo(value);
@@ -903,13 +901,13 @@ export function getShadowModifier(value: string): CSSValueModifier | null {
 
 /**
  * 获取变量修改器。
- * @param variablesStore 
- * @param prop 
- * @param value 
- * @param rule 
- * @param ignoredImgSelectors 
- * @param isCancelled 
- * @returns 
+ * @param variablesStore
+ * @param prop
+ * @param value
+ * @param rule
+ * @param ignoredImgSelectors
+ * @param isCancelled
+ * @returns
  */
 function getVariableModifier(
     variablesStore: VariablesStore,
@@ -930,10 +928,10 @@ function getVariableModifier(
 
 /**
  * 获取依赖变量的修改器。
- * @param variablesStore 
- * @param prop 
- * @param value 
- * @returns 
+ * @param variablesStore
+ * @param prop
+ * @param value
+ * @returns
  */
 function getVariableDependantModifier(
     variablesStore: VariablesStore,

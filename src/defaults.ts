@@ -35,7 +35,7 @@ export const DEFAULT_THEME: Theme = {
     lightSchemeTextColor: DEFAULT_COLORS.lightScheme.text,
     scrollbarColor: false ? '' : 'auto',
     selectionColor: 'auto',
-    styleSystemControls: !true,
+    styleSystemControls: false,
     lightColorScheme: 'Default',
     darkColorScheme: 'Default',
     immediateModify: false,

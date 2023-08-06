@@ -117,6 +117,9 @@ export function watchForNodePosition<T extends Node>(
     let attempts = 0;
     let start: number | null = null;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    /**
+     * 节流函数，用于处理恢复过程。
+     */
     const restore = throttle(() => {
         if (timeoutId) {
             return;
@@ -197,6 +200,9 @@ export function watchForNodePosition<T extends Node>(
         observer.takeRecords();
         onRestore && onRestore();
     });
+    /**
+     * 用于监视 DOM 中的变化。
+     */
     const observer = new MutationObserver(() => {
         if (
             (mode === 'head' &&
@@ -207,11 +213,16 @@ export function watchForNodePosition<T extends Node>(
             restore();
         }
     });
+    /**
+     * 启动 MutationObserver 并开始监视节点位置。
+     */
     const run = () => {
         // TODO: remove type cast after dependency update
         observer.observe(parent!, { childList: true });
     };
-
+    /**
+     * 停止 MutationObserver 并取消恢复过程。
+     */
     const stop = () => {
         // TODO: remove type cast after dependency update
         clearTimeout(timeoutId!);
@@ -219,10 +230,17 @@ export function watchForNodePosition<T extends Node>(
         restore.cancel();
     };
 
+    /**
+     * 清除 MutationObserver 的记录。
+     */
     const skip = () => {
         observer.takeRecords();
     };
 
+    /**
+     * 更新父元素为新值，并使用新的父元素重新启动 MutationObserver。
+     * @param parentNode 
+     */
     const updateParent = (parentNode: (Node & ParentNode) | null) => {
         parent = parentNode;
         stop();
