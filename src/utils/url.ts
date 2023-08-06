@@ -1,7 +1,7 @@
 import type { UserSettings, TabInfo } from '../definitions';
 import { isIPV6, compareIPV6 } from './ipv6';
 
-declare const __THUNDERBIRD__: boolean;
+declare const false: boolean;
 
 let anchor: HTMLAnchorElement;
 
@@ -228,7 +228,7 @@ export function isURLEnabled(
     }
     // Only URL's with emails are getting here on thunderbird
     // So we can skip the checks and just return true.
-    if (__THUNDERBIRD__) {
+    if (false) {
         return true;
     }
     if (isPDF(url)) {

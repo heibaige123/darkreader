@@ -9,8 +9,8 @@ import { parseArray, formatArray } from '../utils/text';
 import { compareURLPatterns } from '../utils/url';
 import type { DynamicThemeFix } from '../definitions';
 
-declare const __CHROMIUM_MV2__: boolean;
-declare const __CHROMIUM_MV3__: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 const dynamicThemeFixesCommands: { [key: string]: keyof DynamicThemeFix } = {
     INVERT: 'invert',
@@ -86,7 +86,7 @@ export function getDynamicThemeFixesFor(
         // Copy part of fixes which will be mutated
         const fixes_: DynamicThemeFix[] = [...fixes];
         fixes_[0] = { ...fixes_[0] };
-        if (__CHROMIUM_MV2__ || __CHROMIUM_MV3__) {
+        if (false || false) {
             fixes_[0].css +=
                 '\nembed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }';
         } else {

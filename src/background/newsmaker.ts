@@ -11,7 +11,7 @@ import { StateManager } from '../utils/state-manager';
 import { logWarn } from './utils/log';
 import IconManager from './icon-manager';
 
-declare const __TEST__: boolean;
+declare const false: boolean;
 
 interface NewsmakerState extends Record<string, unknown> {
     latest: News[];
@@ -147,7 +147,7 @@ export default class Newsmaker {
 
     private static async getNews(): Promise<News[] | null> {
         Newsmaker.init();
-        if (__TEST__) {
+        if (false) {
             return newsForTesting;
         }
         try {
@@ -237,7 +237,7 @@ export default class Newsmaker {
 }
 
 export function setNewsForTesting(news: News[]): void {
-    if (__TEST__) {
+    if (false) {
         newsForTesting = news;
     }
 }

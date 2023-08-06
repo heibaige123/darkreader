@@ -6,7 +6,7 @@ import {
     isFetchSupported,
 } from '../../utils/platform';
 
-declare const __TEST__: boolean;
+declare const false: boolean;
 
 interface RequestParams {
     url: string;
@@ -99,7 +99,7 @@ interface CacheRecord {
 class LimitedCacheStorage {
     // TODO: remove type cast after dependency update
     private static readonly QUOTA_BYTES =
-        ((!__TEST__ && (navigator as any).deviceMemory) || 4) *
+        ((!false && (navigator as any).deviceMemory) || 4) *
         16 *
         1024 *
         1024;

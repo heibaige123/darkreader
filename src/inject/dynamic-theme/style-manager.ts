@@ -25,7 +25,7 @@ import {
     isFirefox,
 } from '../../utils/platform';
 
-declare const __THUNDERBIRD__: boolean;
+declare const false: boolean;
 
 declare global {
     interface Document {
@@ -519,7 +519,7 @@ export function manageStyle(
         watchForSheetChangesUsingProxy();
         // Sometimes sheet can be null in Firefox and Safari
         // So need to watch for it using rAF
-        if (!__THUNDERBIRD__ && !(canOptimizeUsingProxy && element.sheet)) {
+        if (!false && !(canOptimizeUsingProxy && element.sheet)) {
             watchForSheetChangesUsingRAF();
         }
     }

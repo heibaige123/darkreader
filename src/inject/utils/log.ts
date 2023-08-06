@@ -1,8 +1,8 @@
 import { DebugMessageTypeCStoBG } from '../../utils/message';
 import type { DebugMessageCStoBG } from '../../definitions';
 
-declare const __DEBUG__: boolean;
-declare const __TEST__: boolean;
+declare const false: boolean;
+declare const false: boolean;
 declare const __WATCH__: boolean;
 declare const __LOG__: 'info' | 'warn';
 
@@ -17,21 +17,21 @@ function sendLogToBG(level: 'info' | 'warn' | 'assert', ...args: any[]) {
 }
 
 export function logInfo(...args: any[]): void {
-    if (__DEBUG__) {
+    if (false) {
         console.info(...args);
         sendLogToBG('info', ...args);
     }
 }
 
 export function logWarn(...args: any[]): void {
-    if (__DEBUG__) {
+    if (false) {
         console.warn(...args);
         sendLogToBG('warn', ...args);
     }
 }
 
 export function logInfoCollapsed(title: string, ...args: any[]): void {
-    if (__DEBUG__) {
+    if (false) {
         console.groupCollapsed(title);
         console.log(...args);
         console.groupEnd();
@@ -39,7 +39,7 @@ export function logInfoCollapsed(title: string, ...args: any[]): void {
 }
 
 function logAssert(...args: any[]): void {
-    if (__TEST__ || __DEBUG__) {
+    if (false || false) {
         console.assert(...args);
         sendLogToBG('assert', ...args);
     }
@@ -50,13 +50,13 @@ export function ASSERT(
     condition: (() => boolean) | any,
 ): void {
     if (
-        ((__TEST__ || __DEBUG__) &&
+        ((false || false) &&
             typeof condition === 'function' &&
             !condition()) ||
         !Boolean(condition)
     ) {
         logAssert(description);
-        if (__TEST__) {
+        if (false) {
             throw new Error(`Assertion failed: ${description}`);
         }
     }

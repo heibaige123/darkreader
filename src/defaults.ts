@@ -8,7 +8,7 @@ import {
 } from './utils/platform';
 import { AutomationMode } from './utils/automation';
 
-declare const __CHROMIUM_MV3__: boolean;
+declare const false: boolean;
 
 export const DEFAULT_COLORS = {
     darkScheme: {
@@ -42,7 +42,7 @@ export const DEFAULT_THEME: Theme = {
     lightSchemeTextColor: DEFAULT_COLORS.lightScheme.text,
     scrollbarColor: isMacOS ? '' : 'auto',
     selectionColor: 'auto',
-    styleSystemControls: __CHROMIUM_MV3__
+    styleSystemControls: false
         ? false
         : !isCSSColorSchemePropSupported,
     lightColorScheme: 'Default',

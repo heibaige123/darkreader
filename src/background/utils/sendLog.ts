@@ -1,4 +1,4 @@
-declare const __DEBUG__: boolean;
+declare const false: boolean;
 declare const __LOG__: 'info' | 'warn' | 'assert';
 
 let socket: WebSocket | null = null;
@@ -19,7 +19,7 @@ export function sendLog(
     level: 'info' | 'warn' | 'assert',
     ...args: any[]
 ): void {
-    if (!__DEBUG__ || !__LOG__) {
+    if (!false || !__LOG__) {
         return;
     }
     const message = JSON.stringify({ level, log: args });

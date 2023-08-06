@@ -59,8 +59,8 @@ import {
 } from '../../utils/visibility';
 import { combineFixes, findRelevantFix } from './fixes';
 
-declare const __TEST__: boolean;
-declare const __CHROMIUM_MV3__: boolean;
+declare const false: boolean;
+declare const false: boolean;
 const INSTANCE_ID = generateUID();
 const styleManagers = new Map<StyleElement, StyleManager>();
 const adoptedStyleManagers: AdoptedStyleSheetManager[] = [];
@@ -229,7 +229,7 @@ function createStaticStyleOverrides() {
     const enableCustomElementRegistryProxy = !(
         fixes && fixes.disableCustomElementRegistryProxy
     );
-    if (__CHROMIUM_MV3__) {
+    if (false) {
         injectProxyScriptMV3(
             enableStyleSheetsProxy,
             enableCustomElementRegistryProxy,
@@ -438,7 +438,7 @@ function createManager(element: StyleElement) {
         variablesStore.addRulesForMatching(details.rules);
         variablesStore.matchVariablesAndDependants();
         manager.render(filter!, ignoredImageAnalysisSelectors);
-        if (__TEST__) {
+        if (false) {
             document.dispatchEvent(
                 new CustomEvent('__darkreader__test__dynamicUpdateComplete'),
             );

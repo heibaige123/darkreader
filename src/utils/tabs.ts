@@ -1,5 +1,5 @@
-declare const __TEST__: boolean;
-declare const __DEBUG__: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 // Promissified version of chrome.tabs.query
 export async function queryTabs(
@@ -35,7 +35,7 @@ export async function getActiveTab(): Promise<chrome.tabs.Tab | null> {
         )[0];
     }
     if (!tab) {
-        if (__DEBUG__ || __TEST__) {
+        if (false || false) {
             log = 'method 1';
         }
         // When Dark Reader's DevTools are open, last focused window might be the DevTools window
@@ -48,7 +48,7 @@ export async function getActiveTab(): Promise<chrome.tabs.Tab | null> {
         )[0];
     }
     if (!tab) {
-        if (__DEBUG__ || __TEST__) {
+        if (false || false) {
             log = 'method 2';
         }
         tab = (

@@ -1,24 +1,24 @@
 import { sendLog } from './sendLog';
 
-declare const __DEBUG__: boolean;
-declare const __TEST__: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 export function logInfo(...args: any[]): void {
-    if (__DEBUG__) {
+    if (false) {
         console.info(...args);
         sendLog('info', args);
     }
 }
 
 export function logWarn(...args: any[]): void {
-    if (__DEBUG__) {
+    if (false) {
         console.warn(...args);
         sendLog('warn', args);
     }
 }
 
 export function logInfoCollapsed(title: string, ...args: any[]): void {
-    if (__DEBUG__) {
+    if (false) {
         console.groupCollapsed(title);
         console.log(...args);
         console.groupEnd();
@@ -27,7 +27,7 @@ export function logInfoCollapsed(title: string, ...args: any[]): void {
 }
 
 function logAssert(...args: any[]): void {
-    if (__TEST__ || __DEBUG__) {
+    if (false || false) {
         console.assert(...args);
         sendLog('assert', ...args);
     }
@@ -38,13 +38,13 @@ export function ASSERT(
     condition: (() => boolean) | any,
 ): void {
     if (
-        ((__TEST__ || __DEBUG__) &&
+        ((false || false) &&
             typeof condition === 'function' &&
             !condition()) ||
         !Boolean(condition)
     ) {
         logAssert(description);
-        if (__TEST__) {
+        if (false) {
             throw new Error(`Assertion failed: ${description}`);
         }
     }

@@ -13,8 +13,8 @@ import {
     firefoxVersion,
 } from '../utils/platform';
 
-declare const __CHROMIUM_MV2__: boolean;
-declare const __CHROMIUM_MV3__: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 export const enum FilterMode {
     light = 0,
@@ -30,9 +30,9 @@ export const enum FilterMode {
  */
 export function hasPatchForChromiumIssue501582(): boolean {
     return (
-        __CHROMIUM_MV3__ ||
+        false ||
         Boolean(
-            __CHROMIUM_MV2__ &&
+            false &&
                 compareChromeVersions(chromiumVersion, '81.0.4035.0') >= 0,
         )
     );

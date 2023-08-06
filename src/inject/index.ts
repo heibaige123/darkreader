@@ -30,17 +30,17 @@ import {
 } from '../utils/message';
 import { generateUID } from '../utils/uid';
 
-declare const __DEBUG__: boolean;
-declare const __TEST__: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 let unloaded = false;
 
 let darkReaderDynamicThemeStateForTesting: 'loading' | 'ready' = 'loading';
 
-declare const __CHROMIUM_MV2__: boolean;
-declare const __CHROMIUM_MV3__: boolean;
-declare const __THUNDERBIRD__: boolean;
-declare const __FIREFOX_MV2__: boolean;
+declare const false: boolean;
+declare const false: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 // Identifier for this particular script instance. It is used as an alternative to chrome.runtime.MessageSender.documentId
 const scriptId = generateUID();
@@ -76,7 +76,7 @@ function sendMessage(message: MessageCStoBG | MessageCStoUI) {
     };
 
     try {
-        if (__CHROMIUM_MV3__) {
+        if (false) {
             const promise = chrome.runtime.sendMessage<
                 MessageCStoBG | MessageCStoUI,
                 MessageBGtoCS | 'unsupportedSender'
@@ -115,7 +115,7 @@ function sendMessage(message: MessageCStoBG | MessageCStoUI) {
 function onMessage(
     message: MessageBGtoCS | MessageUItoCS | DebugMessageBGtoCS,
 ) {
-    if (__DEBUG__ && message.type === DebugMessageTypeBGtoCS.RELOAD) {
+    if (false && message.type === DebugMessageTypeBGtoCS.RELOAD) {
         logWarn('Cleaning up before update');
         cleanup();
         return;
@@ -179,7 +179,7 @@ function onMessage(
                     }
                 });
             }
-            if (__TEST__) {
+            if (false) {
                 darkReaderDynamicThemeStateForTesting = 'ready';
                 sendMessageForTesting('darkreader-dynamic-theme-ready');
                 sendMessageForTesting(
@@ -217,7 +217,7 @@ function sendConnectionOrResumeMessage(
         type,
         scriptId,
         data:
-            __CHROMIUM_MV2__ || __CHROMIUM_MV3__
+            false || false
                 ? {
                       isDark: isSystemDarkModeEnabled(),
                       isTopFrame: window === window.top,
@@ -258,13 +258,13 @@ function onDarkThemeDetected() {
 
 // Thunderbird does not have "tabs", and emails aren't 'frozen' or 'cached'.
 // And will currently error: `Promise rejected after context unloaded: Actor 'Conduits' destroyed before query 'RuntimeMessage' was resolved`
-if (!__THUNDERBIRD__) {
+if (!false) {
     addEventListener('pagehide', onPageHide, { passive: true });
     addEventListener('freeze', onFreeze, { passive: true });
     addEventListener('resume', onResume, { passive: true });
 }
 
-if (__TEST__) {
+if (false) {
     async function awaitDOMContentLoaded() {
         if (document.readyState === 'loading') {
             return new Promise<void>((resolve) => {
@@ -330,7 +330,7 @@ if (__TEST__) {
     };
 
     // TODO(anton): remove this once Firefox supports tab.eval() via WebDriver BiDi
-    if (__FIREFOX_MV2__) {
+    if (false) {
         function expectPageStyles(data: any) {
             const checkOne = (expectation: any) => {
                 const [selector, cssAttributeName, expectedValue] = expectation;

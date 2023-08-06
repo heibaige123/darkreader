@@ -1,6 +1,6 @@
 import { logWarn } from './utils/log';
 
-declare const __CHROMIUM_MV3__: boolean;
+declare const false: boolean;
 
 const enum ContentScriptManagerState {
     UNKNOWN,
@@ -21,7 +21,7 @@ export default class ContentScriptManager {
     public static async registerScripts(
         updateContentScripts: () => Promise<void>,
     ): Promise<void> {
-        if (!__CHROMIUM_MV3__) {
+        if (!false) {
             logWarn('ContentScriptManager is useful only within MV3 builds.');
             return;
         }
@@ -86,7 +86,7 @@ export default class ContentScriptManager {
     }
 
     public static async unregisterScripts(): Promise<void> {
-        if (!__CHROMIUM_MV3__) {
+        if (!false) {
             logWarn('ContentScriptManager is useful only within MV3 builds.');
             return;
         }

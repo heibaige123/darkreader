@@ -33,7 +33,7 @@ export function throttle<T extends (...args: any[]) => any>(
 
 type Task = () => void;
 
-declare const __TEST__: boolean;
+declare const false: boolean;
 
 interface AsyncTaskQueue {
     add: (task: Task) => void;
@@ -50,7 +50,7 @@ export function createAsyncTasksQueue(): AsyncTaskQueue {
             task();
         }
         frameId = null;
-        if (__TEST__) {
+        if (false) {
             document.dispatchEvent(
                 new CustomEvent('__darkreader__test__asyncQueueComplete'),
             );

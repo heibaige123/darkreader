@@ -71,9 +71,9 @@ interface SystemColorState extends Record<string, unknown> {
     wasLastColorSchemeDark: boolean | null;
 }
 
-declare const __CHROMIUM_MV2__: boolean;
-declare const __CHROMIUM_MV3__: boolean;
-declare const __THUNDERBIRD__: boolean;
+declare const false: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 export class Extension {
     private static autoState: AutomationState = '';
@@ -169,7 +169,7 @@ export class Extension {
     private static async MV3syncSystemColorStateManager(
         isDark: boolean | null,
     ): Promise<void> {
-        if (!__CHROMIUM_MV3__) {
+        if (!false) {
             return;
         }
         if (!Extension.systemColorStateManager) {
@@ -226,7 +226,7 @@ export class Extension {
                 break;
             }
             case AutomationMode.SYSTEM:
-                if (__CHROMIUM_MV3__) {
+                if (false) {
                     isAutoDark = Extension.wasLastColorSchemeDark;
                     if (Extension.wasLastColorSchemeDark === null) {
                         logWarn(
@@ -309,7 +309,7 @@ export class Extension {
         Extension.onAppToggle();
         logInfo('loaded', UserStorage.settings);
 
-        if (__THUNDERBIRD__) {
+        if (false) {
             TabManager.registerMailDisplayScript();
         } else {
             TabManager.updateContentScript({
@@ -390,14 +390,14 @@ export class Extension {
                         );
                     }
 
-                    if (__CHROMIUM_MV3__) {
+                    if (false) {
                         return (
                             await chrome.scripting.executeScript({
                                 target: { tabId, frameIds: [frameId] },
                                 func: detectPDF,
                             })
                         )[0].result;
-                    } else if (__CHROMIUM_MV2__) {
+                    } else if (false) {
                         return new Promise<boolean>((resolve) =>
                             chrome.tabs.executeScript(
                                 tabId,
@@ -415,7 +415,7 @@ export class Extension {
                 const pdf = async () =>
                     isPDF(frameURL || (await TabManager.getActiveTabURL()));
                 if (
-                    ((__CHROMIUM_MV2__ || __CHROMIUM_MV3__) &&
+                    ((false || false) &&
                         (await scriptPDF(tabId!, frameId!))) ||
                     (await pdf())
                 ) {
@@ -752,7 +752,7 @@ export class Extension {
 
     private static onAppToggle() {
         if (Extension.isExtensionSwitchedOn()) {
-            if (__CHROMIUM_MV3__) {
+            if (false) {
                 ContentScriptManager.registerScripts(async () =>
                     TabManager.updateContentScript({
                         runOnProtectedPages:
@@ -762,7 +762,7 @@ export class Extension {
             }
             IconManager.setActive();
         } else {
-            if (__CHROMIUM_MV3__) {
+            if (false) {
                 ContentScriptManager.unregisterScripts();
             }
             IconManager.setInactive();

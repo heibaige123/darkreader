@@ -24,7 +24,7 @@ import { isFirefox, isCSSColorSchemePropSupported } from '../../utils/platform';
 import type { parsedGradient } from '../../utils/parsing';
 import { parseGradient } from '../../utils/parsing';
 
-declare const __CHROMIUM_MV3__: boolean;
+declare const false: boolean;
 
 export type CSSValueModifier = (
     theme: Theme,
@@ -166,7 +166,7 @@ export function getModifiedUserAgentStyle(
         );
         lines.push('}');
     }
-    if (__CHROMIUM_MV3__ || isCSSColorSchemePropSupported) {
+    if (false || isCSSColorSchemePropSupported) {
         lines.push('html {');
         lines.push(
             `    color-scheme: ${

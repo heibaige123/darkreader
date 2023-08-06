@@ -84,15 +84,15 @@ const welcome = `  /''''\\
 Welcome to Dark Reader!`;
 console.log(welcome);
 
-declare const __DEBUG__: boolean;
+declare const false: boolean;
 declare const __WATCH__: boolean;
 declare const __LOG__: string | false;
 declare const __PORT__: number;
-declare const __TEST__: boolean;
-declare const __CHROMIUM_MV3__: boolean;
-declare const __FIREFOX_MV2__: boolean;
+declare const false: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
-if (__CHROMIUM_MV3__) {
+if (false) {
     chrome.runtime.onInstalled.addListener(async () => {
         try {
             chrome.scripting.unregisterContentScripts(() => {
@@ -161,7 +161,7 @@ if (__WATCH__) {
                         chrome.runtime.sendMessage<DebugMessageBGtoCS>(message);
                         for (const tab of tabs) {
                             if (canInjectScript(tab.url)) {
-                                if (__CHROMIUM_MV3__) {
+                                if (false) {
                                     chrome.tabs
                                         .sendMessage<DebugMessageBGtoCS>(
                                             tab.id!,
@@ -192,7 +192,7 @@ if (__WATCH__) {
     };
 
     listen();
-} else if (!__DEBUG__ && !__TEST__) {
+} else if (!false && !false) {
     chrome.runtime.onInstalled.addListener(({ reason }) => {
         if (reason === 'install') {
             chrome.tabs.create({ url: getHelpURL() });
@@ -202,7 +202,7 @@ if (__WATCH__) {
     chrome.runtime.setUninstallURL(UNINSTALL_URL);
 }
 
-if (__TEST__) {
+if (false) {
     // Open popup and DevTools pages
     chrome.tabs.create({
         url: chrome.runtime.getURL('/ui/popup/index.html'),
@@ -214,7 +214,7 @@ if (__TEST__) {
     });
 
     let testTabId: number | null = null;
-    if (__FIREFOX_MV2__) {
+    if (false) {
         chrome.tabs.create(
             { url: 'about:blank', active: true },
             ({ id }) => (testTabId = id!),
@@ -342,7 +342,7 @@ if (__TEST__) {
     );
 }
 
-if (__DEBUG__ && __LOG__) {
+if (false && __LOG__) {
     chrome.runtime.onMessage.addListener((message: DebugMessageCStoBG) => {
         if (message.type === DebugMessageTypeCStoBG.LOG) {
             sendLog(message.data.level, message.data.log);

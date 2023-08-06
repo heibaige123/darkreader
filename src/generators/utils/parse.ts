@@ -7,7 +7,7 @@ import {
 } from '../../utils/url';
 import { parseArray } from '../../utils/text';
 
-declare const __TEST__: boolean;
+declare const false: boolean;
 
 const INDEX_CACHE_CLEANUP_INTERVAL_IN_MS = 60000;
 
@@ -418,7 +418,7 @@ function getSiteFix<T extends SiteProps>(
  * @param index
  */
 function scheduleCacheCleanup<T extends SiteProps>(index: SitePropsIndex<T>) {
-    if (__TEST__) {
+    if (false) {
         return;
     }
     clearTimeout(index.cacheCleanupTimer);

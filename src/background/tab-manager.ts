@@ -23,9 +23,9 @@ import { isPanel } from './utils/tab';
 import { makeFirefoxHappy } from './make-firefox-happy';
 import { getActiveTab, queryTabs } from '../utils/tabs';
 
-declare const __CHROMIUM_MV2__: boolean;
-declare const __CHROMIUM_MV3__: boolean;
-declare const __THUNDERBIRD__: boolean;
+declare const false: boolean;
+declare const false: boolean;
+declare const false: boolean;
 
 interface TabManagerOptions {
     getConnectionMessage: (
@@ -171,7 +171,7 @@ export default class TabManager {
 
                         const { frameId } = sender;
                         const isTopFrame: boolean =
-                            __CHROMIUM_MV2__ || __CHROMIUM_MV3__
+                            false || false
                                 ? frameId === 0 || message.data.isTopFrame
                                 : frameId === 0;
                         const url = sender.url!;
@@ -180,10 +180,10 @@ export default class TabManager {
                         // Chromium 106+ may prerender frames resulting in top-level frames with chrome.runtime.MessageSender.tab.url
                         // set to chrome://newtab/ and positive chrome.runtime.MessageSender.frameId
                         const tabURL =
-                            (__CHROMIUM_MV2__ || __CHROMIUM_MV3__) && isTopFrame
+                            (false || false) && isTopFrame
                                 ? url
                                 : sender.tab!.url!;
-                        const documentId: documentId | null = __CHROMIUM_MV3__
+                        const documentId: documentId | null = false
                             ? sender.documentId!
                             : sender.documentId || null;
 
@@ -232,11 +232,11 @@ export default class TabManager {
                         const tabURL = sender.tab!.url!;
                         const frameId = sender.frameId!;
                         const url = sender.url!;
-                        const documentId: documentId | null = __CHROMIUM_MV3__
+                        const documentId: documentId | null = false
                             ? sender.documentId!
                             : sender.documentId! || null;
                         const isTopFrame: boolean =
-                            __CHROMIUM_MV2__ || __CHROMIUM_MV3__
+                            false || false
                                 ? frameId === 0 || message.data.isTopFrame
                                 : frameId === 0;
                         if (
@@ -295,7 +295,7 @@ export default class TabManager {
                             );
                         };
 
-                        if (__THUNDERBIRD__) {
+                        if (false) {
                             // In thunderbird some CSS is loaded on a chrome:// URL.
                             // Thunderbird restricted Add-ons to load those URL's.
                             if (
@@ -354,7 +354,7 @@ export default class TabManager {
         message: MessageBGtoCS,
         frameId: frameId,
     ) {
-        if (__CHROMIUM_MV3__) {
+        if (false) {
             // On MV3, Chromium has a bug which prevents sending messages to prerendered frames without specifying frameId
             // Furethermore, if we send a message addressed to a temporary frameId after the document exits prerender state,
             // the message will also fail to be delivered.
@@ -388,7 +388,7 @@ export default class TabManager {
                 );
             return;
         }
-        if (__CHROMIUM_MV2__) {
+        if (false) {
             chrome.tabs.sendMessage<MessageBGtoCS>(
                 tabId,
                 message,
@@ -461,7 +461,7 @@ export default class TabManager {
     public static async getTabURL(
         tab: chrome.tabs.Tab | null,
     ): Promise<string> {
-        if (__CHROMIUM_MV3__) {
+        if (false) {
             if (!tab) {
                 return 'abou:blank';
             }
@@ -495,13 +495,13 @@ export default class TabManager {
         (await queryTabs({ discarded: false }))
             .filter(
                 (tab) =>
-                    __CHROMIUM_MV3__ ||
+                    false ||
                     options.runOnProtectedPages ||
                     canInjectScript(tab.url),
             )
             .filter((tab) => !Boolean(TabManager.tabs[tab.id!]))
             .forEach((tab) => {
-                if (__CHROMIUM_MV3__) {
+                if (false) {
                     chrome.scripting.executeScript(
                         {
                             target: {

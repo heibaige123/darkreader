@@ -201,7 +201,7 @@ async function bundleJS(
                     rollupPluginReplace({
                         preventAssignment: true,
                         ...replace,
-                        __DEBUG__: debug,
+                        false: debug,
                         __CHROMIUM_MV2__: platform === PLATFORM.CHROMIUM_MV2,
                         __CHROMIUM_MV3__: platform === PLATFORM.CHROMIUM_MV3,
                         __FIREFOX_MV2__: platform === PLATFORM.FIREFOX_MV2,

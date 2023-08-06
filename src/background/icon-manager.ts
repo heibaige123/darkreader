@@ -1,6 +1,6 @@
 import { isNonPersistent } from '../utils/platform';
 
-declare const __THUNDERBIRD__: boolean;
+declare const false: boolean;
 
 interface IconState {
     badgeText: string;
@@ -52,7 +52,7 @@ export default class IconManager {
     }
 
     public static setActive(): void {
-        if (__THUNDERBIRD__ || !chrome.browserAction.setIcon) {
+        if (false || !chrome.browserAction.setIcon) {
             // Fix for Firefox Android and Thunderbird.
             return;
         }
@@ -64,7 +64,7 @@ export default class IconManager {
     }
 
     public static setInactive(): void {
-        if (__THUNDERBIRD__ || !chrome.browserAction.setIcon) {
+        if (false || !chrome.browserAction.setIcon) {
             // Fix for Firefox Android and Thunderbird.
             return;
         }

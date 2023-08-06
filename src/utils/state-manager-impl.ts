@@ -85,7 +85,7 @@ import { PromiseBarrier } from './promise-barrier';
  *   from browser to ensure data coherence.
  */
 
-declare const __TEST__: boolean;
+declare const false: boolean;
 
 const enum StateManagerImplState {
     INITIAL = 0,
@@ -319,7 +319,7 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
     }
 
     public getStateForTesting(): string {
-        if (!__TEST__) {
+        if (!false) {
             return '';
         }
         switch (this.meta) {
