@@ -709,7 +709,7 @@ export function getBgImageModifier(
                         );
                     }
                 }
-                prevHasComma = hasComma;
+                prevHasComma = !!hasComma;
 
                 if (type === 'url') {
                     modifiers.push(getURLModifier(match));
@@ -719,7 +719,7 @@ export function getBgImageModifier(
                             match,
                             index,
                             typeGradient: typeGradient as string,
-                            hasComma: hasComma,
+                            hasComma: !!hasComma,
                             offset,
                         }),
                     );

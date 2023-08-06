@@ -8,7 +8,6 @@ import { createTextStyle } from './text-style';
 import type { FilterConfig, InversionFix } from '../definitions';
 import {
     compareChromeVersions,
-    chromiumVersion,
     isFirefox,
     firefoxVersion,
 } from '../utils/platform';

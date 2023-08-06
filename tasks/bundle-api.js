@@ -65,7 +65,7 @@ async function bundleAPI({ debug, watch }) {
         // TODO: Consider removing next line
         esModule: true,
         file: dest,
-        strict: true,
+        strict: false,
         format: 'iife',
         name: 'DarkReader',
         sourcemap: debug ? 'inline' : false,

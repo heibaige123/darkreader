@@ -99,24 +99,6 @@ function createOrUpdateScript(
     return element;
 }
 
-/**
- * Note: This function is used only with MV3.
- * The string passed as the src parameter must be included in the web_accessible_resources manifest key.
- */
-function injectProxyScriptMV3(
-    enableStyleSheetsProxy: boolean,
-    enableCustomElementRegistryProxy: boolean,
-): void {
-    logInfo('MV3 proxy injector: regular path attempts to inject...');
-    const element = document.createElement('script');
-    element.src = chrome.runtime.getURL('inject/proxy.js');
-    element.dataset.arg = JSON.stringify({
-        enableStyleSheetsProxy,
-        enableCustomElementRegistryProxy,
-    });
-    document.head.prepend(element);
-}
-
 const nodePositionWatchers = new Map<
     string,
     ReturnType<typeof watchForNodePosition>
