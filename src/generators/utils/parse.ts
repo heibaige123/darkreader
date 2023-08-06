@@ -7,8 +7,6 @@ import {
 } from '../../utils/url';
 import { parseArray } from '../../utils/text';
 
-declare const false: boolean;
-
 const INDEX_CACHE_CLEANUP_INTERVAL_IN_MS = 60000;
 
 // TODO: remove cast once types are updated
@@ -418,9 +416,7 @@ function getSiteFix<T extends SiteProps>(
  * @param index
  */
 function scheduleCacheCleanup<T extends SiteProps>(index: SitePropsIndex<T>) {
-    if (false) {
-        return;
-    }
+ 
     clearTimeout(index.cacheCleanupTimer);
     index.cacheCleanupTimer = setTimeout(() => {
         index.cacheCleanupTimer = null;

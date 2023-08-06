@@ -1,7 +1,5 @@
 import { isNonPersistent } from '../utils/platform';
 
-declare const false: boolean;
-
 interface IconState {
     badgeText: string;
     active: boolean;
@@ -52,7 +50,7 @@ export default class IconManager {
     }
 
     public static setActive(): void {
-        if (false || !chrome.browserAction.setIcon) {
+        if (!chrome.browserAction.setIcon) {
             // Fix for Firefox Android and Thunderbird.
             return;
         }
@@ -64,7 +62,7 @@ export default class IconManager {
     }
 
     public static setInactive(): void {
-        if (false || !chrome.browserAction.setIcon) {
+        if (!chrome.browserAction.setIcon) {
             // Fix for Firefox Android and Thunderbird.
             return;
         }

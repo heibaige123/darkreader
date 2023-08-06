@@ -84,40 +84,8 @@ const welcome = `  /''''\\
 Welcome to Dark Reader!`;
 console.log(welcome);
 
-declare const false: boolean;
 declare const __WATCH__: boolean;
-declare const __LOG__: string | false;
 declare const __PORT__: number;
-declare const false: boolean;
-declare const false: boolean;
-declare const false: boolean;
-
-if (false) {
-    chrome.runtime.onInstalled.addListener(async () => {
-        try {
-            chrome.scripting.unregisterContentScripts(() => {
-                chrome.scripting.registerContentScripts(
-                    [
-                        {
-                            id: 'proxy',
-                            matches: ['<all_urls>'],
-                            js: ['inject/proxy.js'],
-                            runAt: 'document_start',
-                            allFrames: true,
-                            persistAcrossSessions: true,
-                            world: 'MAIN',
-                        },
-                    ],
-                    () => logInfo('Registerd direct CSS proxy injector.'),
-                );
-            });
-        } catch (e) {
-            logInfo(
-                'Failed to register direct CSS proxy injector, falling back to other injection methods.',
-            );
-        }
-    });
-}
 
 if (__WATCH__) {
     const PORT = __PORT__;
@@ -161,17 +129,6 @@ if (__WATCH__) {
                         chrome.runtime.sendMessage<DebugMessageBGtoCS>(message);
                         for (const tab of tabs) {
                             if (canInjectScript(tab.url)) {
-                                if (false) {
-                                    chrome.tabs
-                                        .sendMessage<DebugMessageBGtoCS>(
-                                            tab.id!,
-                                            message,
-                                        )
-                                        .catch(() => {
-                                            /* noop */
-                                        });
-                                    continue;
-                                }
                                 chrome.tabs.sendMessage<DebugMessageBGtoCS>(
                                     tab.id!,
                                     message,
@@ -192,7 +149,7 @@ if (__WATCH__) {
     };
 
     listen();
-} else if (!false && !false) {
+} else if (true) {
     chrome.runtime.onInstalled.addListener(({ reason }) => {
         if (reason === 'install') {
             chrome.tabs.create({ url: getHelpURL() });
@@ -200,154 +157,6 @@ if (__WATCH__) {
     });
 
     chrome.runtime.setUninstallURL(UNINSTALL_URL);
-}
-
-if (false) {
-    // Open popup and DevTools pages
-    chrome.tabs.create({
-        url: chrome.runtime.getURL('/ui/popup/index.html'),
-        active: false,
-    });
-    chrome.tabs.create({
-        url: chrome.runtime.getURL('/ui/devtools/index.html'),
-        active: false,
-    });
-
-    let testTabId: number | null = null;
-    if (false) {
-        chrome.tabs.create(
-            { url: 'about:blank', active: true },
-            ({ id }) => (testTabId = id!),
-        );
-    }
-
-    const socket = new WebSocket(`ws://localhost:8894`);
-    socket.onopen = async () => {
-        // Wait for extension to start
-        await extension;
-        socket.send(
-            JSON.stringify({
-                data: {
-                    type: 'background',
-                    extensionOrigin: chrome.runtime.getURL(''),
-                },
-                id: null,
-            }),
-        );
-    };
-    socket.onmessage = (e) => {
-        try {
-            const message: TestMessage = JSON.parse(e.data);
-            const { id, type } = message;
-            const respond = (
-                data?:
-                    | ExtensionData
-                    | string
-                    | boolean
-                    | { [key: string]: string }
-                    | null,
-            ) =>
-                socket.send(
-                    JSON.stringify({
-                        data,
-                        id,
-                    }),
-                );
-
-            switch (type) {
-                case 'changeSettings':
-                    Extension.changeSettings(message.data);
-                    respond();
-                    break;
-                case 'collectData':
-                    Extension.collectData().then(respond);
-                    break;
-                case 'getManifest': {
-                    const data = chrome.runtime.getManifest();
-                    respond(data);
-                    break;
-                }
-                case 'changeChromeStorage': {
-                    const region = message.data.region;
-                    chrome.storage[region].set(message.data.data, () =>
-                        respond(),
-                    );
-                    break;
-                }
-                case 'getChromeStorage': {
-                    const keys = message.data.keys;
-                    const region = message.data.region;
-                    chrome.storage[region].get(keys, respond);
-                    break;
-                }
-                case 'setNews':
-                    setNewsForTesting(message.data);
-                    respond();
-                    break;
-                // TODO(anton): remove this once Firefox supports tab.eval() via WebDriver BiDi
-                case 'firefox-createTab':
-                    ASSERT('Firefox-specific function', isFirefox);
-                    chrome.tabs.update(
-                        testTabId!,
-                        { url: message.data, active: true },
-                        () => respond(),
-                    );
-                    break;
-                case 'firefox-getColorScheme': {
-                    ASSERT('Firefox-specific function', isFirefox);
-                    respond(isSystemDarkModeEnabled() ? 'dark' : 'light');
-                    break;
-                }
-                case 'firefox-emulateColorScheme': {
-                    ASSERT('Firefox-specific function', isFirefox);
-                    emulateColorScheme(message.data);
-                    respond();
-                    break;
-                }
-            }
-        } catch (err) {
-            socket.send(
-                JSON.stringify({ error: String(err), original: e.data }),
-            );
-        }
-    };
-
-    chrome.downloads.onCreated.addListener(
-        ({ id, mime, url, danger, paused }) => {
-            // Cancel download
-            chrome.downloads.cancel(id);
-
-            try {
-                const { protocol, origin } = new URL(url);
-                const realOrigin = new URL(chrome.runtime.getURL('')).origin;
-                const ok =
-                    paused === false &&
-                    danger === 'safe' &&
-                    protocol === 'blob:' &&
-                    origin === realOrigin;
-                socket.send(
-                    JSON.stringify({
-                        data: {
-                            type: 'download',
-                            ok,
-                            mime,
-                        },
-                        id: null,
-                    }),
-                );
-            } catch (e) {
-                // Do nothing
-            }
-        },
-    );
-}
-
-if (false && __LOG__) {
-    chrome.runtime.onMessage.addListener((message: DebugMessageCStoBG) => {
-        if (message.type === DebugMessageTypeCStoBG.LOG) {
-            sendLog(message.data.level, message.data.log);
-        }
-    });
 }
 
 makeChromiumHappy();

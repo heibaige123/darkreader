@@ -59,8 +59,6 @@ import {
 } from '../../utils/visibility';
 import { combineFixes, findRelevantFix } from './fixes';
 
-declare const false: boolean;
-declare const false: boolean;
 const INSTANCE_ID = generateUID();
 const styleManagers = new Map<StyleElement, StyleManager>();
 const adoptedStyleManagers: AdoptedStyleSheetManager[] = [];
@@ -229,28 +227,13 @@ function createStaticStyleOverrides() {
     const enableCustomElementRegistryProxy = !(
         fixes && fixes.disableCustomElementRegistryProxy
     );
-    if (false) {
-        injectProxyScriptMV3(
-            enableStyleSheetsProxy,
-            enableCustomElementRegistryProxy,
-        );
-        // Notify the dedicated injector of the data.
-        document.dispatchEvent(
-            new CustomEvent('__darkreader__stylesheetProxy__arg', {
-                detail: {
-                    enableStyleSheetsProxy,
-                    enableCustomElementRegistryProxy,
-                },
-            }),
-        );
-    } else {
-        const proxyScript = createOrUpdateScript('darkreader--proxy');
-        proxyScript.append(
-            `(${injectProxy})(${enableStyleSheetsProxy}, ${enableCustomElementRegistryProxy})`,
-        );
-        document.head.insertBefore(proxyScript, rootVarsStyle.nextSibling);
-        proxyScript.remove();
-    }
+
+    const proxyScript = createOrUpdateScript('darkreader--proxy');
+    proxyScript.append(
+        `(${injectProxy})(${enableStyleSheetsProxy}, ${enableCustomElementRegistryProxy})`,
+    );
+    document.head.insertBefore(proxyScript, rootVarsStyle.nextSibling);
+    proxyScript.remove();
 }
 
 const shadowRootsWithOverrides = new Set<ShadowRoot>();
@@ -438,11 +421,6 @@ function createManager(element: StyleElement) {
         variablesStore.addRulesForMatching(details.rules);
         variablesStore.matchVariablesAndDependants();
         manager.render(filter!, ignoredImageAnalysisSelectors);
-        if (false) {
-            document.dispatchEvent(
-                new CustomEvent('__darkreader__test__dynamicUpdateComplete'),
-            );
-        }
     }
 
     const manager = manageStyle(element, { update, loadingStart, loadingEnd });

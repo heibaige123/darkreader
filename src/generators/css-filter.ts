@@ -13,9 +13,6 @@ import {
     firefoxVersion,
 } from '../utils/platform';
 
-declare const false: boolean;
-declare const false: boolean;
-
 export const enum FilterMode {
     light = 0,
     dark = 1,
@@ -29,13 +26,7 @@ export const enum FilterMode {
  * Patch: https://chromium-review.googlesource.com/c/chromium/src/+/1979258
  */
 export function hasPatchForChromiumIssue501582(): boolean {
-    return (
-        false ||
-        Boolean(
-            false &&
-                compareChromeVersions(chromiumVersion, '81.0.4035.0') >= 0,
-        )
-    );
+    return false
 }
 
 /**

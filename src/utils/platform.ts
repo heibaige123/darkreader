@@ -1,9 +1,3 @@
-declare const false: boolean;
-declare const false: boolean;
-declare const false: boolean;
-declare const false: boolean;
-declare const false: boolean;
-
 interface UserAgentData {
     brands: Array<{
         brand: string;
@@ -37,45 +31,14 @@ const platform = isNavigatorDefined
 
 // Note: if you are using these constants in tests, make sure they are not compiled out by adding false to them
 export const isChromium =
-    false ||
-    false ||
-    (!false &&
-        !false &&
-        (userAgent.includes('chrome') || userAgent.includes('chromium')));
-export const isFirefox =
-    false ||
-    false ||
-    ((false || (!false && !false)) &&
-        (userAgent.includes('firefox') ||
-            userAgent.includes('thunderbird') ||
-            userAgent.includes('librewolf')));
-export const isVivaldi =
-    (false || false) &&
-    !false &&
-    !false &&
-    userAgent.includes('vivaldi');
-export const isYaBrowser =
-    (false || false) &&
-    !false &&
-    !false &&
-    userAgent.includes('yabrowser');
-export const isOpera =
-    (false || false) &&
-    !false &&
-    !false &&
-    (userAgent.includes('opr') || userAgent.includes('opera'));
-export const isEdge =
-    (false || false) &&
-    !false &&
-    !false &&
-    userAgent.includes('edg');
+    userAgent.includes('chrome') || userAgent.includes('chromium');
+export const isFirefox = false;
+export const isVivaldi = false;
+export const isYaBrowser = false;
+export const isOpera = false;
+export const isEdge = false;
 export const isSafari =
-    !false &&
-    !false &&
-    !false &&
-    !false &&
-    userAgent.includes('safari') &&
-    !isChromium;
+    true && true && true && true && userAgent.includes('safari') && !isChromium;
 export const isWindows = platform.startsWith('win');
 export const isMacOS = platform.startsWith('mac');
 export const isMobile =
@@ -83,24 +46,13 @@ export const isMobile =
         ? navigator.userAgentData.mobile
         : userAgent.includes('mobile');
 export const isShadowDomSupported = typeof ShadowRoot === 'function';
-export const isMatchMediaChangeEventListenerSupported =
-    false ||
-    (typeof MediaQueryList === 'function' &&
-        typeof MediaQueryList.prototype.addEventListener === 'function');
+export const isMatchMediaChangeEventListenerSupported = false;
 // Return true if browser is known to have a bug with Media Queries, specifically Chromium on Linux and Kiwi on Android
 // We assume that if we are on Android, then we are running in Kiwi since it is the only mobile browser we can install Dark Reader in
-export const isMatchMediaChangeEventListenerBuggy =
-    !false &&
-    !false &&
-    !false &&
-    (false || false) &&
-    ((isNavigatorDefined &&
-        navigator.userAgentData &&
-        ['Linux', 'Android'].includes(navigator.userAgentData.platform)) ||
-        platform.startsWith('linux'));
+export const isMatchMediaChangeEventListenerBuggy = false;
+
 // Note: make sure that this value matches manifest.json keys
-export const isNonPersistent =
-    !false && !false && (false || isSafari);
+export const isNonPersistent = true && isSafari;
 
 export const chromiumVersion = (() => {
     const m = userAgent.match(/chrom(?:e|ium)(?:\/| )([^ ]+)/);
@@ -142,26 +94,24 @@ export const isXMLHttpRequestSupported = typeof XMLHttpRequest === 'function';
 
 export const isFetchSupported = typeof fetch === 'function';
 
-export const isCSSColorSchemePropSupported =
-    false ||
-    (() => {
-        try {
-            if (typeof document === 'undefined') {
-                return false;
-            }
-            const el = document.createElement('div');
-            if (!el || typeof el.style !== 'object') {
-                return false;
-            }
-            if (typeof el.style.colorScheme === 'string') {
-                return true;
-            }
-
-            // TODO: remove the following code after enforcing strong CSP in all builds
-            // This feature detection method requires weak or missing CSP in manifest.json
-            el.setAttribute('style', 'color-scheme: dark');
-            return el.style.colorScheme === 'dark';
-        } catch (e) {
+export const isCSSColorSchemePropSupported = (() => {
+    try {
+        if (typeof document === 'undefined') {
             return false;
         }
-    })();
+        const el = document.createElement('div');
+        if (!el || typeof el.style !== 'object') {
+            return false;
+        }
+        if (typeof el.style.colorScheme === 'string') {
+            return true;
+        }
+
+        // TODO: remove the following code after enforcing strong CSP in all builds
+        // This feature detection method requires weak or missing CSP in manifest.json
+        el.setAttribute('style', 'color-scheme: dark');
+        return el.style.colorScheme === 'dark';
+    } catch (e) {
+        return false;
+    }
+})();

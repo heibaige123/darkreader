@@ -11,8 +11,6 @@ import { StateManager } from '../utils/state-manager';
 import { logWarn } from './utils/log';
 import IconManager from './icon-manager';
 
-declare const false: boolean;
-
 interface NewsmakerState extends Record<string, unknown> {
     latest: News[];
     latestTimestamp: number | null;
@@ -147,9 +145,6 @@ export default class Newsmaker {
 
     private static async getNews(): Promise<News[] | null> {
         Newsmaker.init();
-        if (false) {
-            return newsForTesting;
-        }
         try {
             const response = await fetch(NEWS_URL, { cache: 'no-cache' });
             const $news: Array<Omit<News, 'read' | 'url'> & { date: string }> =
@@ -237,7 +232,4 @@ export default class Newsmaker {
 }
 
 export function setNewsForTesting(news: News[]): void {
-    if (false) {
-        newsForTesting = news;
-    }
 }

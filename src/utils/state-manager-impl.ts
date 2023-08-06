@@ -85,8 +85,6 @@ import { PromiseBarrier } from './promise-barrier';
  *   from browser to ensure data coherence.
  */
 
-declare const false: boolean;
-
 const enum StateManagerImplState {
     INITIAL = 0,
     LOADING = 1,
@@ -319,24 +317,6 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
     }
 
     public getStateForTesting(): string {
-        if (!false) {
-            return '';
-        }
-        switch (this.meta) {
-            case StateManagerImplState.INITIAL:
-                return 'Initial';
-            case StateManagerImplState.LOADING:
-                return 'Loading';
-            case StateManagerImplState.READY:
-                return 'Ready';
-            case StateManagerImplState.SAVING:
-                return 'Saving';
-            case StateManagerImplState.SAVING_OVERRIDE:
-                return 'Saving Override';
-            case StateManagerImplState.ONCHANGE_RACE:
-                return 'Onchange Race';
-            case StateManagerImplState.RECOVERY:
-                return 'Recovery';
-        }
+        return '';
     }
 }

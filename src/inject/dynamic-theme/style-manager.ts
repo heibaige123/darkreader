@@ -25,8 +25,6 @@ import {
     isFirefox,
 } from '../../utils/platform';
 
-declare const false: boolean;
-
 declare global {
     interface Document {
         adoptedStyleSheets: CSSStyleSheet[];
@@ -519,7 +517,7 @@ export function manageStyle(
         watchForSheetChangesUsingProxy();
         // Sometimes sheet can be null in Firefox and Safari
         // So need to watch for it using rAF
-        if (!false && !(canOptimizeUsingProxy && element.sheet)) {
+        if (!(canOptimizeUsingProxy && element.sheet)) {
             watchForSheetChangesUsingRAF();
         }
     }

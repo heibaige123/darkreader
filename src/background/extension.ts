@@ -71,10 +71,6 @@ interface SystemColorState extends Record<string, unknown> {
     wasLastColorSchemeDark: boolean | null;
 }
 
-declare const false: boolean;
-declare const false: boolean;
-declare const false: boolean;
-
 export class Extension {
     private static autoState: AutomationState = '';
     private static wasEnabledOnLastCheck: boolean | null = null;
@@ -169,27 +165,7 @@ export class Extension {
     private static async MV3syncSystemColorStateManager(
         isDark: boolean | null,
     ): Promise<void> {
-        if (!false) {
-            return;
-        }
-        if (!Extension.systemColorStateManager) {
-            Extension.systemColorStateManager =
-                new StateManager<SystemColorState>(
-                    Extension.SYSTEM_COLOR_LOCAL_STORAGE_KEY,
-                    Extension,
-                    {
-                        wasLastColorSchemeDark: isDark,
-                    },
-                    logWarn,
-                );
-        }
-        if (isDark === null) {
-            // Attempt to restore data from storage
-            return Extension.systemColorStateManager.loadState();
-        } else if (Extension.wasLastColorSchemeDark !== isDark) {
-            Extension.wasLastColorSchemeDark = isDark;
-            return Extension.systemColorStateManager.saveState();
-        }
+        return;
     }
 
     private static alarmListener = (alarm: chrome.alarms.Alarm): void => {
@@ -226,16 +202,6 @@ export class Extension {
                 break;
             }
             case AutomationMode.SYSTEM:
-                if (false) {
-                    isAutoDark = Extension.wasLastColorSchemeDark;
-                    if (Extension.wasLastColorSchemeDark === null) {
-                        logWarn(
-                            'System color scheme is unknown. Defaulting to Dark.',
-                        );
-                        isAutoDark = true;
-                    }
-                    break;
-                }
                 isAutoDark =
                     Extension.wasLastColorSchemeDark === null
                         ? isSystemDarkModeEnabled()
@@ -309,14 +275,9 @@ export class Extension {
         Extension.onAppToggle();
         logInfo('loaded', UserStorage.settings);
 
-        if (false) {
-            TabManager.registerMailDisplayScript();
-        } else {
-            TabManager.updateContentScript({
-                runOnProtectedPages:
-                    UserStorage.settings.enableForProtectedPages,
-            });
-        }
+        TabManager.updateContentScript({
+            runOnProtectedPages: UserStorage.settings.enableForProtectedPages,
+        });
 
         UserStorage.settings.fetchNews && Newsmaker.subscribe();
         Extension.startBarrier!.resolve();
@@ -390,35 +351,12 @@ export class Extension {
                         );
                     }
 
-                    if (false) {
-                        return (
-                            await chrome.scripting.executeScript({
-                                target: { tabId, frameIds: [frameId] },
-                                func: detectPDF,
-                            })
-                        )[0].result;
-                    } else if (false) {
-                        return new Promise<boolean>((resolve) =>
-                            chrome.tabs.executeScript(
-                                tabId,
-                                {
-                                    frameId,
-                                    code: `(${detectPDF.toString()})()`,
-                                },
-                                ([r]) => resolve(r),
-                            ),
-                        );
-                    }
                     return false;
                 }
 
                 const pdf = async () =>
                     isPDF(frameURL || (await TabManager.getActiveTabURL()));
-                if (
-                    ((false || false) &&
-                        (await scriptPDF(tabId!, frameId!))) ||
-                    (await pdf())
-                ) {
+                if (await pdf()) {
                     Extension.changeSettings({
                         enableForPDF: !UserStorage.settings.enableForPDF,
                     });
@@ -752,19 +690,9 @@ export class Extension {
 
     private static onAppToggle() {
         if (Extension.isExtensionSwitchedOn()) {
-            if (false) {
-                ContentScriptManager.registerScripts(async () =>
-                    TabManager.updateContentScript({
-                        runOnProtectedPages:
-                            UserStorage.settings.enableForProtectedPages,
-                    }),
-                );
-            }
             IconManager.setActive();
         } else {
-            if (false) {
-                ContentScriptManager.unregisterScripts();
-            }
+
             IconManager.setInactive();
         }
 

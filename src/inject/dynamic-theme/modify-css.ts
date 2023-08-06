@@ -24,8 +24,6 @@ import { isFirefox, isCSSColorSchemePropSupported } from '../../utils/platform';
 import type { parsedGradient } from '../../utils/parsing';
 import { parseGradient } from '../../utils/parsing';
 
-declare const false: boolean;
-
 export type CSSValueModifier = (
     theme: Theme,
 ) => string | Promise<string | null>;
@@ -166,7 +164,7 @@ export function getModifiedUserAgentStyle(
         );
         lines.push('}');
     }
-    if (false || isCSSColorSchemePropSupported) {
+    if (isCSSColorSchemePropSupported) {
         lines.push('html {');
         lines.push(
             `    color-scheme: ${
@@ -711,7 +709,7 @@ export function getBgImageModifier(
                         );
                     }
                 }
-                prevHasComma = hasComma || false;
+                prevHasComma = hasComma;
 
                 if (type === 'url') {
                     modifiers.push(getURLModifier(match));
@@ -721,7 +719,7 @@ export function getBgImageModifier(
                             match,
                             index,
                             typeGradient: typeGradient as string,
-                            hasComma: hasComma || false,
+                            hasComma: hasComma,
                             offset,
                         }),
                     );

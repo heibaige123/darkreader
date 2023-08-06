@@ -16,16 +16,12 @@ import {
     MessageTypeBGtoCS,
     MessageTypeUItoBG,
 } from '../utils/message';
-import { ASSERT, logInfo, logWarn } from './utils/log';
+import { ASSERT, logWarn } from './utils/log';
 import { StateManager } from '../utils/state-manager';
 import { getURLHostOrProtocol } from '../utils/url';
 import { isPanel } from './utils/tab';
 import { makeFirefoxHappy } from './make-firefox-happy';
 import { getActiveTab, queryTabs } from '../utils/tabs';
-
-declare const false: boolean;
-declare const false: boolean;
-declare const false: boolean;
 
 interface TabManagerOptions {
     getConnectionMessage: (
@@ -170,19 +166,13 @@ export default class TabManager {
                         }
 
                         const { frameId } = sender;
-                        const isTopFrame: boolean =
-                            false || false
-                                ? frameId === 0 || message.data.isTopFrame
-                                : frameId === 0;
+                        const isTopFrame: boolean = frameId === 0;
                         const url = sender.url!;
                         const tabId = sender.tab!.id!;
                         const scriptId = message.scriptId!;
                         // Chromium 106+ may prerender frames resulting in top-level frames with chrome.runtime.MessageSender.tab.url
                         // set to chrome://newtab/ and positive chrome.runtime.MessageSender.frameId
-                        const tabURL =
-                            (false || false) && isTopFrame
-                                ? url
-                                : sender.tab!.url!;
+                        const tabURL = sender.tab!.url!;
                         const documentId: documentId | null = false
                             ? sender.documentId!
                             : sender.documentId || null;
@@ -235,10 +225,7 @@ export default class TabManager {
                         const documentId: documentId | null = false
                             ? sender.documentId!
                             : sender.documentId! || null;
-                        const isTopFrame: boolean =
-                            false || false
-                                ? frameId === 0 || message.data.isTopFrame
-                                : frameId === 0;
+                        const isTopFrame: boolean = frameId === 0;
                         if (
                             TabManager.tabs[tabId][frameId].timestamp <
                             TabManager.timestamp
@@ -295,18 +282,6 @@ export default class TabManager {
                             );
                         };
 
-                        if (false) {
-                            // In thunderbird some CSS is loaded on a chrome:// URL.
-                            // Thunderbird restricted Add-ons to load those URL's.
-                            if (
-                                (message.data.url as string).startsWith(
-                                    'chrome://',
-                                )
-                            ) {
-                                sendResponse({ data: null });
-                                return;
-                            }
-                        }
                         try {
                             const { url, responseType, mimeType, origin } =
                                 message.data;
@@ -354,48 +329,6 @@ export default class TabManager {
         message: MessageBGtoCS,
         frameId: frameId,
     ) {
-        if (false) {
-            // On MV3, Chromium has a bug which prevents sending messages to prerendered frames without specifying frameId
-            // Furethermore, if we send a message addressed to a temporary frameId after the document exits prerender state,
-            // the message will also fail to be delivered.
-            //
-            // To work around this:
-            //  1. Attempt to send the message by documentId. If this fails, this means the document is in prerender state.
-            //  2. Attempt to send the message by dicumentId and temporary frameId. If this fails, this means the document
-            //     either alteady exited prerendred state or was discarded.
-            //  3. Attempt to send the message by documentId (omitting the permanent frameId which is 0).If this fails, this
-            //     means the document was already discarded.
-            //
-            // More info: https://crbug.com/1455817
-
-            chrome.tabs
-                .sendMessage<MessageBGtoCS>(tabId, message, { documentId })
-                .catch(() =>
-                    chrome.tabs
-                        .sendMessage<MessageBGtoCS>(tabId, message, {
-                            frameId,
-                            documentId,
-                        })
-                        .catch(() =>
-                            chrome.tabs
-                                .sendMessage<MessageBGtoCS>(tabId, message, {
-                                    documentId,
-                                })
-                                .catch(() => {
-                                    /* noop */
-                                }),
-                        ),
-                );
-            return;
-        }
-        if (false) {
-            chrome.tabs.sendMessage<MessageBGtoCS>(
-                tabId,
-                message,
-                documentId ? { documentId } : { frameId },
-            );
-            return;
-        }
         chrome.tabs.sendMessage<MessageBGtoCS>(tabId, message, { frameId });
     }
 
@@ -461,27 +394,6 @@ export default class TabManager {
     public static async getTabURL(
         tab: chrome.tabs.Tab | null,
     ): Promise<string> {
-        if (false) {
-            if (!tab) {
-                return 'abou:blank';
-            }
-            try {
-                if (TabManager.tabs[tab.id!] && TabManager.tabs[tab.id!][0]) {
-                    return TabManager.tabs[tab.id!][0].url || 'about:blank';
-                }
-                return (
-                    await chrome.scripting.executeScript({
-                        target: {
-                            tabId: tab.id!,
-                            frameIds: [0],
-                        },
-                        func: () => window.location.href,
-                    })
-                )[0].result;
-            } catch (e) {
-                return 'about:blank';
-            }
-        }
         // It can happen in cases whereby the tab.url is empty.
         // Luckily this only and will only happen on `about:blank`-like pages.
         // Due to this we can safely use `about:blank` as fallback value.
@@ -495,36 +407,16 @@ export default class TabManager {
         (await queryTabs({ discarded: false }))
             .filter(
                 (tab) =>
-                    false ||
-                    options.runOnProtectedPages ||
-                    canInjectScript(tab.url),
+                    options.runOnProtectedPages || canInjectScript(tab.url),
             )
             .filter((tab) => !Boolean(TabManager.tabs[tab.id!]))
             .forEach((tab) => {
-                if (false) {
-                    chrome.scripting.executeScript(
-                        {
-                            target: {
-                                tabId: tab.id!,
-                                allFrames: true,
-                            },
-                            files: ['/inject/index.js'],
-                        },
-                        () =>
-                            logInfo(
-                                'Could not update content script in tab',
-                                tab,
-                                chrome.runtime.lastError,
-                            ),
-                    );
-                } else {
-                    chrome.tabs.executeScript(tab.id!, {
-                        runAt: 'document_start',
-                        file: '/inject/index.js',
-                        allFrames: true,
-                        matchAboutBlank: true,
-                    });
-                }
+                chrome.tabs.executeScript(tab.id!, {
+                    runAt: 'document_start',
+                    file: '/inject/index.js',
+                    allFrames: true,
+                    matchAboutBlank: true,
+                });
             });
     }
 
@@ -576,7 +468,7 @@ export default class TabManager {
                             const message = TabManager.getTabMessage(
                                 tabURL,
                                 url!,
-                                isTop || false,
+                                isTop,
                             );
                             message.scriptId = scriptId;
 
@@ -607,7 +499,7 @@ export default class TabManager {
     }
 
     public static canAccessTab(tab: chrome.tabs.Tab | null): boolean {
-        return (tab && Boolean(TabManager.tabs[tab.id!])) || false;
+        return tab && Boolean(TabManager.tabs[tab.id!]);
     }
 
     public static getTabDocumentId(

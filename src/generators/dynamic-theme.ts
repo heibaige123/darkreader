@@ -9,8 +9,6 @@ import { parseArray, formatArray } from '../utils/text';
 import { compareURLPatterns } from '../utils/url';
 import type { DynamicThemeFix } from '../definitions';
 
-declare const false: boolean;
-declare const false: boolean;
 
 const dynamicThemeFixesCommands: { [key: string]: keyof DynamicThemeFix } = {
     INVERT: 'invert',

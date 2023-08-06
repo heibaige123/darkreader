@@ -1,6 +1,3 @@
-declare const false: boolean;
-declare const false: boolean;
-
 // Promissified version of chrome.tabs.query
 export async function queryTabs(
     query: chrome.tabs.QueryInfo = {},
@@ -35,9 +32,6 @@ export async function getActiveTab(): Promise<chrome.tabs.Tab | null> {
         )[0];
     }
     if (!tab) {
-        if (false || false) {
-            log = 'method 1';
-        }
         // When Dark Reader's DevTools are open, last focused window might be the DevTools window
         // so we lift this restriction and try again (with the best guess)
         tab = (
@@ -48,9 +42,6 @@ export async function getActiveTab(): Promise<chrome.tabs.Tab | null> {
         )[0];
     }
     if (!tab) {
-        if (false || false) {
-            log = 'method 2';
-        }
         tab = (
             await queryTabs({
                 active: true,
