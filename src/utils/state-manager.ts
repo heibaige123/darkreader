@@ -5,6 +5,9 @@
 
 import { StateManagerImpl } from './state-manager-impl';
 
+/**
+ * 管理状态
+ */
 export class StateManager<T extends Record<string, unknown>> {
     private stateManager: StateManagerImpl<T> | null;
 
@@ -16,12 +19,18 @@ export class StateManager<T extends Record<string, unknown>> {
         logWarn: (log: string) => void,
     ) {}
 
+    /**
+     * 检查 stateManager 是否存在。如果存在，它将调用 stateManager 的 saveState 方法
+     */
     public async saveState(): Promise<void> {
         if (this.stateManager) {
             return this.stateManager.saveState();
         }
     }
 
+    /**
+     * 检查 stateManager 是否存在。如果存在，它将调用 stateManager 的 loadState 方法
+     */
     public async loadState(): Promise<void> {
         if (this.stateManager) {
             return this.stateManager.loadState();

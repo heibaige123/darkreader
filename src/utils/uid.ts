@@ -1,7 +1,13 @@
+/**
+ * 将一个数字转换成它的16进制表示形式的字符串
+ */
 function hexify(number: number): string {
     return (number < 16 ? '0' : '') + number.toString(16);
 }
 
+/**
+ * 生成唯一标识符（UUID）的函数
+ */
 export function generateUID(): string {
     if ('randomUUID' in crypto) {
         const uuid = crypto.randomUUID();

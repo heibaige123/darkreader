@@ -38,15 +38,11 @@ async function bundleAPI({ debug, watch }) {
                 noImplicitAny: debug ? false : true,
                 noUnusedLocals: debug ? false : true,
                 strictNullChecks: debug ? false : true,
-                removeComments: debug ? false : true,
-                sourceMap: debug ? true : false,
+                removeComments: false,
+                sourceMap: false,
                 inlineSources: debug ? true : false,
                 noEmitOnError: watch ? false : true,
-                cacheDir: debug
-                    ? `${fs.realpathSync(
-                          os.tmpdir(),
-                      )}/darkreader_api_typescript_cache`
-                    : undefined,
+                cacheDir: undefined,
             }),
             rollupPluginReplace({
                 preventAssignment: true,

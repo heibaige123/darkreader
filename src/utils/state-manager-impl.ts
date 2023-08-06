@@ -85,25 +85,73 @@ import { PromiseBarrier } from './promise-barrier';
  *   from browser to ensure data coherence.
  */
 
+/**
+ * 状态管理器的状态
+ */
 const enum StateManagerImplState {
+    /**
+     * 仅调用构造函数
+     */
     INITIAL = 0,
+    /**
+     * loadState() 被调用
+     */
     LOADING = 1,
+    /**
+     * 数据已从存储中检索
+     */
     READY = 2,
+    /**
+     * saveState() 被调用并且没有 chrome.storage.local.set()
+     * 操作正在进行中。我们只需要收集并保存数据。
+     */
     SAVING = 3,
+    /**
+     * saveState() 在最后一次写入操作之前调用
+     * 已完成（数据甚至在写入存储之前就已过时）
+     * 我们等待正在进行的写入操作结束，然后才开始新的写入操作
+     */
     SAVING_OVERRIDE = 4,
+    /**
+     * chrome.storage.onChanged 侦听器在活动期间被调用
+     * 读/写操作。 StateManager需要等待该操作结束
+     * 并再次重新请求数据
+     */
     ONCHANGE_RACE = 5,
+    /**
+     * 状态管理器检测到竞争条件，可能是由数据加载或保存期间的 onChanged 事件。状态管理器将加载数据
+     * 来自浏览器以确保数据一致性
+     */
     RECOVERY = 6,
 }
 
+/**
+ * 负责管理和持久化状态
+ * 状态管理器特别是用来与浏览器的 chrome.storage API 交互，用于保存和加载状态
+ */
 export class StateManagerImpl<T extends Record<string, unknown>> {
+    /**
+     * 用于在浏览器存储中标识状态的键
+     */
     private localStorageKey: string;
     private parent;
+    /**
+     * 状态的默认值
+     */
     private defaults: T;
     private logWarn: (log: string) => void;
 
+    /**
+     * 表示当前状态管理器的状态的枚举值
+     */
     private meta: StateManagerImplState;
+    /**
+     * 同步状态管理操作
+     */
     private barrier: PromiseBarrier<void, void> | null = null;
-
+    /**
+     * 提供方法来从存储中获取和设置数据的对象
+     */
     private storage: {
         get: (
             storageKey: string,
@@ -111,7 +159,9 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
         ) => void;
         set: (items: { [key: string]: any }, callback: () => void) => void;
     };
-
+    /**
+     * 一个集合，其中包含当状态改变时应该被通知的回调函数
+     */
     private listeners: Set<() => void>;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -144,6 +194,9 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
         // and remove StateManagerImplState.INITIAL.
     }
 
+    /**
+     * 从父对象中收集当前状态
+     */
     private collectState() {
         const state = {} as T;
         for (const key of Object.keys(this.defaults) as Array<keyof T>) {
@@ -152,20 +205,32 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
         return state;
     }
 
+    /**
+     * 将状态应用到父对象
+     */
     private applyState(storage: T) {
         Object.assign(this.parent, this.defaults, storage);
     }
 
+    /**
+     * “释放”当前的 PromiseBarrier
+     */
     private releaseBarrier() {
         const barrier = this.barrier;
         this.barrier = new PromiseBarrier();
         barrier!.resolve();
     }
 
+    /**
+     * 通知所有注册的监听器
+     */
     private notifyListeners() {
         this.listeners.forEach((listener) => listener());
     }
 
+    /**
+     * 当状态更改时，基于当前的 meta 状态进行相应的处理
+     */
     private onChange(state: T) {
         switch (this.meta) {
             case StateManagerImplState.INITIAL:
@@ -193,6 +258,9 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
         }
     }
 
+    /**
+     * 使用 chrome.storage API 保存状态
+     */
     private saveStateInternal() {
         this.storage.set(
             { [this.localStorageKey]: this.collectState() },
@@ -226,6 +294,9 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
     }
 
     // This function is not guaranteed to save state before returning
+    /**
+     * 根据当前的 meta 状态保存状态
+     */
     public async saveState(): Promise<void> {
         switch (this.meta) {
             case StateManagerImplState.INITIAL:
@@ -264,6 +335,9 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
         }
     }
 
+    /**
+     * 使用 chrome.storage API 加载状态
+     */
     private loadStateInternal() {
         this.storage.get(this.localStorageKey, (data: any) => {
             switch (this.meta) {
@@ -290,6 +364,9 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
         });
     }
 
+    /**
+     * 根据当前的 meta 状态加载状态
+     */
     public async loadState(): Promise<void> {
         switch (this.meta) {
             case StateManagerImplState.INITIAL:
@@ -312,6 +389,9 @@ export class StateManagerImpl<T extends Record<string, unknown>> {
         }
     }
 
+    /**
+     * 添加一个新的状态更改监听器
+     */
     public addChangeListener(callback: () => void): void {
         this.listeners.add(callback);
     }
