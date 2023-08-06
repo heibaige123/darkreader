@@ -29,8 +29,8 @@ export const DEFAULT_THEME: Theme = {
     fontFamily: isMacOS
         ? 'Helvetica Neue'
         : isWindows
-        ? 'Segoe UI'
-        : 'Open Sans',
+            ? 'Segoe UI'
+            : 'Open Sans',
     textStroke: 0,
     engine: ThemeEngine.dynamicTheme,
     stylesheet: '',

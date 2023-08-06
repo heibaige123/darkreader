@@ -39,7 +39,7 @@ config.overrides.push({
         ],
         'jsx-quotes': ['error', 'prefer-double'],
         'keyword-spacing': 'error',
-        'object-curly-spacing': ['error', 'never'],
+        // 'object-curly-spacing': ['error', 'never'],
         'operator-assignment': ['error', 'always'],
         'prefer-template': 'error',
         'no-debugger': 'error',
