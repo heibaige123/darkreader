@@ -1,4 +1,4 @@
-export enum AutomationMode {
+export const enum AutomationMode {
     NONE = '',
     TIME = 'time',
     SYSTEM = 'system',

@@ -10,7 +10,7 @@ import {
     HELP_URL,
 } from './links';
 
-enum CSP {
+const enum CSP {
     NONE = "'none'",
     SELF = "'self'",
 }

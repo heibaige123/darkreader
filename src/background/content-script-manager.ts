@@ -2,7 +2,7 @@ import { logWarn } from './utils/log';
 
 declare const __CHROMIUM_MV3__: boolean;
 
-enum ContentScriptManagerState {
+const enum ContentScriptManagerState {
     UNKNOWN,
     REGISTERING,
     REGISTERED,

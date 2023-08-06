@@ -1,4 +1,4 @@
-export enum MessageTypeUItoBG {
+export const enum MessageTypeUItoBG {
     GET_DATA = 'ui-bg-get-data',
     GET_DEVTOOLS_DATA = 'ui-bg-get-devtools-data',
     SUBSCRIBE_TO_CHANGES = 'ui-bg-subscribe-to-changes',
@@ -19,16 +19,16 @@ export enum MessageTypeUItoBG {
     HIDE_HIGHLIGHTS = 'ui-bg-hide-highlights',
 }
 
-export enum MessageTypeBGtoUI {
+export const enum MessageTypeBGtoUI {
     CHANGES = 'bg-ui-changes',
 }
 
-export enum DebugMessageTypeBGtoUI {
+export const enum DebugMessageTypeBGtoUI {
     CSS_UPDATE = 'debug-bg-ui-css-update',
     UPDATE = 'debug-bg-ui-update',
 }
 
-export enum MessageTypeBGtoCS {
+export const enum MessageTypeBGtoCS {
     ADD_CSS_FILTER = 'bg-cs-add-css-filter',
     ADD_DYNAMIC_THEME = 'bg-cs-add-dynamic-theme',
     ADD_STATIC_THEME = 'bg-cs-add-static-theme',
@@ -38,11 +38,11 @@ export enum MessageTypeBGtoCS {
     UNSUPPORTED_SENDER = 'bg-cs-unsupported-sender',
 }
 
-export enum DebugMessageTypeBGtoCS {
+export const enum DebugMessageTypeBGtoCS {
     RELOAD = 'debug-bg-cs-reload',
 }
 
-export enum MessageTypeCStoBG {
+export const enum MessageTypeCStoBG {
     COLOR_SCHEME_CHANGE = 'cs-bg-color-scheme-change',
     DARK_THEME_DETECTED = 'cs-bg-dark-theme-detected',
     DARK_THEME_NOT_DETECTED = 'cs-bg-dark-theme-not-detected',
@@ -53,14 +53,14 @@ export enum MessageTypeCStoBG {
     DOCUMENT_RESUME = 'cs-bg-document-resume',
 }
 
-export enum DebugMessageTypeCStoBG {
+export const enum DebugMessageTypeCStoBG {
     LOG = 'debug-cs-bg-log',
 }
 
-export enum MessageTypeCStoUI {
+export const enum MessageTypeCStoUI {
     EXPORT_CSS_RESPONSE = 'cs-ui-export-css-response',
 }
 
-export enum MessageTypeUItoCS {
+export const enum MessageTypeUItoCS {
     EXPORT_CSS = 'ui-cs-export-css',
 }

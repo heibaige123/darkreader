@@ -1,4 +1,4 @@
-export enum ThemeEngine {
+export const enum ThemeEngine {
     cssFilter = 'cssFilter',
     svgFilter = 'svgFilter',
     staticTheme = 'staticTheme',

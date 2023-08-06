@@ -87,7 +87,7 @@ import { PromiseBarrier } from './promise-barrier';
 
 declare const __TEST__: boolean;
 
-enum StateManagerImplState {
+const enum StateManagerImplState {
     INITIAL = 0,
     LOADING = 1,
     READY = 2,

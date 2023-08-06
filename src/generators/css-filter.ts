@@ -16,7 +16,7 @@ import {
 declare const __CHROMIUM_MV2__: boolean;
 declare const __CHROMIUM_MV3__: boolean;
 
-export enum FilterMode {
+export const enum FilterMode {
     light = 0,
     dark = 1,
 }
