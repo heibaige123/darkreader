@@ -10,10 +10,18 @@ import {
 import { scale } from '../utils/math';
 import { applyColorMatrix, createFilterMatrix } from './utils/matrix';
 
+/**
+ * 表示以HSLA格式修改颜色的函数的接口。
+ */
 interface ColorFunction {
     (hsl: HSLA): HSLA;
 }
 
+/**
+ * 根据主题是暗模式还是亮模式来确定主题的基本背景和前景颜色。
+ * @param theme 
+ * @returns 
+ */
 function getBgPole(theme: Theme) {
     const isDarkScheme = theme.mode === 1;
     const prop: keyof Theme = isDarkScheme
@@ -22,6 +30,11 @@ function getBgPole(theme: Theme) {
     return theme[prop];
 }
 
+/**
+ * 根据主题是暗模式还是亮模式来确定主题的基本背景和前景颜色。
+ * @param theme 
+ * @returns 
+ */
 function getFgPole(theme: Theme) {
     const isDarkScheme = theme.mode === 1;
     const prop: keyof Theme = isDarkScheme
@@ -30,13 +43,26 @@ function getFgPole(theme: Theme) {
     return theme[prop];
 }
 
+/**
+ * 一个双层的缓存机制，用于防止重新计算颜色转换。
+ * 第一层将修改函数映射到一个缓存，第二层将从RGB和主题数据生成的ID映射到修改后的颜色。
+ */
 const colorModificationCache = new Map<ColorFunction, Map<string, string>>();
 
+/**
+ * 
+ */
 export function clearColorModificationCache(): void {
     colorModificationCache.clear();
 }
 
+/**
+ * 用于为颜色和主题创建缓存ID的字符串数组。
+ */
 const rgbCacheKeys: Array<keyof RGBA> = ['r', 'g', 'b', 'a'];
+/**
+ * 用于为颜色和主题创建缓存ID的字符串数组。
+ */
 const themeCacheKeys: Array<keyof Theme> = [
     'mode',
     'brightness',
@@ -49,6 +75,9 @@ const themeCacheKeys: Array<keyof Theme> = [
     'lightSchemeTextColor',
 ];
 
+/**
+ * 通过连接RGB和主题属性值来创建缓存ID。
+ */
 function getCacheId(rgb: RGBA, theme: Theme): string {
     let resultId = '';
     rgbCacheKeys.forEach((key) => {
@@ -60,6 +89,9 @@ function getCacheId(rgb: RGBA, theme: Theme): string {
     return resultId;
 }
 
+/**
+ * 修改颜色并缓存结果的核心函数。它处理在RGB和HSL之间转换颜色，应用修改函数，然后应用主题的滤镜矩阵。
+ */
 function modifyColorWithCache(
     rgb: RGBA,
     theme: Theme,
@@ -101,20 +133,32 @@ function modifyColorWithCache(
     return color;
 }
 
+/**
+ * 接受一个 HSLA 类型的参数，并直接返回这个参数，不进行任何处理
+ */
 function noopHSL(hsl: HSLA): HSLA {
     return hsl;
 }
 
+/**
+ * 修改颜色并缓存结果的核心函数。它处理在RGB和HSL之间转换颜色，应用修改函数，然后应用主题的滤镜矩阵。
+ */
 export function modifyColor(rgb: RGBA, theme: FilterConfig): string {
     return modifyColorWithCache(rgb, theme, noopHSL);
 }
 
+/**
+ * 修改亮模式颜色
+ */
 function modifyLightSchemeColor(rgb: RGBA, theme: Theme): string {
     const poleBg = getBgPole(theme);
     const poleFg = getFgPole(theme);
     return modifyColorWithCache(rgb, theme, modifyLightModeHSL, poleFg, poleBg);
 }
 
+/**
+ * 根据输入颜色和暗/亮模式的标准颜色（poleFg和poleBg）来修改输入的HSLA颜色。
+ */
 function modifyLightModeHSL(
     { h, s, l, a }: HSLA,
     poleFg: HSLA,
@@ -148,6 +192,9 @@ function modifyLightModeHSL(
 
 const MAX_BG_LIGHTNESS = 0.4;
 
+/**
+ * 
+ */
 function modifyBgHSL({ h, s, l, a }: HSLA, pole: HSLA): HSLA {
     const isDark = l < 0.5;
     const isBlue = h > 200 && h < 280;
@@ -190,6 +237,9 @@ function modifyBgHSL({ h, s, l, a }: HSLA, pole: HSLA): HSLA {
     return { h: hx, s, l: lx, a };
 }
 
+/**
+ * 修改模式背景
+ */
 export function modifyBackgroundColor(rgb: RGBA, theme: Theme): string {
     if (theme.mode === 0) {
         return modifyLightSchemeColor(rgb, theme);
@@ -200,10 +250,21 @@ export function modifyBackgroundColor(rgb: RGBA, theme: Theme): string {
 
 const MIN_FG_LIGHTNESS = 0.55;
 
+/**
+ * 对于在 205 到 245 之间的色调值，此函数将其缩放至 205 到 220 之
+ */
 function modifyBlueFgHue(hue: number): number {
     return scale(hue, 205, 245, 205, 220);
 }
 
+/**
+ * 根据输入的颜色和基准颜色调整颜色的 HSLA 值。
+ * 判断颜色是否为浅色（isLight），中性色（isNeutral），或蓝色调范围内（isBlue）。
+ * 如果颜色是浅色并且是中性色，它将色调和饱和度调整为基准颜色的色调和饱和度。
+ * 如果颜色是浅色但不是中性色，并且是蓝色，它将色调调整为 modifyBlueFgHue 函数返回的值。
+ * 如果颜色是深色并且是中性色，它同样会调整色调和饱和度。
+ * 如果颜色是深色但不是中性色，并且是蓝色，它将调整色调，并根据给定的规则调整亮度。
+ */
 function modifyFgHSL({ h, s, l, a }: HSLA, pole: HSLA): HSLA {
     const isLight = l > 0.5;
     const isNeutral = l < 0.2 || s < 0.24;
@@ -241,6 +302,9 @@ function modifyFgHSL({ h, s, l, a }: HSLA, pole: HSLA): HSLA {
     return { h: hx, s, l: lx, a };
 }
 
+/**
+ * 修改模式前景色
+ */
 export function modifyForegroundColor(rgb: RGBA, theme: Theme): string {
     if (theme.mode === 0) {
         return modifyLightSchemeColor(rgb, theme);
@@ -249,6 +313,12 @@ export function modifyForegroundColor(rgb: RGBA, theme: Theme): string {
     return modifyColorWithCache(rgb, { ...theme, mode: 0 }, modifyFgHSL, pole);
 }
 
+/**
+ * 对中性色的色调和饱和度进行了调整，并减少了亮度
+ * 首先确定颜色是否是暗色（isDark），以及是否是中性色（isNeutral）。
+ * 对于中性颜色，它根据颜色是深色还是浅色来从poleFg或poleBg中提取色调和饱和度值。
+ * 接着，这个函数会对亮度l进行缩放，将其值从[0, 1]的范围映射到[0.5, 0.2]的范围。这基本上是减少亮度的操作。
+ */
 function modifyBorderHSL(
     { h, s, l, a }: HSLA,
     poleFg: HSLA,
@@ -275,6 +345,9 @@ function modifyBorderHSL(
     return { h: hx, s: sx, l: lx, a };
 }
 
+/**
+ * 修改模式边框色
+ */
 export function modifyBorderColor(rgb: RGBA, theme: Theme): string {
     if (theme.mode === 0) {
         return modifyLightSchemeColor(rgb, theme);
@@ -290,10 +363,16 @@ export function modifyBorderColor(rgb: RGBA, theme: Theme): string {
     );
 }
 
+/**
+ * 修改模式阴影色
+ */
 export function modifyShadowColor(rgb: RGBA, filter: FilterConfig): string {
     return modifyBackgroundColor(rgb, filter);
 }
 
+/**
+ * 修改模式渐变色
+ */
 export function modifyGradientColor(rgb: RGBA, filter: FilterConfig): string {
     return modifyBackgroundColor(rgb, filter);
 }

@@ -32,9 +32,18 @@ declare global {
     }
 }
 
+/**
+ * 定义了一个元素数组，其中的元素是 HTMLStyleElement 类
+ */
 export type StyleElement = HTMLLinkElement | HTMLStyleElement;
 
+/**
+ * 用于指定样式元素和详情参数的类型
+ */
 export type detailsArgument = { secondRound: boolean };
+/**
+ * 一个管理样式的接口，包括了如何创建、更新和删除样式的方法。
+ */
 export interface StyleManager {
     details(options: detailsArgument): { rules: CSSRuleList } | null;
     render(theme: Theme, ignoreImageAnalysis: string[]): void;
@@ -44,11 +53,20 @@ export interface StyleManager {
     restore(): void;
 }
 
+/**
+ * 用于选择样式元素的选择器。它匹配所有的 style 元素和带有 rel 属性包含 "stylesheet" 的非禁用 link 元素
+ */
 export const STYLE_SELECTOR =
     'style, link[rel*="stylesheet" i]:not([disabled])';
 
 // isFontsGoogleApiStyle returns is the given link element is a style from
 // google fonts.
+/**
+ * 用于检查给定的 link 元素是否是来自 Google Fonts API 的样式。
+ * 它通过解析链接中的主机名来判断是否使用了 Google Fonts API
+ * @param element 
+ * @returns 
+ */
 function isFontsGoogleApiStyle(element: HTMLLinkElement): boolean {
     if (!element.href) {
         return false;
@@ -63,6 +81,11 @@ function isFontsGoogleApiStyle(element: HTMLLinkElement): boolean {
     }
 }
 
+/**
+ * 用于检查给定的节点是否应该由样式管理器来管理。
+ * @param element 
+ * @returns 
+ */
 export function shouldManageStyle(element: Node | null): boolean {
     return (
         (element instanceof HTMLStyleElement ||
@@ -79,6 +102,13 @@ export function shouldManageStyle(element: Node | null): boolean {
     );
 }
 
+/**
+ * 用于获取可管理的样式元素。
+ * @param node 
+ * @param results 
+ * @param deep 
+ * @returns 
+ */
 export function getManageableStyles(
     node: Node | null,
     results: StyleElement[] = [],
@@ -104,9 +134,18 @@ export function getManageableStyles(
     return results;
 }
 
+/**
+ * 用于存储 sync 样式元素，防止重复管理。
+ */
 const syncStyleSet = new WeakSet<HTMLStyleElement | SVGStyleElement>();
+/**
+ * 用于存储 cors 样式元素，防止重复管理。
+ */
 const corsStyleSet = new WeakSet<HTMLStyleElement>();
 
+/**
+ * 用于表示是否可以使用代理优化样式。
+ */
 let canOptimizeUsingProxy = false;
 document.addEventListener(
     '__darkreader__inlineScriptsAllowed',
@@ -116,13 +155,30 @@ document.addEventListener(
     { once: true, passive: true },
 );
 
+/**
+ * 用于给加载中的链接元素分配一个唯一的标识符。
+ */
 let loadingLinkCounter = 0;
+/**
+ * 用于存储加载中的链接元素的拒绝函数。
+ * 当链接元素加载完成或出现错误时，可以调用相应的拒绝函数来解决或拒绝 Promise。
+ */
 const rejectorsForLoadingLinks = new Map<number, (reason?: any) => void>();
 
+/**
+ * 用于清除存储在 rejectorsForLoadingLinks 常量中的拒绝函数。
+ */
 export function cleanLoadingLinks(): void {
     rejectorsForLoadingLinks.clear();
 }
 
+/**
+ * 用于管理样式元素。它接受一个样式元素和一个对象，
+ * 其中包含 update、loadingStart 和 loadingEnd 函数。这些函数在样式需要更新
+ * @param element 
+ * @param param1 
+ * @returns 
+ */
 export function manageStyle(
     element: StyleElement,
     {
@@ -650,6 +706,12 @@ export function manageStyle(
     };
 }
 
+/**
+ * 用于加载链接元素的样式
+ * @param link 
+ * @param loadingId 
+ * @returns 
+ */
 async function linkLoading(link: HTMLLinkElement, loadingId: number) {
     return new Promise<void>((resolve, reject) => {
         const cleanUp = () => {
@@ -681,6 +743,12 @@ async function linkLoading(link: HTMLLinkElement, loadingId: number) {
     });
 }
 
+/**
+ * 用于从 @import 语句中获取导入的样式表的 URL。
+ * 它从给定的导入声明中提取 URL，并进行处理，去掉可能的空格和分号等。
+ * @param importDeclaration 
+ * @returns 
+ */
 function getCSSImportURL(importDeclaration: string) {
     // substring(7) is used to remove `@import` from the string.
     // And then use .trim() to remove the possible whitespaces.
@@ -693,6 +761,13 @@ function getCSSImportURL(importDeclaration: string) {
     );
 }
 
+/**
+ * 用于加载文本资源，包括样式表。它接受一个 URL 字符串，
+ * 根据 URL 的类型（以 data: 开头或非 data: 开头）来决定如何加载。
+ * 对于非 data: URL，它使用 bgFetch 函数来进行后台加载，返回一个包含加载文本的 Promise
+ * @param url 
+ * @returns 
+ */
 async function loadText(url: string) {
     if (url.startsWith('data:')) {
         return await (await fetch(url)).text();
@@ -705,6 +780,13 @@ async function loadText(url: string) {
     });
 }
 
+/**
+ * 用于替换样式表中的 @import 语句
+ * @param cssText 
+ * @param basePath 
+ * @param cache 
+ * @returns 
+ */
 async function replaceCSSImports(
     cssText: string,
     basePath: string,
@@ -743,6 +825,17 @@ async function replaceCSSImports(
     return cssText;
 }
 
+/**
+ * 用于创建样式表的 CORS 副本。
+ * 它接受一个原始的样式元素和一个样式文本字符串，
+ * 创建一个新的 style 元素并将样式文本插入其中。
+ * 然后将新的样式元素插入到原始样式元素的后面，并返回新的样式元素。
+ * 此函数用于处理一些跨域的样式表，因为有时候访问跨域样式表的 sheet 属性会抛出错误。
+ * 通过创建 CORS 副本来绕过这个问题，从而可以访问样式表的 cssRules。
+ * @param srcElement 
+ * @param cssText 
+ * @returns 
+ */
 function createCORSCopy(srcElement: StyleElement, cssText: string) {
     if (!cssText) {
         return null;

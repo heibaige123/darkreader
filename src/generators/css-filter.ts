@@ -8,6 +8,9 @@ import { createTextStyle } from './text-style';
 import type { FilterConfig, InversionFix } from '../definitions';
 import { compareChromeVersions } from '../utils/platform';
 
+/**
+ * 表示两种滤镜模式："light" 和 "dark"。
+ */
 export const enum FilterMode {
     light = 0,
     dark = 1,
@@ -20,6 +23,10 @@ export const enum FilterMode {
  * Bug report: https://bugs.chromium.org/p/chromium/issues/detail?id=501582
  * Patch: https://chromium-review.googlesource.com/c/chromium/src/+/1979258
  */
+/**
+ * 检查当前的 Chromium 浏览器版本是否包含特定的修复补丁。
+ * @returns 
+ */
 export function hasPatchForChromiumIssue501582(): boolean {
     return false;
 }
@@ -28,11 +35,21 @@ export function hasPatchForChromiumIssue501582(): boolean {
  * Since Firefox v102.0, they have changed to the new root behavior.
  * This was already the case for Chromium v81.0.4035.0 and Firefox now
  * switched over as well.
+ * 检查当前的 Firefox 浏览器版本是否切换到了新的根行为
  */
 export function hasFirefoxNewRootBehavior(): boolean {
     return Boolean(false && compareChromeVersions('', '102.0') >= 0);
 }
 
+/**
+ * 基于提供的 config、url、isTopFrame、fixes 和 index 参数生成CSS滤镜样式表
+ * @param config 
+ * @param url 
+ * @param isTopFrame 
+ * @param fixes 
+ * @param index 
+ * @returns 
+ */
 export default function createCSSFilterStyleSheet(
     config: FilterConfig,
     url: string,
@@ -53,6 +70,17 @@ export default function createCSSFilterStyleSheet(
     );
 }
 
+/**
+ *  根据提供的配置生成CSS滤镜样式表，包含不同的规则。它为主滤镜、反转滤镜（用于暗黑模式）、文本样式和其他修复功能生成规则。
+ * @param filterValue 
+ * @param reverseFilterValue 
+ * @param config 
+ * @param url 
+ * @param isTopFrame 
+ * @param fixes 
+ * @param index 
+ * @returns 
+ */
 export function cssFilterStyleSheetTemplate(
     filterValue: string,
     reverseFilterValue: string,
@@ -139,6 +167,11 @@ export function cssFilterStyleSheetTemplate(
     return lines.join('\n');
 }
 
+/**
+ * 根据提供的 config 计算CSS滤镜的值。
+ * @param config 
+ * @returns 
+ */
 export function getCSSFilterValue(config: FilterConfig): string | null {
     const filters: string[] = [];
 
@@ -164,7 +197,11 @@ export function getCSSFilterValue(config: FilterConfig): string | null {
 
     return filters.join(' ');
 }
-
+/**
+ * 为滤镜生成特定的CSS规则。
+ * @param filterValue 
+ * @returns 
+ */
 function createLeadingRule(filterValue: string): string {
     return [
         'html {',
@@ -178,6 +215,12 @@ function joinSelectors(selectors: string[]): string {
     return selectors.map((s) => s.replace(/\,$/, '')).join(',\n');
 }
 
+/**
+ * 为滤镜生成特定的CSS规则。
+ * @param reverseFilterValue 
+ * @param fix 
+ * @returns 
+ */
 function createReverseRule(
     reverseFilterValue: string,
     fix: InversionFix,
@@ -210,6 +253,7 @@ function createReverseRule(
 /**
  * Returns fixes for a given URL.
  * If no matches found, common fixes will be returned.
+ * 获取给定URL的反转修复功能。
  * @param url Site URL.
  * @param inversionFixes List of inversion fixes.
  */
@@ -257,6 +301,9 @@ export function getInversionFixesFor(
     return common;
 }
 
+/**
+ * 定义反转修复功能的属性。
+ */
 const inversionFixesCommands: { [key: string]: keyof InversionFix } = {
     INVERT: 'invert',
     'NO INVERT': 'noinvert',
@@ -264,6 +311,15 @@ const inversionFixesCommands: { [key: string]: keyof InversionFix } = {
     CSS: 'css',
 };
 
+/**
+ * 处理反转修复功能的配置,将文本配置解析为对象数组
+ * 
+ * 接受一个字符串 text 作为输入，该字符串包含反转修复功能的配置信息。
+ * 函数会解析这些配置信息，并返回一个包含多个 InversionFix 对象的数组，
+ * 每个对象都代表一个反转修复功能的配置
+ * @param text 
+ * @returns 
+ */
 export function parseInversionFixes(text: string): InversionFix[] {
     return parseSitesFixesConfig<InversionFix>(text, {
         commands: Object.keys(inversionFixesCommands),
@@ -277,6 +333,15 @@ export function parseInversionFixes(text: string): InversionFix[] {
     });
 }
 
+/**
+ * 处理反转修复功能的配置,将对象数组格式化为文本配置。
+ * 
+ * 接受一个 InversionFix 对象数组 inversionFixes 作为输入。
+ * 它会对这些对象进行排序，并根据反转修复功能的配置信息生成一个格式化的字符串。
+ * 这个字符串可以用来保存反转修复功能的配置或进行其他操作。
+ * @param inversionFixes 
+ * @returns 
+ */
 export function formatInversionFixes(inversionFixes: InversionFix[]): string {
     const fixes = inversionFixes
         .slice()

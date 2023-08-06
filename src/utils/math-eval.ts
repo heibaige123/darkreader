@@ -4,6 +4,12 @@
 // Example: 1 + 2 * 3 -> [1, 2, 3, *, +] which with parentheses means 1 (2 3 *) +
 //
 // Then it evaluates the RPN stack and returns the output.
+/**
+ * 使用“调度场算法”（Shunting Yard Algorithm）来处理数学表达式
+ * 逆波兰表示法
+ * @param expression 
+ * @returns 
+ */
 export function evalMath(expression: string): number {
     // Stack where operators & numbers are stored in RPN.
     const rpnStack: string[] = [];
@@ -74,6 +80,9 @@ export function evalMath(expression: string): number {
 }
 
 // Operator class  defines a operator that can be parsed & evaluated by evalMath.
+/**
+ * 操作符
+ */
 class Operator {
     private precendce: number;
     private execMethod: (left: number, right: number) => number;
@@ -86,15 +95,30 @@ class Operator {
         this.execMethod = method;
     }
 
+    /**
+     * 执行操作
+     * @param left 
+     * @param right 
+     * @returns 
+     */
     public exec(left: number, right: number): number {
         return this.execMethod(left, right);
     }
 
+    /**
+     * 比较两个操作符的优先级
+     * @param op 
+     * @returns 
+     */
     public lessOrEqualThan(op: Operator) {
         return this.precendce <= op.precendce;
     }
 }
 
+/**
+ * 一个只读的映射，其中的键是操作符字符串（如"+"或"*"），值是对应的Operator对象。
+ * 定义了四个基本的数学操作：加、减、乘、除，并为每个操作设置了一个优先级。
+ */
 const operators: Readonly<Map<string, Operator>> = new Map([
     [
         '+',

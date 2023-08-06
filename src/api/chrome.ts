@@ -3,73 +3,58 @@ import type { MessageBGtoCS } from '../definitions';
 import { readResponseAsDataURL } from '../utils/network';
 import { callFetchMethod } from './fetch';
 
-if (!window.chrome) {
-    window.chrome = {} as any;
-}
-if (!chrome.runtime) {
-    chrome.runtime = {} as any;
-}
-
+/**
+ * 用于存储添加的消息监听器函数。每当接收到新的消息时，这些监听器函数将被调用
+ */
 const messageListeners = new Set<(message: MessageBGtoCS) => void>();
 
-async function sendMessage(...args: any[]) {
-    if (args[0] && args[0].type === MessageTypeCStoBG.FETCH) {
-        const { id } = args[0];
-        try {
-            const { url, responseType } = args[0].data;
-            const response = await callFetchMethod(url);
-            let text: string;
-            if (responseType === 'data-url') {
-                text = await readResponseAsDataURL(response);
-            } else {
-                text = await response.text();
+window.chrome = {
+    runtime: {
+        /**
+         * 一个异步函数，用于发送消息
+         * 当接收到内容脚本发送的FETCH类型的消息时，它会执行FETCH操作，并根据结果调用相应的监听器函数。
+         * @param args
+         */
+        sendMessage: async function sendMessage(...args: any[]) {
+            if (args[0] && args[0].type === MessageTypeCStoBG.FETCH) {
+                const { id } = args[0];
+                try {
+                    const { url, responseType } = args[0].data;
+                    const response = await callFetchMethod(url);
+                    let text: string;
+                    if (responseType === 'data-url') {
+                        text = await readResponseAsDataURL(response);
+                    } else {
+                        text = await response.text();
+                    }
+                    messageListeners.forEach((cb) =>
+                        cb({
+                            type: MessageTypeBGtoCS.FETCH_RESPONSE,
+                            data: text,
+                            error: null,
+                            id,
+                        }),
+                    );
+                } catch (error) {
+                    console.error(error);
+                    messageListeners.forEach((cb) =>
+                        cb({
+                            type: MessageTypeBGtoCS.FETCH_RESPONSE,
+                            data: null,
+                            error,
+                            id,
+                        }),
+                    );
+                }
             }
-            messageListeners.forEach((cb) =>
-                cb({
-                    type: MessageTypeBGtoCS.FETCH_RESPONSE,
-                    data: text,
-                    error: null,
-                    id,
-                }),
-            );
-        } catch (error) {
-            console.error(error);
-            messageListeners.forEach((cb) =>
-                cb({
-                    type: MessageTypeBGtoCS.FETCH_RESPONSE,
-                    data: null,
-                    error,
-                    id,
-                }),
-            );
-        }
-    }
-}
-
-function addMessageListener(callback: (data: any) => void) {
-    messageListeners.add(callback);
-}
-
-if (typeof chrome.runtime.sendMessage === 'function') {
-    const nativeSendMessage = chrome.runtime.sendMessage;
-    (chrome.runtime.sendMessage as unknown) = (...args: any[]) => {
-        sendMessage(...args);
-        nativeSendMessage.apply(chrome.runtime, args);
-    };
-} else {
-    chrome.runtime.sendMessage = sendMessage;
-}
-
-if (!chrome.runtime.onMessage) {
-    chrome.runtime.onMessage = {} as any;
-}
-if (typeof chrome.runtime.onMessage.addListener === 'function') {
-    const nativeAddListener = chrome.runtime.onMessage.addListener;
-    chrome.runtime.onMessage.addListener = (...args: any[]) => {
-        addMessageListener(args[0]);
-        nativeAddListener.apply(chrome.runtime.onMessage, args);
-    };
-} else {
-    chrome.runtime.onMessage.addListener = (...args: any[]) =>
-        addMessageListener(args[0]);
-}
+        },
+        // @ts-ignore
+        onMessage: {
+            /**
+             * 一个用于添加消息监听器的函数。它将传入的回调函数添加到messageListeners集合中，以便在接收到新消息时调用。
+             * @param callback
+             */
+            addListener: (...args: any[]) => messageListeners.add(args[0]),
+        },
+    },
+};

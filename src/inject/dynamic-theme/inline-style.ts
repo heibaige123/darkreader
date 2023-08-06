@@ -13,6 +13,9 @@ import type { FilterConfig } from '../../definitions';
 import { getDuration } from '../../utils/time';
 import { throttle } from '../../utils/throttle';
 
+/**
+ * 定义了CSS属性与其相应的自定义属性、数据属性和实际CSS属性之间的映射。
+ */
 interface Overrides {
     [cssProp: string]: {
         customProp: string;
@@ -95,6 +98,9 @@ overridesList.forEach(
     ({ cssProp, customProp }) => (normalizedPropList[customProp] = cssProp),
 );
 
+/**
+ * 列出了可能在HTML元素上设置为内联样式的属性
+ */
 const INLINE_STYLE_ATTRS = [
     'style',
     'fill',
@@ -103,10 +109,17 @@ const INLINE_STYLE_ATTRS = [
     'bgcolor',
     'color',
 ];
+
+/**
+ * 一个CSS选择器，可以用来选取页面上具有这些内联样式属性的所有元素
+ */
 export const INLINE_STYLE_SELECTOR = INLINE_STYLE_ATTRS.map(
     (attr) => `[${attr}]`,
 ).join(', ');
 
+/**
+ * 创建一个CSS字符串，该字符串使用自定义属性覆盖某些CSS属性。结果是一组CSS规则，可以应用于元素，以确保它们使用主题的样式
+ */
 export function getInlineOverrideStyle(): string {
     return overridesList
         .map(({ dataAttr, customProp, cssProp }) => {
@@ -119,6 +132,11 @@ export function getInlineOverrideStyle(): string {
         .join('\n');
 }
 
+/**
+ * 在节点内获取具有可能需要覆盖的内联样式或某些属性
+ * @param root 
+ * @returns 
+ */
 function getInlineStyleElements(root: Node) {
     const results: Element[] = [];
     if (root instanceof Element && root.matches(INLINE_STYLE_SELECTOR)) {
@@ -137,6 +155,11 @@ function getInlineStyleElements(root: Node) {
 const treeObservers = new Map<Node, { disconnect(): void }>();
 const attrObservers = new Map<Node, MutationObserver>();
 
+/**
+ * 使用mutation观察器来跟踪DOM中的更改
+ * @param elementStyleDidChange 
+ * @param shadowRootDiscovered 
+ */
 export function watchForInlineStyles(
     elementStyleDidChange: (element: HTMLElement) => void,
     shadowRootDiscovered: (root: ShadowRoot) => void,
@@ -155,6 +178,12 @@ export function watchForInlineStyles(
     });
 }
 
+/**
+ * 使用mutation观察器来跟踪DOM中的更改
+ * @param root 
+ * @param elementStyleDidChange 
+ * @param shadowRootDiscovered 
+ */
 function deepWatchForInlineStyles(
     root: Document | ShadowRoot,
     elementStyleDidChange: (element: HTMLElement) => void,
@@ -251,6 +280,9 @@ function deepWatchForInlineStyles(
     attrObservers.set(root, attrObserver);
 }
 
+/**
+ * 停止mutation观察器，有效地暂停了跟踪内联样式更改的功能
+ */
 export function stopWatchingForInlineStyles(): void {
     treeObservers.forEach((o) => o.disconnect());
     attrObservers.forEach((o) => o.disconnect());
@@ -267,6 +299,12 @@ const filterProps: Array<keyof FilterConfig> = [
     'mode',
 ];
 
+/**
+ * 为给定的HTML元素和主题生成一个唯一的字符串键
+ * @param el 
+ * @param theme 
+ * @returns 
+ */
 function getInlineStyleCacheKey(el: HTMLElement, theme: FilterConfig): string {
     return INLINE_STYLE_ATTRS.map(
         (attr) => `${attr}="${el.getAttribute(attr)}"`,
@@ -275,6 +313,12 @@ function getInlineStyleCacheKey(el: HTMLElement, theme: FilterConfig): string {
         .join(' ');
 }
 
+/**
+ * 这个函数决定是否应该忽略一个元素的样式覆盖。它接受一个元素和一个选择器列表作为参数。
+ * @param element 
+ * @param selectors 
+ * @returns 
+ */
 function shouldIgnoreInlineStyle(
     element: HTMLElement,
     selectors: string[],
@@ -288,6 +332,14 @@ function shouldIgnoreInlineStyle(
     return false;
 }
 
+/**
+ * 处理实际样式覆盖的核心函数。它浏览元素的各种内联样式和属性，并根据给定的主题设置或修改它们
+ * @param element 
+ * @param theme 
+ * @param ignoreInlineSelectors 
+ * @param ignoreImageSelectors 
+ * @returns 
+ */
 export function overrideInlineStyle(
     element: HTMLElement,
     theme: FilterConfig,

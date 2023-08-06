@@ -1,3 +1,9 @@
+/**
+ * 用于在页面中注入代理的函数，它涉及到对样式表（style sheets）
+ * 和自定义元素注册表（custom element registry）的代理操作。
+ * @param enableStyleSheetsProxy
+ * @param enableCustomElementRegistryProxy
+ */
 export function injectProxy(
     enableStyleSheetsProxy: boolean,
     enableCustomElementRegistryProxy: boolean,
@@ -65,6 +71,9 @@ export function injectProxy(
         ? Object.getOwnPropertyDescriptor(Node.prototype, 'childNodes')
         : null;
 
+    /**
+     * 清除代理，并恢复原始的样式表和自定义元素注册表的方法和属性。
+     */
     const cleanUp = () => {
         Object.defineProperty(
             CSSStyleSheet.prototype,
@@ -121,6 +130,10 @@ export function injectProxy(
         }
     };
 
+    /**
+     * 向 customElements 注册一个未定义的元素，并在元素定义后触发自定义事件 __darkreader__isDefined。
+     * @param tag
+     */
     const addUndefinedResolverInner = (tag: string) => {
         customElements.whenDefined(tag).then(() => {
             document.dispatchEvent(
@@ -129,6 +142,11 @@ export function injectProxy(
         });
     };
 
+    /**
+     * 处理 __darkreader__addUndefinedResolver 事件
+     * @param e
+     * @returns
+     */
     const addUndefinedResolver = (e: CustomEvent<{ tag: string }>) =>
         addUndefinedResolverInner(e.detail.tag);
 

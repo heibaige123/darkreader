@@ -15,9 +15,15 @@ export interface HSLA {
     a?: number;
 }
 
+// 提高颜色解析的性能
 const hslaParseCache = new Map<string, HSLA>();
 const rgbaParseCache = new Map<string, RGBA>();
 
+/**
+ * rgba先检查颜色是否已经被缓存。如果没有，它会尝试解析颜色并将结果存储在缓存中。
+ * @param $color 
+ * @returns 
+ */
 export function parseColorWithCache($color: string): RGBA | null {
     $color = $color.trim();
     if (rgbaParseCache.has($color)) {
@@ -33,6 +39,11 @@ export function parseColorWithCache($color: string): RGBA | null {
     return color;
 }
 
+/**
+ * hsla先检查颜色是否已经被缓存。如果没有，它会尝试解析颜色并将结果存储在缓存中。
+ * @param $color 
+ * @returns 
+ */
 export function parseToHSLWithCache(color: string): HSLA | null {
     if (hslaParseCache.has(color)) {
         return hslaParseCache.get(color)!;
@@ -46,12 +57,21 @@ export function parseToHSLWithCache(color: string): HSLA | null {
     return hsl;
 }
 
+/**
+ * 清除颜色的缓存。
+ * @param $color 
+ * @returns 
+ */
 export function clearColorCache(): void {
     hslaParseCache.clear();
     rgbaParseCache.clear();
 }
 
-// https://en.wikipedia.org/wiki/HSL_and_HSV
+/**
+ * 将HSLA格式的颜色转换为RGBA格式
+ * @param $color 
+ * @returns 
+ *///https:en.wikipedia.org/wiki/HSL_and_HSV
 export function hslToRGB({ h, s, l, a = 1 }: HSLA): RGBA {
     if (s === 0) {
         const [r, b, g] = [l, l, l].map((x) => Math.round(x * 255));
@@ -78,7 +98,11 @@ export function hslToRGB({ h, s, l, a = 1 }: HSLA): RGBA {
     return { r, g, b, a };
 }
 
-// https://en.wikipedia.org/wiki/HSL_and_HSV
+/**
+ * 将RGBA格式的颜色转换为HSLA格式
+ * @param $color 
+ * @returns 
+ *///https:sen.wikipedia.org/wiki/HSL_and_HSV
 export function rgbToHSL({ r: r255, g: g255, b: b255, a = 1 }: RGBA): HSLA {
     const r = r255 / 255;
     const g = g255 / 255;
@@ -109,6 +133,11 @@ export function rgbToHSL({ r: r255, g: g255, b: b255, a = 1 }: RGBA): HSLA {
     return { h, s, l, a };
 }
 
+/**
+ * 
+ * @param $color 
+ * @returns 
+ */
 function toFixed(n: number, digits = 0): string {
     const fixed = n.toFixed(digits);
     if (digits === 0) {
@@ -127,6 +156,11 @@ function toFixed(n: number, digits = 0): string {
     return fixed;
 }
 
+/**
+ * 将RGBA或HSLA格式的颜色转换为字符串表示
+ * @param $color 
+ * @returns 
+ */
 export function rgbToString(rgb: RGBA): string {
     const { r, g, b, a } = rgb;
     if (a != null && a < 1) {
@@ -138,6 +172,11 @@ export function rgbToString(rgb: RGBA): string {
     return `rgb(${toFixed(r)}, ${toFixed(g)}, ${toFixed(b)})`;
 }
 
+/**
+ * 将RGBA或HSLA格式的颜色转换为字符串表示
+ * @param $color 
+ * @returns 
+ */
 export function rgbToHexString({ r, g, b, a }: RGBA): string {
     return `#${(a != null && a < 1 ? [r, g, b, Math.round(a * 255)] : [r, g, b])
         .map((x) => {
@@ -146,6 +185,11 @@ export function rgbToHexString({ r, g, b, a }: RGBA): string {
         .join('')}`;
 }
 
+/**
+ * 将RGBA或HSLA格式的颜色转换为字符串表示
+ * @param $color 
+ * @returns 
+ */
 export function hslToString(hsl: HSLA): string {
     const { h, s, l, a } = hsl;
     if (a != null && a < 1) {
@@ -160,6 +204,11 @@ const rgbMatch = /^rgba?\([^\(\)]+\)$/;
 const hslMatch = /^hsla?\([^\(\)]+\)$/;
 const hexMatch = /^#[0-9a-f]+$/i;
 
+/**
+ * 根据输入的字符串格式（RGB、HSL或十六进制）来解析颜色
+ * @param $color 
+ * @returns 
+ */
 export function parse($color: string): RGBA | null {
     const c = $color.trim().toLowerCase();
 
@@ -190,6 +239,11 @@ export function parse($color: string): RGBA | null {
     return null;
 }
 
+/**
+ * 用于从输入的字符串 $color 中提取数字。
+ * @param $color 
+ * @returns 
+ */
 function getNumbers($color: string) {
     const numbers: string[] = [];
     let prevPos = 0;
@@ -224,6 +278,13 @@ function getNumbers($color: string) {
     return numbers;
 }
 
+/**
+ * 调用了 getNumbers 函数来提取字符串 str 中的数字，并对数字进行处理
+ * @param str 
+ * @param range 
+ * @param units 
+ * @returns 
+ */
 function getNumbersFromString(
     str: string,
     range: number[],
@@ -255,6 +316,11 @@ function getNumbersFromString(
 const rgbRange = [255, 255, 255, 1];
 const rgbUnits = { '%': 100 };
 
+/**
+ * 分别解析RGB、HSL和十六进制格式的颜色字符串。
+ * @param $rgb 
+ * @returns 
+ */
 function parseRGB($rgb: string): RGBA {
     const [r, g, b, a = 1] = getNumbersFromString($rgb, rgbRange, rgbUnits);
     return { r, g, b, a };
@@ -263,11 +329,21 @@ function parseRGB($rgb: string): RGBA {
 const hslRange = [360, 1, 1, 1];
 const hslUnits = { '%': 100, deg: 360, rad: 2 * Math.PI, turn: 1 };
 
+/**
+ * 分别解析RGB、HSL和十六进制格式的颜色字符串。
+ * @param $hsl 
+ * @returns 
+ */
 function parseHSL($hsl: string): RGBA {
     const [h, s, l, a = 1] = getNumbersFromString($hsl, hslRange, hslUnits);
     return hslToRGB({ h, s, l, a });
 }
 
+/**
+ * 分别解析RGB、HSL和十六进制格式的颜色字符串。
+ * @param $hex 
+ * @returns 
+ */
 function parseHex($hex: string): RGBA | null {
     const h = $hex.substring(1);
     switch (h.length) {
@@ -292,6 +368,11 @@ function parseHex($hex: string): RGBA | null {
     return null;
 }
 
+/**
+ * 根据颜色的名称或系统颜色的名称返回相应的RGBA颜色。
+ * @param $color 
+ * @returns 
+ */
 function getColorByName($color: string): RGBA {
     const n = knownColors.get($color)!;
     return {
@@ -302,6 +383,11 @@ function getColorByName($color: string): RGBA {
     };
 }
 
+/**
+ * 根据颜色的名称或系统颜色的名称返回相应的RGBA颜色。
+ * @param $color 
+ * @returns 
+ */
 function getSystemColor($color: string): RGBA {
     const n = systemColors.get($color)!;
     return {
@@ -315,6 +401,11 @@ function getSystemColor($color: string): RGBA {
 // lowerCalcExpression is a helper function that tries to remove `calc(...)`
 // expressions from the given string. It can only lower expressions to a certain
 // degree so we can keep this function easy and simple to understand.
+/**
+ * 尝试简化包含calc(...)表达式的字符串
+ * @param color 
+ * @returns 
+ */
 export function lowerCalcExpression(color: string): string {
     // searchIndex will be used as searchIndex and as a "cursor" within
     // the calc(...) expression.
@@ -357,6 +448,9 @@ export function lowerCalcExpression(color: string): string {
     return color;
 }
 
+/**
+ * 分别包含了已知的颜色和系统颜色的十六进制值。
+ */
 const knownColors: Map<string, number> = new Map(
     Object.entries({
         aliceblue: 0xf0f8ff,
@@ -510,6 +604,9 @@ const knownColors: Map<string, number> = new Map(
     }),
 );
 
+/**
+ * 分别包含了已知的颜色和系统颜色的十六进制值。
+ */
 const systemColors: Map<string, number> = new Map(
     Object.entries({
         ActiveBorder: 0x3b99fc,
@@ -545,6 +642,13 @@ const systemColors: Map<string, number> = new Map(
 );
 
 // https://en.wikipedia.org/wiki/Relative_luminance
+/**
+ * 根据红、绿和蓝的值计算颜色的相对亮度。
+ * @param r 
+ * @param g 
+ * @param b 
+ * @returns 
+ */
 export function getSRGBLightness(r: number, g: number, b: number): number {
     return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
 }

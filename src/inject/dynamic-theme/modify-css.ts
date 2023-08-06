@@ -23,18 +23,30 @@ import type { FilterConfig, Theme } from '../../definitions';
 import type { parsedGradient } from '../../utils/parsing';
 import { parseGradient } from '../../utils/parsing';
 
+/**
+ * 输入一个主题并返回一个字符串或Promise。
+ */
 export type CSSValueModifier = (
     theme: Theme,
 ) => string | Promise<string | null>;
 
+/**
+ * 描述了修改CSS值后的结果。
+ */
 export interface CSSValueModifierResult {
     result: string;
     matchesLength: number;
     unparseableMatchesLength: number;
 }
 
+/**
+ * 输入一个主题并返回CSSValueModifierResult
+ */
 export type CSSValueModifierWithInfo = (theme: Theme) => CSSValueModifierResult;
 
+/**
+ * 描述了可修改的CSS声明。
+ */
 export interface ModifiableCSSDeclaration {
     property: string;
     value: string | CSSValueModifier | CSSVariableModifier;
@@ -42,16 +54,35 @@ export interface ModifiableCSSDeclaration {
     sourceValue: string;
 }
 
+/**
+ * 描述了可修改的CSS规则。
+ */
 export interface ModifiableCSSRule {
     selector: string;
     parentRule: CSSRule;
     declarations: ModifiableCSSDeclaration[];
 }
 
+/**
+ * 获取CSS规则的优先级。
+ * @param ruleStyle 
+ * @param property 
+ * @returns 
+ */
 function getPriority(ruleStyle: CSSStyleDeclaration, property: string) {
     return Boolean(ruleStyle && ruleStyle.getPropertyPriority(property));
 }
 
+/**
+ * 获取可修改的CSS声明。
+ * @param property 
+ * @param value 
+ * @param rule 
+ * @param variablesStore 
+ * @param ignoreImageSelectors 
+ * @param isCancelled 
+ * @returns 
+ */
 export function getModifiableCSSDeclaration(
     property: string,
     value: string,
@@ -143,10 +174,22 @@ export function getModifiableCSSDeclaration(
     return null;
 }
 
+/**
+ * 将多个选择器连接为一个字符串
+ * @param selectors 
+ * @returns 
+ */
 function joinSelectors(...selectors: string[]) {
     return selectors.filter(Boolean).join(', ');
 }
 
+/**
+ * 获取修改后的用户代理样式。
+ * @param theme 
+ * @param isIFrame 
+ * @param styleSystemControls 
+ * @returns 
+ */
 export function getModifiedUserAgentStyle(
     theme: Theme,
     isIFrame: boolean,
@@ -248,6 +291,11 @@ export function getModifiedUserAgentStyle(
     return lines.join('\n');
 }
 
+/**
+ * 根据主题获取选择颜色。
+ * @param theme 
+ * @returns 
+ */
 export function getSelectionColor(theme: Theme): {
     backgroundColorSelection: string;
     foregroundColorSelection: string;
@@ -276,6 +324,9 @@ export function getSelectionColor(theme: Theme): {
     return { backgroundColorSelection, foregroundColorSelection };
 }
 
+/**
+ * 获取修改后的选择样式。
+ */
 function getModifiedSelectionStyle(theme: Theme) {
     const lines: string[] = [];
     const modifiedSelectionColor = getSelectionColor(theme);
@@ -294,6 +345,11 @@ function getModifiedSelectionStyle(theme: Theme) {
     return lines.join('\n');
 }
 
+/**
+ * 获取修改后的滚动条样式。
+ * @param theme 
+ * @returns 
+ */
 function getModifiedScrollbarStyle(theme: Theme) {
     const lines: string[] = [];
     let colorTrack: string;
@@ -353,6 +409,12 @@ function getModifiedScrollbarStyle(theme: Theme) {
     return lines.join('\n');
 }
 
+/**
+ * 获取修改后的回退样式。
+ * @param filter 
+ * @param param1 
+ * @returns 
+ */
 export function getModifiedFallbackStyle(
     filter: FilterConfig,
     { strict }: { strict: boolean },
@@ -404,6 +466,13 @@ const unparsableColors = new Set([
     'unset',
 ]);
 
+/**
+ * 获取颜色修改器。
+ * @param prop 
+ * @param value 
+ * @param rule 
+ * @returns 
+ */
 function getColorModifier(
     prop: string,
     value: string,
@@ -438,12 +507,25 @@ function getColorModifier(
     return (filter) => modifyForegroundColor(rgb, filter);
 }
 
+/**
+ * 用于缓存图片的详细信息。键是图片的 URL，值是包含图片详细信息的对象。
+ */
 const imageDetailsCache = new Map<string, ImageDetails>();
+/**
+ * 存储正在等待加载的图片和它们的回调函数。
+ * 当图片加载完成后，这些回调函数将被触发并传递图片的详细信息。
+ */
 const awaitingForImageLoading = new Map<
     string,
     Array<(imageDetails: ImageDetails | null) => void>
 >();
 
+/**
+ * 用于检查图片是否应该被忽略的函数。
+ * @param selectorText 
+ * @param selectors 
+ * @returns 
+ */
 function shouldIgnoreImage(selectorText: string, selectors: string[]) {
     if (!selectorText || selectors.length === 0) {
         return false;
@@ -470,6 +552,14 @@ interface bgImageMatches {
     hasComma?: boolean;
 }
 
+/**
+ * 获取背景图像修改器。
+ * @param value 
+ * @param rule 
+ * @param ignoreImageSelectors 
+ * @param isCancelled 
+ * @returns 
+ */
 export function getBgImageModifier(
     value: string,
     rule: CSSStyleRule,
@@ -747,6 +837,11 @@ export function getBgImageModifier(
     }
 }
 
+/**
+ * 获取具有信息的阴影修改器。
+ * @param value 
+ * @returns 
+ */
 export function getShadowModifierWithInfo(
     value: string,
 ): CSSValueModifierWithInfo | null {
@@ -793,6 +888,11 @@ export function getShadowModifierWithInfo(
     }
 }
 
+/**
+ * 获取阴影修改器。
+ * @param value 
+ * @returns 
+ */
 export function getShadowModifier(value: string): CSSValueModifier | null {
     const shadowModifier = getShadowModifierWithInfo(value);
     if (!shadowModifier) {
@@ -801,6 +901,16 @@ export function getShadowModifier(value: string): CSSValueModifier | null {
     return (theme: Theme) => shadowModifier(theme).result;
 }
 
+/**
+ * 获取变量修改器。
+ * @param variablesStore 
+ * @param prop 
+ * @param value 
+ * @param rule 
+ * @param ignoredImgSelectors 
+ * @param isCancelled 
+ * @returns 
+ */
 function getVariableModifier(
     variablesStore: VariablesStore,
     prop: string,
@@ -818,6 +928,13 @@ function getVariableModifier(
     });
 }
 
+/**
+ * 获取依赖变量的修改器。
+ * @param variablesStore 
+ * @param prop 
+ * @param value 
+ * @returns 
+ */
 function getVariableDependantModifier(
     variablesStore: VariablesStore,
     prop: string,
@@ -826,6 +943,9 @@ function getVariableDependantModifier(
     return variablesStore.getModifierForVarDependant(prop, value);
 }
 
+/**
+ * 清除修改缓存。
+ */
 export function cleanModificationCache(): void {
     clearColorModificationCache();
     imageDetailsCache.clear();

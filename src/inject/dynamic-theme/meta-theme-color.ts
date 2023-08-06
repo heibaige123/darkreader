@@ -8,6 +8,12 @@ const metaThemeColorSelector = `meta[name="${metaThemeColorName}"]`;
 let srcMetaThemeColor: string | null = null;
 let observer: MutationObserver | null = null;
 
+/**
+ * 用于改变 meta 元素中的主题颜色。
+ * @param meta 
+ * @param theme 
+ * @returns 
+ */
 function changeMetaThemeColor(meta: HTMLMetaElement, theme: FilterConfig) {
     srcMetaThemeColor = srcMetaThemeColor || meta.content;
     const color = parseColorWithCache(srcMetaThemeColor);
@@ -18,6 +24,10 @@ function changeMetaThemeColor(meta: HTMLMetaElement, theme: FilterConfig) {
     meta.content = modifyBackgroundColor(color, theme);
 }
 
+/**
+ * 用于在可用时改变网页的主题颜色。
+ * @param theme 
+ */
 export function changeMetaThemeColorWhenAvailable(theme: FilterConfig): void {
     const meta: HTMLMetaElement = document.querySelector(
         metaThemeColorSelector,
@@ -49,6 +59,9 @@ export function changeMetaThemeColorWhenAvailable(theme: FilterConfig): void {
     }
 }
 
+/**
+ * 用于恢复原始的主题颜色。
+ */
 export function restoreMetaThemeColor(): void {
     if (observer) {
         observer.disconnect();

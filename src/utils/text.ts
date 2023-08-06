@@ -1,3 +1,9 @@
+/**
+ * 返回字符串中指定索引位置的消息，包括行数和列数。它还提供一个指示字符来明确显示错误的位置
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function getTextPositionMessage(text: string, index: number): string {
     if (!isFinite(index)) {
         throw new Error(`Wrong char index ${index}`);
@@ -24,6 +30,12 @@ export function getTextPositionMessage(text: string, index: number): string {
     return message;
 }
 
+/**
+ * 一个比较两个字符串并返回第一个不同字符的索引的函数。
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function getTextDiffIndex(a: string, b: string): number {
     const short = Math.min(a.length, b.length);
     for (let i = 0; i < short; i++) {
@@ -37,6 +49,12 @@ export function getTextDiffIndex(a: string, b: string): number {
     return -1;
 }
 
+/**
+ * 一个字符串转换为字符串数组，其中每一行变成数组的一个元素。
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function parseArray(text: string): string[] {
     return text
         .replace(/\r/g, '')
@@ -45,10 +63,22 @@ export function parseArray(text: string): string[] {
         .filter((s) => s);
 }
 
+/**
+ * 将字符串数组转换回为一个单独的字符串。
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function formatArray(arr: Readonly<string[]>): string {
     return arr.concat('').join('\n');
 }
 
+/**
+ * 使用正则表达式从输入的字符串中捕获并返回所有匹配项。
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function getMatches(regex: RegExp, input: string, group = 0): string[] {
     const matches: string[] = [];
     let m: RegExpMatchArray | null;
@@ -58,10 +88,22 @@ export function getMatches(regex: RegExp, input: string, group = 0): string[] {
     return matches;
 }
 
+/**
+ * 返回字符串的大小。此处的大小是基于每个字符占用2个字节来计算的。
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function getStringSize(value: string): number {
     return value.length * 2;
 }
 
+/**
+ * 格式化CSS代码，使其具有恰当的缩进和新行。此函数特别处理了多余的空格、括号和其他CSS特有的格式问题。
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function formatCSS(text: string): string {
     function trimLeft(text: string) {
         return text.replace(/^\s+/, '');
@@ -111,11 +153,20 @@ export function formatCSS(text: string): string {
     return formatted.join('').trim();
 }
 
+/**
+ * 这是一个接口，定义了一对括号的开始和结束索引。
+ */
 interface ParenthesesRange {
     start: number;
     end: number;
 }
 
+/**
+ * 返回输入字符串中从指定开始索引处的第一对完整的括号的范围。
+ * @param text 
+ * @param index 
+ * @returns 
+ */
 export function getParenthesesRange(
     input: string,
     searchStartIndex = 0,

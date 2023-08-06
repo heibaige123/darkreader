@@ -20,6 +20,11 @@ const definedCustomElements = new Set<string>();
 const undefinedGroups = new Map<string, Set<Element>>();
 let elementsDefinitionCallback: ((elements: Element[]) => void) | null;
 
+/**
+ * 判断一个元素是否为自定义元素。
+ * @param element 
+ * @returns 
+ */
 function isCustomElement(element: Element): boolean {
     if (element.tagName.includes('-') || element.getAttribute('is')) {
         return true;
@@ -27,6 +32,11 @@ function isCustomElement(element: Element): boolean {
     return false;
 }
 
+/**
+ * 记录尚未定义的自定义元素。
+ * @param element 
+ * @returns 
+ */
 function recordUndefinedElement(element: Element): void {
     let tag = element.tagName.toLowerCase();
     if (!tag.includes('-')) {
@@ -55,6 +65,11 @@ function recordUndefinedElement(element: Element): void {
     undefinedGroups.get(tag)!.add(element);
 }
 
+/**
+ * 收集并记录未定义的自定义元素。
+ * @param root 
+ * @returns 
+ */
 function collectUndefinedElements(root: ParentNode): void {
     if (!true) {
         return;
@@ -73,6 +88,10 @@ document.addEventListener(
 
 const resolvers = new Map<string, Array<() => void>>();
 
+/**
+ * 当一个自定义元素被定义时，它会被触发
+ * @param e 
+ */
 function handleIsDefined(e: CustomEvent<{ tag: string }>) {
     canOptimizeUsingProxy = true;
     const tag = e.detail.tag;
@@ -88,6 +107,11 @@ function handleIsDefined(e: CustomEvent<{ tag: string }>) {
     }
 }
 
+/**
+ * 等待一个自定义元素被定义。当指定的元素被定义后，返回的 Promise 将会被解决
+ * @param tag 
+ * @returns 
+ */
 async function customElementsWhenDefined(tag: string): Promise<void> {
     ASSERT(
         'customElementsWhenDefined() expects lower-case node names',
@@ -134,18 +158,31 @@ async function customElementsWhenDefined(tag: string): Promise<void> {
     });
 }
 
+/**
+ * 当自定义元素被定义时，执行一个回调。
+ * @param callback 
+ */
 function watchWhenCustomElementsDefined(
     callback: (elements: Element[]) => void,
 ): void {
     elementsDefinitionCallback = callback;
 }
 
+/**
+ * 取消订阅或停止监听与自定义元素定义相关的事件或回调
+ */
 function unsubscribeFromDefineCustomElements(): void {
     elementsDefinitionCallback = null;
     undefinedGroups.clear();
     document.removeEventListener('__darkreader__isDefined', handleIsDefined);
 }
 
+/**
+ * 开始观察给定的样式元素列表的变化，当样式发生变化时，执行一个回调。
+ * @param currentStyles 
+ * @param update 
+ * @param shadowRootDiscovered 
+ */
 export function watchForStyleChanges(
     currentStyles: StyleElement[],
     update: (styles: ChangedStyles) => void,
@@ -157,16 +194,29 @@ export function watchForStyleChanges(
     const prevStyleSiblings = new WeakMap<Element, Element>();
     const nextStyleSiblings = new WeakMap<Element, Element>();
 
+    /**
+     * 用来记住元素在DOM或列表中的初始位置。
+     * @param style 
+     */
     function saveStylePosition(style: StyleElement) {
         prevStyleSiblings.set(style, style.previousElementSibling!);
         nextStyleSiblings.set(style, style.nextElementSibling!);
     }
 
+    /**
+     * 从prevStyleSiblings和nextStyleSiblings映射中删除给定的StyleElement的保存位置。
+     * @param style 
+     */
     function forgetStylePosition(style: StyleElement) {
         prevStyleSiblings.delete(style);
         nextStyleSiblings.delete(style);
     }
 
+    /**
+     * 检查StyleElement在DOM或列表中的当前位置是否与保存的位置发生了变化
+     * @param style 
+     * @returns 
+     */
     function didStylePositionChange(style: StyleElement) {
         return (
             style.previousElementSibling !== prevStyleSiblings.get(style) ||
@@ -176,6 +226,10 @@ export function watchForStyleChanges(
 
     currentStyles.forEach(saveStylePosition);
 
+    /**
+     * 处理样式元素的创建、移动和删除。
+     * @param operations 
+     */
     function handleStyleOperations(operations: {
         createdStyles: Set<StyleElement>;
         movedStyles: Set<StyleElement>;
@@ -200,6 +254,10 @@ export function watchForStyleChanges(
         }
     }
 
+    /**
+     * 处理DOM树的微小和大规模变化，以跟踪样式元素的变化。
+     * @param param0 
+     */
     function handleMinorTreeMutations({
         additions,
         moves,
@@ -241,6 +299,10 @@ export function watchForStyleChanges(
         );
     }
 
+    /**
+     * 处理DOM树的微小和大规模变化，以跟踪样式元素的变化。
+     * @param root 
+     */
     function handleHugeTreeMutations(root: Document | ShadowRoot) {
         const styles = new Set(getManageableStyles(root));
 
@@ -273,6 +335,10 @@ export function watchForStyleChanges(
         collectUndefinedElements(root);
     }
 
+    /**
+     * 处理属性变化，如rel、disabled、media和href，这些可能会影响样式元素的状态。
+     * @param mutations 
+     */
     function handleAttributeMutations(mutations: MutationRecord[]) {
         const updatedStyles = new Set<StyleElement>();
         const removedStyles = new Set<StyleElement>();
@@ -299,6 +365,11 @@ export function watchForStyleChanges(
         }
     }
 
+    /**
+     * 开始在给定的根上观察样式和属性变化。
+     * @param root 
+     * @returns 
+     */
     function observe(root: Document | ShadowRoot) {
         if (observedRoots.has(root)) {
             return;
@@ -316,6 +387,11 @@ export function watchForStyleChanges(
         observedRoots.add(root);
     }
 
+    /**
+     * 监视一个元素的Shadow DOM（如果存在）的变化
+     * @param node 
+     * @returns 
+     */
     function subscribeForShadowRootChanges(node: Element) {
         const { shadowRoot } = node;
         if (shadowRoot == null || observedRoots.has(shadowRoot)) {
@@ -325,6 +401,10 @@ export function watchForStyleChanges(
         shadowRootDiscovered(shadowRoot);
     }
 
+    /**
+     * 扩展迭代shadow host来观察它们的变化。
+     * @param node 
+     */
     function extendedIterateShadowHosts(node: Node) {
         iterateShadowHosts(node, subscribeForShadowRootChanges);
     }
@@ -354,12 +434,18 @@ export function watchForStyleChanges(
     collectUndefinedElements(document);
 }
 
+/**
+ * 重置或清理与观察者相关的所有数据和监听
+ */
 function resetObservers() {
     observers.forEach((o) => o.disconnect());
     observers.splice(0, observers.length);
     observedRoots = new WeakSet();
 }
 
+/**
+ * 停止所有的观察。
+ */
 export function stopWatchingForStyleChanges(): void {
     resetObservers();
     unsubscribeFromDefineCustomElements();

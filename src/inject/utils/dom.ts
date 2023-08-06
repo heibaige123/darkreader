@@ -3,6 +3,9 @@ import { throttle } from '../../utils/throttle';
 import { forEach } from '../../utils/array';
 import { getDuration } from '../../utils/time';
 
+/**
+ * 用于传递创建DOM节点所需的参数。它包含了一些用于选择目标节点、创建节点和更新节点的函数
+ */
 interface CreateNodeAsapParams {
     selectNode: () => HTMLElement;
     createNode: (target: HTMLElement) => void;
@@ -12,12 +15,19 @@ interface CreateNodeAsapParams {
     isTargetMutation: (mutation: MutationRecord) => boolean;
 }
 
+/**
+ * 用于定义观察DOM节点位置的方法。它包含了三个方法：run、stop和skip，分别用于启动、停止和跳过观察器的运行
+ */
 interface NodePosetionWatcher {
     run: () => void;
     stop: () => void;
     skip: () => void;
 }
 
+/**
+ * 用于在尽可能快的时间内创建DOM节点。它根据传入的参数选择目标节点，并根据目标节点的状态执行相应的操作（创建节点或更新节点）
+ * @param param0 
+ */
 export function createNodeAsap({
     selectNode,
     createNode,
@@ -69,10 +79,21 @@ export function createNodeAsap({
     }
 }
 
+/**
+ * 用于从DOM中移除给定的节点
+ * @param node 
+ */
 export function removeNode(node: Node | null): void {
     node && node.parentNode && node.parentNode.removeChild(node);
 }
 
+/**
+ * 用于观察DOM节点的位置变化。它接收一个节点和一个模式（"head"或"prev-sibling"），并在节点的位置发生变化时执行相应的回调函数。
+ * @param node 
+ * @param mode 
+ * @param onRestore 
+ * @returns 
+ */
 export function watchForNodePosition<T extends Node>(
     node: T,
     mode: 'head' | 'prev-sibling',
@@ -212,6 +233,12 @@ export function watchForNodePosition<T extends Node>(
     return { run, stop, skip };
 }
 
+/**
+ * 用于遍历DOM树中的所有Shadow Host节点，并执行指定的回调函数。
+ * @param root 
+ * @param iterator 
+ * @returns 
+ */
 export function iterateShadowHosts(
     root: Node | null,
     iterator: (host: Element) => void,
@@ -244,6 +271,10 @@ export function iterateShadowHosts(
     }
 }
 
+/**
+ * 指示DOM是否已完全加载
+ * @returns 
+ */
 export let isDOMReady: () => boolean = () => {
     return (
         document.readyState === 'complete' ||
@@ -251,39 +282,65 @@ export let isDOMReady: () => boolean = () => {
     );
 };
 
+/**
+ * 设置自定义的DOM就绪检查函数。
+ * @param newFunc 
+ */
 export function setIsDOMReady(newFunc: () => boolean): void {
     isDOMReady = newFunc;
 }
 
 const readyStateListeners = new Set<() => void>();
 
+/**
+ * 用于添加DOM就绪监听器的函数
+ * @param listener 
+ */
 export function addDOMReadyListener(listener: () => void): void {
     isDOMReady() ? listener() : readyStateListeners.add(listener);
 }
 
+/**
+ * 用于移除DOM就绪监听器的函数
+ * @param listener 
+ */
 export function removeDOMReadyListener(listener: () => void): void {
     readyStateListeners.delete(listener);
 }
 
 // `interactive` can and will be fired when their are still stylesheets loading.
 // We use certain actions that can cause a forced layout change, which is bad.
+/**
+ * 用于检查文档的readyState是否为"complete"的函数。
+ * @returns 
+ */
 export function isReadyStateComplete(): boolean {
     return document.readyState === 'complete';
 }
 
 const readyStateCompleteListeners = new Set<() => void>();
 
+/**
+ * 用于添加文档就绪完成监听器
+ * @param listener 
+ */
 export function addReadyStateCompleteListener(listener: () => void): void {
     isReadyStateComplete()
         ? listener()
         : readyStateCompleteListeners.add(listener);
 }
-
+/**
+ * 清楚文档就绪监听器
+ */
 export function cleanReadyStateCompleteListeners(): void {
     readyStateCompleteListeners.clear();
 }
 
 if (!isDOMReady()) {
+    /**
+     * 当DOM的状态变为ready或complete时，这个函数会被调用。如果DOM已准备好，它会调用所有的readyStateListeners。
+     * 如果状态是complete，它还会移除onReadyStateChange的事件监听器并调用所有的
+     */
     const onReadyStateChange = () => {
         if (isDOMReady()) {
             readyStateListeners.forEach((listener) => listener());
@@ -303,8 +360,16 @@ if (!isDOMReady()) {
     document.addEventListener('readystatechange', onReadyStateChange);
 }
 
+/**
+ * 定义了一个大的变异数量，用于后续判断。
+ */
 const HUGE_MUTATIONS_COUNT = 1000;
 
+/**
+ * 根据提供的变异记录判断是否有大量的变异。
+ * @param mutations 
+ * @returns 
+ */
 function isHugeMutation(mutations: MutationRecord[]) {
     if (mutations.length > HUGE_MUTATIONS_COUNT) {
         return true;
@@ -321,12 +386,20 @@ function isHugeMutation(mutations: MutationRecord[]) {
     return false;
 }
 
+/**
+ * 描述了三种元素树的操作：添加、移动和删除。
+ */
 export interface ElementsTreeOperations {
     additions: Set<Element>;
     moves: Set<Element>;
     deletions: Set<Element>;
 }
 
+/**
+ * 根据提供的变异记录返回元素树的操作。它处理添加的节点、删除的节点以及移动的节点，并确保不会有重复的添加和删除操作。
+ * @param mutations 
+ * @returns 
+ */
 function getElementsTreeOperations(
     mutations: MutationRecord[],
 ): ElementsTreeOperations {
@@ -369,18 +442,33 @@ function getElementsTreeOperations(
     return { additions, moves, deletions };
 }
 
+/**
+ * 定义了两个回调函数，一个用于处理小量的DOM变异，另一个用于处理大量的DOM变异。
+ */
 interface OptimizedTreeObserverCallbacks {
     onMinorMutations: (operations: ElementsTreeOperations) => void;
     onHugeMutations: (root: Document | ShadowRoot) => void;
 }
 
+/**
+ * 用于存储和管理优化的DOM树观察器和它们的回调函数
+ */
 const optimizedTreeObservers = new Map<Node, MutationObserver>();
+/**
+ * 用于存储和管理优化的DOM树观察器和它们的回调函数
+ */
 const optimizedTreeCallbacks = new WeakMap<
     MutationObserver,
     Set<OptimizedTreeObserverCallbacks>
 >();
 
 // TODO: Use a single function to observe all shadow roots.
+/**
+ * 用于创建优化的DOM树观察器
+ * @param root 
+ * @param callbacks 
+ * @returns 
+ */
 export function createOptimizedTreeObserver(
     root: Document | ShadowRoot,
     callbacks: OptimizedTreeObserverCallbacks,

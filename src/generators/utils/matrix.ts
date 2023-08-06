@@ -2,6 +2,14 @@ import { clamp, multiplyMatrices } from '../../utils/math';
 import type { matrix5x1, matrix5x5 } from '../../utils/math';
 import type { FilterConfig } from '../../definitions';
 
+/**
+ * 根据传入的 FilterConfig 配置对象创建一个 5x5 的颜色矩阵。
+ * 根据 config 中的不同参数，
+ * 该函数会按顺序应用 Sepia、Grayscale、Contrast、Brightness
+ *  和 Invert Hue（反转色调）的变换，然后返回最终的颜色矩阵。
+ * @param config
+ * @returns
+ */
 export function createFilterMatrix(config: FilterConfig): matrix5x5 {
     let m: matrix5x5 = Matrix.identity();
     if (config.sepia !== 0) {
@@ -22,6 +30,14 @@ export function createFilterMatrix(config: FilterConfig): matrix5x5 {
     return m;
 }
 
+/**
+ * 用于应用颜色矩阵到一个 RGB 颜色上。它接收一个包含 RGB 分量
+ * 值的数组 [r, g, b] 和一个 5x5 的颜色矩阵 matrix，
+ * 然后将该颜色矩阵应用到 RGB 颜色上，并返回处理后的 RGB 分量值。
+ * @param param0
+ * @param matrix
+ * @returns
+ */
 export function applyColorMatrix(
     [r, g, b]: [number, number, number],
     matrix: matrix5x5,
@@ -33,7 +49,14 @@ export function applyColorMatrix(
     ) as [number, number, number];
 }
 
+/**
+ * 一个对象，包含了一些静态方法用于创建不同类型的颜色矩阵
+ */
 export const Matrix = {
+    /**
+     * 单位矩阵
+     * @returns
+     */
     identity(): matrix5x5 {
         return [
             [1, 0, 0, 0, 0],
@@ -44,6 +67,10 @@ export const Matrix = {
         ];
     },
 
+    /**
+     * 反转色调矩阵
+     * @returns
+     */
     invertNHue(): matrix5x5 {
         return [
             [0.333, -0.667, -0.667, 0, 1],
@@ -54,6 +81,11 @@ export const Matrix = {
         ];
     },
 
+    /**
+     * 亮度矩阵
+     * @param v
+     * @returns
+     */
     brightness(v: number): matrix5x5 {
         return [
             [v, 0, 0, 0, 0],
@@ -64,6 +96,11 @@ export const Matrix = {
         ];
     },
 
+    /**
+     * 对比度矩阵
+     * @param v
+     * @returns
+     */
     contrast(v: number): matrix5x5 {
         const t = (1 - v) / 2;
         return [
@@ -75,6 +112,11 @@ export const Matrix = {
         ];
     },
 
+    /**
+     * 褐色矩阵
+     * @param v
+     * @returns
+     */
     sepia(v: number): matrix5x5 {
         return [
             [
@@ -103,6 +145,11 @@ export const Matrix = {
         ];
     },
 
+    /**
+     * 灰度矩阵
+     * @param v
+     * @returns
+     */
     grayscale(v: number): matrix5x5 {
         return [
             [

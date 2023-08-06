@@ -4,6 +4,11 @@ import { getMatches, formatCSS } from '../../utils/text';
 
 const blobRegex = /url\(\"(blob\:.*?)\"\)/g;
 
+/**
+ * 用于替换CSS文本中的blob URLs。
+ * @param text 
+ * @returns 
+ */
 async function replaceBlobs(text: string) {
     const promises: Array<Promise<string>> = [];
     getMatches(blobRegex, text, 1).forEach((url) => {
@@ -38,6 +43,10 @@ _______|_______/__/ ____ \\__\\__|___\\__\\__|___\\__\\____
 /*! Dark reader generated CSS | Licensed under MIT https://github.com/darkreader/darkreader/blob/main/LICENSE */
 `;
 
+/**
+ * 用于收集页面上的不同类型的CSS样式，并返回一个包含完整CSS的字符串数组。
+ * @returns 
+ */
 export async function collectCSS(): Promise<string> {
     const css = [banner];
 

@@ -10,6 +10,9 @@ import {
 import { collectCSS } from '../inject/dynamic-theme/css-collection';
 
 let isDarkReaderEnabled = false;
+/**
+ * 判断当前页面是否运行在iframe
+ */
 const isIFrame = (() => {
     try {
         return window.self !== window.top;
@@ -19,6 +22,11 @@ const isIFrame = (() => {
     }
 })();
 
+/**
+ * 用于启用Dark Reader主题。
+ * @param themeOptions
+ * @param fixes
+ */
 export function enable(
     themeOptions: Partial<Theme> | null = {},
     fixes: DynamicThemeFix | null = null,
@@ -34,10 +42,17 @@ export function enable(
     isDarkReaderEnabled = true;
 }
 
+/**
+ * 用于检查Dark Reader主题是否已启用。
+ * @returns
+ */
 export function isEnabled(): boolean {
     return isDarkReaderEnabled;
 }
 
+/**
+ * 用于禁用Dark Reader主题。
+ */
 export function disable(): void {
     removeDynamicTheme();
     isDarkReaderEnabled = false;
@@ -49,6 +64,9 @@ let store = {
     fixes: null as DynamicThemeFix | null,
 };
 
+/**
+ * 根据当前的颜色方案（深色模式或浅色模式）来启用或禁用 Dark Reader 动态主题。
+ */
 function handleColorScheme(): void {
     if (darkScheme.matches) {
         enable(store.themeOptions, store.fixes);
@@ -57,6 +75,11 @@ function handleColorScheme(): void {
     }
 }
 
+/**
+ * 用于根据用户的系统首选色彩方案自动启用或禁用Dark Reader主题。
+ * @param themeOptions
+ * @param fixes
+ */
 export function auto(
     themeOptions: Partial<Theme> | false = {},
     fixes: DynamicThemeFix | null = null,
@@ -71,8 +94,15 @@ export function auto(
     }
 }
 
+/**
+ * 用于导出生成的CSS样式。
+ * @returns
+ */
 export async function exportGeneratedCSS(): Promise<string> {
     return await collectCSS();
 }
 
+/**
+ * 用于设置自定义的Fetch方法
+ */
 export const setFetchMethod = setFetch;

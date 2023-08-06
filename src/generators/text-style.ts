@@ -1,5 +1,10 @@
 import type { FilterConfig } from '../definitions';
 
+/**
+ * 根据传入的 FilterConfig 配置对象生成一个 CSS 样式文本。
+ * @param config 
+ * @returns 
+ */
 export function createTextStyle(config: FilterConfig): string {
     const lines: string[] = [];
     // Don't target pre elements as they are preformatted element's e.g. code blocks
