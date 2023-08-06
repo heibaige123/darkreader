@@ -1,4 +1,4 @@
-import { isMobile } from '../utils/platform';
+import { isMobile } from '../../src/utils/platform';
 
 declare const __CHROMIUM_MV3__: boolean;
 
