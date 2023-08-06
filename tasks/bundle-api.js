@@ -66,7 +66,7 @@ async function bundleAPI({ debug, watch }) {
         esModule: true,
         file: dest,
         strict: true,
-        format: 'umd',
+        format: 'iife',
         name: 'DarkReader',
         sourcemap: debug ? 'inline' : false,
     });
