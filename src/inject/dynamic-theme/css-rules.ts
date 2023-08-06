@@ -2,6 +2,9 @@ import { forEach } from '../../utils/array';
 import { parseURL, getAbsoluteURL } from '../../utils/url';
 import { logInfo, logWarn } from '../utils/log';
 
+/**
+ * 遍历CSS规则集合，并对每个规则应用回调函数。这个函数还处理了各种CSS规则类型（如导入规则、媒体规则、支持规则等）
+ */
 export function iterateCSSRules(
     rules: CSSRuleList,
     iterate: (rule: CSSStyleRule) => void,
@@ -70,7 +73,9 @@ const shorthandVarDependantProperties = [
     'outline',
     'outline-color',
 ];
-
+/**
+ * 遍历CSS样式声明，并对每个属性和值应用回调函数。为了优化性能，该函数还包含了一些关于var函数的特殊处理。
+ */
 export function iterateCSSDeclarations(
     style: CSSStyleDeclaration,
     iterate: (property: string, value: string) => void,
@@ -96,8 +101,13 @@ export function iterateCSSDeclarations(
         });
     }
 }
-
+/**
+ * 正则表达式用于匹配CSS中的URL值
+ */
 export const cssURLRegex = /url\((('.*?')|(".*?")|([^\)]*?))\)/g;
+/**
+ * 正则表达式用于匹配CSS中的@import规则
+ */
 export const cssImportRegex =
     /@import\s*(url\()?(('.+?')|(".+?")|([^\)]*?))\)? ?(screen)?;?/gi;
 
@@ -105,6 +115,9 @@ export const cssImportRegex =
 // backslashes in the URL. (Chromium don't handle this natively). Remove all newlines
 // beforehand, otherwise `.` will fail matching the content within the url, as it
 // doesn't match any linebreaks.
+/**
+ * 从CSS的url()函数中提取URL值。
+ */
 export function getCSSURLValue(cssURL: string): string {
     return cssURL
         .trim()
@@ -115,14 +128,18 @@ export function getCSSURLValue(cssURL: string): string {
         .replace(/^'(.*)'$/, '$1')
         .replace(/(?:\\(.))/g, '$1');
 }
-
+/**
+ * 从给定的URL中获取基路径，这对于解析相对路径的CSS资源非常有用。
+ */
 export function getCSSBaseBath(url: string): string {
     const cssURL = parseURL(url);
     return `${cssURL.origin}${cssURL.pathname
         .replace(/\?.*$/, '')
         .replace(/(\/)([^\/]+)$/i, '$1')}`;
 }
-
+/**
+ * 将CSS中的相对URL替换为绝对URL。
+ */
 export function replaceCSSRelativeURLsWithAbsolute(
     $css: string,
     cssBasePath: string,
@@ -144,13 +161,20 @@ export function replaceCSSRelativeURLsWithAbsolute(
 }
 
 const cssCommentsRegex = /\/\*[\s\S]*?\*\//g;
-
+/**
+ * 从CSS代码中删除所有注释。
+ */
 export function removeCSSComments($css: string): string {
     return $css.replace(cssCommentsRegex, '');
 }
 
+/**
+ * 正则表达式用于匹配CSS中的@font-face规则。
+ */
 const fontFaceRegex = /@font-face\s*{[^}]*}/g;
-
+/**
+ * 从CSS代码中删除所有的@font-face规则。
+ */
 export function replaceCSSFontFace($css: string): string {
     return $css.replace(fontFaceRegex, '');
 }

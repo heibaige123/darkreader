@@ -6,6 +6,9 @@ import { getModifiableCSSDeclaration } from './modify-css';
 import { variablesStore } from './variables';
 import type { CSSVariableModifier } from './variables';
 
+/**
+ * 一个数组，包含了主题对象的关键属性，用于生成主题的缓存键。
+ */
 const themeCacheKeys: Array<keyof Theme> = [
     'mode',
     'brightness',
@@ -18,6 +21,9 @@ const themeCacheKeys: Array<keyof Theme> = [
     'lightSchemeTextColor',
 ];
 
+/**
+ * 根据主题对象的属性生成一个字符串键，用于缓存或其他目的。
+ */
 function getThemeKey(theme: Theme) {
     let resultKey = '';
     themeCacheKeys.forEach((key) => {
@@ -28,6 +34,9 @@ function getThemeKey(theme: Theme) {
 
 const asyncQueue = createAsyncTasksQueue();
 
+/**
+ * 定义了modifySheet函数的选项参数。
+ */
 interface ModifySheetOptions {
     sourceCSSRules: CSSRuleList;
     theme: Theme;
@@ -37,11 +46,18 @@ interface ModifySheetOptions {
     isAsyncCancelled: () => boolean;
 }
 
+/**
+ * 定义了样式表修改器的接口，包括modifySheet和shouldRebuildStyle两个方法。
+ */
 interface StyleSheetModifier {
     modifySheet: (options: ModifySheetOptions) => void;
     shouldRebuildStyle: () => boolean;
 }
 
+/**
+ * 用于修改CSS样式表
+ * @returns 
+ */
 export function createStyleSheetModifier(): StyleSheetModifier {
     let renderId = 0;
     const rulesTextCache = new Set<string>();
@@ -54,6 +70,11 @@ export function createStyleSheetModifier(): StyleSheetModifier {
         return hasNonLoadedLink && !wasRebuilt;
     }
 
+    /**
+     * 修改给定的CSS规则列表，以适应指定的主题。这个函数处理异步和CSS变量，并确保CSS规则以最优化的方式被修改。
+     * @param options 
+     * @returns 
+     */
     function modifySheet(options: ModifySheetOptions) {
         const rules = options.sourceCSSRules;
         const {
@@ -396,6 +417,9 @@ export function createStyleSheetModifier(): StyleSheetModifier {
 
         const sheet = prepareSheet();
 
+        /**
+         * 根据已修改的规则构建新的CSS样式表
+         */
         function buildStyleSheet() {
             function createTarget(
                 group: ReadyGroup,
@@ -447,6 +471,10 @@ export function createStyleSheetModifier(): StyleSheetModifier {
             });
         }
 
+        /**
+         * 当有异步声明准备好时，重建与该声明相关的规则。
+         * @param key 
+         */
         function rebuildAsyncRule(key: number) {
             const { rule, target, index } = asyncDeclarations.get(key)!;
             target.deleteRule(index);
@@ -454,6 +482,10 @@ export function createStyleSheetModifier(): StyleSheetModifier {
             asyncDeclarations.delete(key);
         }
 
+        /**
+         * 当变量类型发生变化时，重建与该变量相关的规则。
+         * @param key 
+         */
         function rebuildVarRule(key: number) {
             const { rule, target, index } = varDeclarations.get(key)!;
             target.deleteRule(index);

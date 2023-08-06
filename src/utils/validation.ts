@@ -10,60 +10,96 @@ import type {
 } from '../definitions';
 import { AutomationMode } from './automation';
 
+/**
+ * 检查一个值是否是布尔类型
+ * @param x 
+ * @returns 
+ */
 function isBoolean(x: any): x is boolean {
     return typeof x === 'boolean';
 }
 
+/**
+ * 检查一个值是否是纯对象
+ * @param x 
+ * @returns 
+ */
 function isPlainObject(x: any): x is Record<string, unknown> {
     return typeof x === 'object' && x != null && !Array.isArray(x);
 }
-
+/**
+ * 检查一个值是否是数组
+ * @param x 
+ * @returns 
+ */
 function isArray(x: any) {
     return Array.isArray(x);
 }
-
+/**
+ * 检查一个值是否是字符串
+ */
 function isString(x: any): x is string {
     return typeof x === 'string';
 }
-
+/**
+ * 检查一个值是否是非空字符串。
+ */
 function isNonEmptyString(x: any): x is string {
     return x && isString(x);
 }
-
+/**
+ * 检查一个值是否是包含非空字符串的数组。
+ */
 function isNonEmptyArrayOfNonEmptyStrings(x: any): x is any[] {
     return (
         Array.isArray(x) && x.length > 0 && x.every((s) => isNonEmptyString(s))
     );
 }
-
+/**
+ * 返回一个函数，该函数检查一个值是否匹配给定的正则表达式。
+ */
 function isRegExpMatch(regexp: RegExp) {
     return (x: any): x is string => {
         return isString(x) && x.match(regexp) != null;
     };
 }
-
+/**
+ * 检查给定的字符串是否符合时间格式。
+ * 这个正则表达式可以匹配从 00:00 到 23:59 的任何时间
+ */
 const isTime = isRegExpMatch(/^((0?[0-9])|(1[0-9])|(2[0-3])):([0-5][0-9])$/);
+/**
+ * 检查一个值是否是数字。
+ */
 function isNumber(x: any): x is number {
     return typeof x === 'number' && !isNaN(x);
 }
-
+/**
+ * 返回一个函数，该函数检查一个值是否在给定的范围内。
+ */
 function isNumberBetween(min: number, max: number) {
     return (x: any): x is number => {
         return isNumber(x) && x >= min && x <= max;
     };
 }
-
+/**
+ * 返回一个函数，该函数检查一个值是否在给定的值列表中。
+ */
 function isOneOf(...values: any[]) {
     return (x: any) => values.includes(x);
 }
-
+/**
+ * 检查一个对象是否具有所有必需的属性。
+ */
 function hasRequiredProperties<T extends Record<string, unknown>>(
     obj: T,
     keys: Array<keyof T>,
 ) {
     return keys.every((key) => obj.hasOwnProperty(key));
 }
-
+/**
+ * 这个函数返回一个对象，包含了用于验证属性和数组的方法，以及一个收集错误的数组。
+ */
 function createValidator() {
     const errors: string[] = [];
 
@@ -114,12 +150,16 @@ function createValidator() {
 
     return { validateProperty, validateArray, errors };
 }
-
+/**
+ * 
+ */
 interface SettingValidationResult {
     settings: Partial<UserSettings>;
     errors: string[];
 }
-
+/**
+ * 验证用户设置是否合法
+ */
 export function validateSettings(
     settings: Partial<UserSettings>,
 ): SettingValidationResult {
@@ -325,12 +365,16 @@ export function validateSettings(
 
     return { errors, settings };
 }
-
+/**
+ * 
+ */
 interface ThemeValidationResult {
     theme: Partial<Theme>;
     errors: string[];
 }
-
+/**
+ * 验证主题配置是否合法
+ */
 export function validateTheme(
     theme: Partial<Theme> | null | undefined,
 ): ThemeValidationResult {

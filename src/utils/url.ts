@@ -3,8 +3,14 @@ import { isIPV6, compareIPV6 } from './ipv6';
 
 let anchor: HTMLAnchorElement;
 
+/**
+ * 用于缓存已经解析过的URLs，这样在将来需要再次解析相同的URL时，可以直接从缓存中获取，而不是重新解析，从而提高性能
+ */
 export const parsedURLCache = new Map<string, URL>();
 
+/**
+ * 修复并返回一个绝对的基URL
+ */
 function fixBaseURL($url: string): string {
     if (!anchor) {
         anchor = document.createElement('a');
@@ -13,6 +19,9 @@ function fixBaseURL($url: string): string {
     return anchor.href;
 }
 
+/**
+ * 使用缓存解析和返回URL对象
+ */
 export function parseURL($url: string, $base: string | null = null): URL {
     const key = `${$url}${$base ? `;${$base}` : ''}`;
     if (parsedURLCache.has(key)) {
@@ -28,6 +37,9 @@ export function parseURL($url: string, $base: string | null = null): URL {
     return parsedURL;
 }
 
+/**
+ * 将相对URL转换为绝对URL
+ */
 export function getAbsoluteURL($base: string, $relative: string): string {
     if ($relative.match(/^data\\?\:/)) {
         return $relative;
@@ -47,6 +59,11 @@ export function getAbsoluteURL($base: string, $relative: string): string {
 // But https://duck.com/styles/ext.css would return false on https://duck.com/
 // Visa versa https://duck.com/ext.css should return fasle on https://duck.com/search/
 // We're checking if any relative value within ext.css could potentially not be on the same path.
+/**
+ * 检查相对URL是否在window.location上
+ * @param href 
+ * @returns 
+ */
 export function isRelativeHrefOnAbsolutePath(href: string): boolean {
     if (href.startsWith('data:')) {
         return true;
@@ -67,6 +84,11 @@ export function isRelativeHrefOnAbsolutePath(href: string): boolean {
     return url.pathname === location.pathname;
 }
 
+/**
+ * 获取URL的主机或协议
+ * @param $url 
+ * @returns 
+ */
 export function getURLHostOrProtocol($url: string): string {
     const url = new URL($url);
     if (url.host) {
@@ -77,6 +99,12 @@ export function getURLHostOrProtocol($url: string): string {
     return url.protocol;
 }
 
+/**
+ * 比较两个URL模式
+ * @param a 
+ * @param b 
+ * @returns 
+ */
 export function compareURLPatterns(a: string, b: string): number {
     return a.localeCompare(b);
 }
@@ -85,6 +113,9 @@ export function compareURLPatterns(a: string, b: string): number {
  * Determines whether URL has a match in URL template list.
  * @param url Site URL.
  * @paramlist List to search into.
+ */
+/**
+ * 判断URL是否在给定的列表中
  */
 export function isURLInList(url: string, list: string[]): boolean {
     for (let i = 0; i < list.length; i++) {
@@ -100,6 +131,9 @@ export function isURLInList(url: string, list: string[]): boolean {
  * @param url URL.
  * @param urlTemplate URL template ("google.*", "youtube.com" etc).
  */
+/**
+ * 判断URL是否匹配给定的模板
+ */
 export function isURLMatched(url: string, urlTemplate: string): boolean {
     const isFirstIPV6 = isIPV6(url);
     const isSecondIPV6 = isIPV6(urlTemplate);
@@ -112,6 +146,11 @@ export function isURLMatched(url: string, urlTemplate: string): boolean {
     return false;
 }
 
+/**
+ * 根据给定的URL模板创建一个正则表达式。
+ * @param urlTemplate 
+ * @returns 
+ */
 function createUrlRegex(urlTemplate: string): RegExp | null {
     try {
         urlTemplate = urlTemplate.trim();
@@ -178,6 +217,11 @@ function createUrlRegex(urlTemplate: string): RegExp | null {
     }
 }
 
+/**
+ * 判断URL是否指向一个PDF文件。
+ * @param url 
+ * @returns 
+ */
 export function isPDF(url: string): boolean {
     try {
         const { hostname, pathname } = new URL(url);
@@ -212,6 +256,14 @@ export function isPDF(url: string): boolean {
     return false;
 }
 
+/**
+ * 判断URL是否在用户的设置中启用。
+ * @param url 
+ * @param userSettings 
+ * @param param2 
+ * @param isAllowedFileSchemeAccess 
+ * @returns 
+ */
 export function isURLEnabled(
     url: string,
     userSettings: UserSettings,
@@ -245,10 +297,20 @@ export function isURLEnabled(
     return !isURLInUserList;
 }
 
+/**
+ * 判断字符串是否是一个完全合格的域名。
+ * @param candidate 
+ * @returns 
+ */
 export function isFullyQualifiedDomain(candidate: string): boolean {
     return /^[a-z0-9\.\-]+$/i.test(candidate) && candidate.indexOf('..') === -1;
 }
 
+/**
+ * 判断字符串是否是一个带通配符的完全合格的域名。
+ * @param candidate 
+ * @returns 
+ */
 export function isFullyQualifiedDomainWildcard(candidate: string): boolean {
     if (!candidate.includes('*') || !/^[a-z0-9\.\-\*]+$/i.test(candidate)) {
         return false;
@@ -262,6 +324,12 @@ export function isFullyQualifiedDomainWildcard(candidate: string): boolean {
     return true;
 }
 
+/**
+ * 检查给定的域名是否匹配给定的通配符。
+ * @param wildcard 
+ * @param candidate 
+ * @returns 
+ */
 export function fullyQualifiedDomainMatchesWildcard(
     wildcard: string,
     candidate: string,
@@ -281,6 +349,11 @@ export function fullyQualifiedDomainMatchesWildcard(
     return true;
 }
 
+/**
+ * 判断URL是否指向一个本地文件。
+ * @param url 
+ * @returns 
+ */
 export function isLocalFile(url: string): boolean {
     return Boolean(url) && url.startsWith('file:///');
 }

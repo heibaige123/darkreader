@@ -24,8 +24,14 @@
  * has issues optimizing code with multiple callbacks stored in array or in a set.
  */
 
+/**
+ * 一个全局的回调函数，它会在文档可见性发生变化时被调用
+ */
 let documentVisibilityListener: (() => void) | null = null;
 
+/**
+ * 表示文档当前是否可见
+ */
 let documentIsVisible_ = !document.hidden;
 
 // TODO: use EventListenerOptions class once it is updated
@@ -34,6 +40,9 @@ const listenerOptions: any = {
     passive: true,
 };
 
+/**
+ * 添加三个事件监听器，监听文档的可见性变化
+ */
 function watchForDocumentVisibility(): void {
     document.addEventListener(
         'visibilitychange',
@@ -52,6 +61,9 @@ function watchForDocumentVisibility(): void {
     );
 }
 
+/**
+ * 移除文档的可见性监听
+ */
 function stopWatchingForDocumentVisibility(): void {
     document.removeEventListener(
         'visibilitychange',
@@ -70,6 +82,11 @@ function stopWatchingForDocumentVisibility(): void {
     );
 }
 
+/**
+ * 允许外部代码设置一个回调函数，当文档从不可见变为可见时，这个回调会被触发。
+ * 如果之前没有设置过监听器，那么会开始监视文档的可见性。
+ * @param callback 
+ */
 export function setDocumentVisibilityListener(callback: () => void): void {
     const alreadyWatching = Boolean(documentVisibilityListener);
     documentVisibilityListener = () => {
@@ -84,11 +101,18 @@ export function setDocumentVisibilityListener(callback: () => void): void {
     }
 }
 
+/**
+ * 停止监视文档的可见性并移除回调函数。
+ */
 export function removeDocumentVisibilityListener(): void {
     stopWatchingForDocumentVisibility();
     documentVisibilityListener = null;
 }
 
+/**
+ * 返回一个布尔值，表示文档是否当前可见。
+ * @returns 
+ */
 export function documentIsVisible(): boolean {
     return documentIsVisible_;
 }

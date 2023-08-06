@@ -1,7 +1,13 @@
+/**
+ * 获取扩展的本地化消息
+ */
 export function getLocalMessage(messageName: string): string {
     return chrome.i18n.getMessage(messageName);
 }
 
+/**
+ * 获取用户界面的语言
+ */
 export function getUILanguage(): string {
     let code: string;
     if (

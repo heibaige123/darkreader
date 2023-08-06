@@ -1,3 +1,6 @@
+/**
+ * 输入是一个时间字符串，输出是小时和分钟的数组
+ */
 export function parseTime($time: string): [number, number] {
     const parts = $time.split(':').slice(0, 2);
     const lowercased = $time.trim().toLowerCase();
@@ -23,10 +26,16 @@ export function parseTime($time: string): [number, number] {
     return [hours, minutes];
 }
 
+/**
+ * 输入是一个24小时制的时间字符串，输出是小时和分钟的数组
+ */
 function parse24HTime(time: string): number[] {
     return time.split(':').map((x) => parseInt(x));
 }
 
+/**
+ * 比较两个时间数组。返回-1，0或1，表示时间1早于、等于或晚于时间2。
+ */
 function compareTime(time1: number[], time2: number[]): -1 | 0 | 1 {
     if (time1[0] === time2[0] && time1[1] === time2[1]) {
         return 0;
@@ -37,6 +46,9 @@ function compareTime(time1: number[], time2: number[]): -1 | 0 | 1 {
     return 1;
 }
 
+/**
+ * 对于给定的两个时间字符串和一个日期，计算下一个时间间隔。
+ */
 export function nextTimeInterval(
     time0: string,
     time1: string,
@@ -86,6 +98,9 @@ export function nextTimeInterval(
     ).getTime();
 }
 
+/**
+ * 判断给定日期是否在两个时间字符串之间。
+ */
 export function isInTimeIntervalLocal(
     time0: string,
     time1: string,
@@ -100,6 +115,9 @@ export function isInTimeIntervalLocal(
     return compareTime(a, t) <= 0 && compareTime(t, b) < 0;
 }
 
+/**
+ * 判断一个UTC时间戳是否在两个UTC时间之间。
+ */
 function isInTimeIntervalUTC(
     time0: number,
     time1: number,
@@ -118,6 +136,9 @@ interface Duration {
     seconds?: number;
 }
 
+/**
+ * 根据给定的时间持续性（例如天、小时、分钟、秒），计算总持续时间（以毫秒为单位）
+ */
 export function getDuration(time: Duration): number {
     let duration = 0;
     if (time.seconds) {
@@ -135,10 +156,16 @@ export function getDuration(time: Duration): number {
     return duration;
 }
 
+/**
+ * 根据给定的时间持续性（例如天、小时、分钟、秒），计算总持续时间（以分钟为单位）
+ */
 export function getDurationInMinutes(time: Duration): number {
     return getDuration(time) / 1000 / 60;
 }
 
+/**
+ * 计算特定地点在特定日期的日出和日落的UTC时间。
+ */
 function getSunsetSunriseUTCTime(
     latitude: number,
     longitude: number,
@@ -155,6 +182,9 @@ function getSunsetSunriseUTCTime(
     // convert the longitude to hour value and calculate an approximate time
     const lnHour = longitude / 15;
 
+    /**
+     * 
+     */
     function getTime(isSunrise: boolean) {
         const t = dayOfYear + ((isSunrise ? 6 : 18) - lnHour) / 24;
 
@@ -263,6 +293,9 @@ function getSunsetSunriseUTCTime(
     };
 }
 
+/**
+ * 判断在给定日期的特定地点是否是夜晚。
+ */
 export function isNightAtLocation(
     latitude: number,
     longitude: number,
@@ -287,6 +320,9 @@ export function isNightAtLocation(
     return isInTimeIntervalUTC(sunsetTime, sunriseTime, currentTime);
 }
 
+/**
+ * 计算特定地点的下一个日出或日落的时间。
+ */
 export function nextTimeChangeAtLocation(
     latitude: number,
     longitude: number,
