@@ -1,5 +1,3 @@
-import { false } from '../utils/platform';
-
 interface IconState {
     badgeText: string;
     active: boolean;

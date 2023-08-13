@@ -12,7 +12,6 @@ import {
     formatStaticThemes,
 } from '../generators/static-theme';
 import ConfigManager from './config-manager';
-import { false } from '../utils/platform';
 
 // TODO(bershanskiy): Add support for reads/writes of multiple keys at once for performance.
 // TODO(bershanskiy): Popup UI heeds only hasCustom*Fixes() and nothing else. Consider storing that data separatelly.
@@ -122,7 +121,6 @@ export default class DevTools {
         // Firefox don't seem to like using storage.local to store big data on the background-extension.
         // Disabling it for now and defaulting back to localStorage.
         if (
-            !false &&
             typeof chrome.storage.local !== 'undefined' &&
             chrome.storage.local !== null
         ) {

@@ -25,8 +25,8 @@ const imageManager = new AsyncQueue();
 
 /**
  * 用于获取图像详情。
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 export async function getImageDetails(url: string): Promise<ImageDetails> {
     return new Promise<ImageDetails>(async (resolve, reject) => {
@@ -62,8 +62,8 @@ export async function getImageDetails(url: string): Promise<ImageDetails> {
 /**
  * 用于获取图像数据URL。它会判断图像地址是否为本地数据URL，
  * 如果是则直接返回，否则通过 bgFetch 函数异步获取图像数据URL。
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 async function getImageDataURL(url: string): Promise<string> {
     const parsedURL = new URL(url);
@@ -75,8 +75,8 @@ async function getImageDataURL(url: string): Promise<string> {
 
 /**
  * 用于将图像地址转换成 HTMLImageElement 对象，以便后续处理。
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 async function urlToImage(url: string): Promise<HTMLImageElement> {
     return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -114,8 +114,8 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 /**
  * 用于分析图像的属性，包括是否为暗色图像、亮色图像、透明
- * @param image 
- * @returns 
+ * @param image
+ * @returns
  */
 function analyzeImage(image: HTMLImageElement) {
     if (!canvas) {
@@ -228,9 +228,9 @@ function analyzeImage(image: HTMLImageElement) {
 /**
  * 用于获取经过滤镜处理后的图像数据URL。
  * 它将传入的图像详情对象和主题配置（FilterConfig）转换成SVG滤镜效果，并将结果封装成数据URL返回。
- * @param param0 
- * @param theme 
- * @returns 
+ * @param param0
+ * @param theme
+ * @returns
  */
 export function getFilteredImageDataURL(
     { dataURL, width, height }: ImageDetails,

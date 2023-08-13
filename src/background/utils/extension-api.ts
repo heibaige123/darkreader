@@ -1,5 +1,4 @@
 export function canInjectScript(url: string | null | undefined): boolean {
-
     return Boolean(
         url &&
             !url.startsWith('chrome') &&

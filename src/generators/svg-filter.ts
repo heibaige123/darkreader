@@ -9,12 +9,12 @@ import type { SitePropsIndex } from './utils/parse';
  * 它使用 cssFilterStyleSheetTemplate 函数，为
  * 滤镜样式表提供两个值：filterValue 和 reverseFilterValue。
  * 具体值取决于是否为 Chrome 浏览器，因为 Chrome 浏览器在加载外部 URL 时有一些限制。
- * @param config 
- * @param url 
- * @param isTopFrame 
- * @param fixes 
- * @param index 
- * @returns 
+ * @param config
+ * @param url
+ * @param isTopFrame
+ * @param fixes
+ * @param index
+ * @returns
  */
 export function createSVGFilterStylesheet(
     config: FilterConfig,
@@ -26,9 +26,9 @@ export function createSVGFilterStylesheet(
     let filterValue: string;
     let reverseFilterValue: string;
 
-        // Chrome fails with "Unsafe attempt to load URL ... Domains, protocols and ports must match.
-        filterValue = 'url(#dark-reader-filter)';
-        reverseFilterValue = 'url(#dark-reader-reverse-filter)';
+    // Chrome fails with "Unsafe attempt to load URL ... Domains, protocols and ports must match.
+    filterValue = 'url(#dark-reader-filter)';
+    reverseFilterValue = 'url(#dark-reader-reverse-filter)';
     return cssFilterStyleSheetTemplate(
         filterValue,
         reverseFilterValue,
@@ -43,8 +43,8 @@ export function createSVGFilterStylesheet(
 /**
  * 用于将一个二维数组表示的矩阵转换为 SVG 中所需的格式。
  * 它将矩阵中的每个值保留 3 位小数，并将矩阵中的每一行连接成一个字符串。
- * @param matrix 
- * @returns 
+ * @param matrix
+ * @returns
  */
 function toSVGMatrix(matrix: number[][]): string {
     return matrix
@@ -55,8 +55,8 @@ function toSVGMatrix(matrix: number[][]): string {
 
 /**
  * 根据传入的配置 config，生成对应的 SVG 滤镜矩阵值。
- * @param config 
- * @returns 
+ * @param config
+ * @returns
  */
 export function getSVGFilterMatrixValue(config: FilterConfig): string {
     return toSVGMatrix(createFilterMatrix(config));
@@ -64,7 +64,7 @@ export function getSVGFilterMatrixValue(config: FilterConfig): string {
 
 /**
  * 返回 SVG 滤镜的反向矩阵值
- * @returns 
+ * @returns
  */
 export function getSVGReverseFilterMatrixValue(): string {
     return toSVGMatrix(Matrix.invertNHue());

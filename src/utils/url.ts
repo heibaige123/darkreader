@@ -61,8 +61,8 @@ export function getAbsoluteURL($base: string, $relative: string): string {
 // We're checking if any relative value within ext.css could potentially not be on the same path.
 /**
  * 检查相对URL是否在window.location上
- * @param href 
- * @returns 
+ * @param href
+ * @returns
  */
 export function isRelativeHrefOnAbsolutePath(href: string): boolean {
     if (href.startsWith('data:')) {
@@ -86,8 +86,8 @@ export function isRelativeHrefOnAbsolutePath(href: string): boolean {
 
 /**
  * 获取URL的主机或协议
- * @param $url 
- * @returns 
+ * @param $url
+ * @returns
  */
 export function getURLHostOrProtocol($url: string): string {
     const url = new URL($url);
@@ -101,9 +101,9 @@ export function getURLHostOrProtocol($url: string): string {
 
 /**
  * 比较两个URL模式
- * @param a 
- * @param b 
- * @returns 
+ * @param a
+ * @param b
+ * @returns
  */
 export function compareURLPatterns(a: string, b: string): number {
     return a.localeCompare(b);
@@ -148,8 +148,8 @@ export function isURLMatched(url: string, urlTemplate: string): boolean {
 
 /**
  * 根据给定的URL模板创建一个正则表达式。
- * @param urlTemplate 
- * @returns 
+ * @param urlTemplate
+ * @returns
  */
 function createUrlRegex(urlTemplate: string): RegExp | null {
     try {
@@ -219,8 +219,8 @@ function createUrlRegex(urlTemplate: string): RegExp | null {
 
 /**
  * 判断URL是否指向一个PDF文件。
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 export function isPDF(url: string): boolean {
     try {
@@ -258,11 +258,11 @@ export function isPDF(url: string): boolean {
 
 /**
  * 判断URL是否在用户的设置中启用。
- * @param url 
- * @param userSettings 
- * @param param2 
- * @param isAllowedFileSchemeAccess 
- * @returns 
+ * @param url
+ * @param userSettings
+ * @param param2
+ * @param isAllowedFileSchemeAccess
+ * @returns
  */
 export function isURLEnabled(
     url: string,
@@ -299,8 +299,8 @@ export function isURLEnabled(
 
 /**
  * 判断字符串是否是一个完全合格的域名。
- * @param candidate 
- * @returns 
+ * @param candidate
+ * @returns
  */
 export function isFullyQualifiedDomain(candidate: string): boolean {
     return /^[a-z0-9\.\-]+$/i.test(candidate) && candidate.indexOf('..') === -1;
@@ -308,8 +308,8 @@ export function isFullyQualifiedDomain(candidate: string): boolean {
 
 /**
  * 判断字符串是否是一个带通配符的完全合格的域名。
- * @param candidate 
- * @returns 
+ * @param candidate
+ * @returns
  */
 export function isFullyQualifiedDomainWildcard(candidate: string): boolean {
     if (!candidate.includes('*') || !/^[a-z0-9\.\-\*]+$/i.test(candidate)) {
@@ -326,9 +326,9 @@ export function isFullyQualifiedDomainWildcard(candidate: string): boolean {
 
 /**
  * 检查给定的域名是否匹配给定的通配符。
- * @param wildcard 
- * @param candidate 
- * @returns 
+ * @param wildcard
+ * @param candidate
+ * @returns
  */
 export function fullyQualifiedDomainMatchesWildcard(
     wildcard: string,
@@ -351,8 +351,8 @@ export function fullyQualifiedDomainMatchesWildcard(
 
 /**
  * 判断URL是否指向一个本地文件。
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 export function isLocalFile(url: string): boolean {
     return Boolean(url) && url.startsWith('file:///');

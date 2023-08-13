@@ -10,9 +10,9 @@ let observer: MutationObserver | null = null;
 
 /**
  * 用于改变 meta 元素中的主题颜色。
- * @param meta 
- * @param theme 
- * @returns 
+ * @param meta
+ * @param theme
+ * @returns
  */
 function changeMetaThemeColor(meta: HTMLMetaElement, theme: FilterConfig) {
     srcMetaThemeColor = srcMetaThemeColor || meta.content;
@@ -26,7 +26,7 @@ function changeMetaThemeColor(meta: HTMLMetaElement, theme: FilterConfig) {
 
 /**
  * 用于在可用时改变网页的主题颜色。
- * @param theme 
+ * @param theme
  */
 export function changeMetaThemeColorWhenAvailable(theme: FilterConfig): void {
     const meta: HTMLMetaElement = document.querySelector(

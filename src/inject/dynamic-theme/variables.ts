@@ -120,10 +120,10 @@ export class VariablesStore {
     }
 
     /**
-     * 
-     * @param varName 
-     * @param typeNum 
-     * @returns 
+     *
+     * @param varName
+     * @param typeNum
+     * @returns
      */
     private isVarType(varName: string, typeNum: number) {
         return (
@@ -134,7 +134,7 @@ export class VariablesStore {
 
     /**
      * 将CSS规则列表添加到待处理的规则队列。
-     * @param rules 
+     * @param rules
      */
     public addRulesForMatching(rules: CSSRuleList): void {
         this.rulesQueue.push(rules);
@@ -215,8 +215,8 @@ export class VariablesStore {
     /**
      * 为给定的变量创建一个CSS变量修改器。
      * 该方法根据变量的类型创建不同类型的修改器，例如背景颜色修改器、文本颜色修改器、边框颜色修改器等。
-     * @param options 
-     * @returns 
+     * @param options
+     * @returns
      */
     public getModifierForVariable(options: {
         varName: string;
@@ -351,9 +351,9 @@ export class VariablesStore {
     /**
      * 为给定的变量依赖项创建一个CSS值修改器。
      * 该方法根据依赖项的类型创建不同类型的修改器，例如背景颜色修改器、文本颜色修改器、边框颜色修改器等。
-     * @param property 
-     * @param sourceValue 
-     * @returns 
+     * @param property
+     * @param sourceValue
+     * @returns
      */
     public getModifierForVarDependant(
         property: string,
@@ -478,8 +478,8 @@ export class VariablesStore {
 
     /**
      *  订阅变量类型改变时的回调。
-     * @param varName 
-     * @param callback 
+     * @param varName
+     * @param callback
      */
     private subscribeForVarTypeChange(varName: string, callback: () => void) {
         if (!this.typeChangeSubscriptions.has(varName)) {
@@ -493,8 +493,8 @@ export class VariablesStore {
 
     /**
      * 取消订阅变量类型改变的回调。
-     * @param varName 
-     * @param callback 
+     * @param varName
+     * @param callback
      */
     private unsubscribeFromVariableTypeChanges(
         varName: string,
@@ -512,7 +512,7 @@ export class VariablesStore {
     // The task is either `inspectVariable` or `inspectVarDependant`.
     /**
      * 用于收集给定CSS规则列表中的变量和变量依赖关系。
-     * @param ruleList 
+     * @param ruleList
      */
     private collectVariablesAndVarDep(ruleList: CSSRuleList[]) {
         ruleList.forEach((rules) => {
@@ -546,9 +546,9 @@ export class VariablesStore {
 
     /**
      * 用于处理给定的变量及其值。
-     * @param varName 
-     * @param value 
-     * @returns 
+     * @param varName
+     * @param value
+     * @returns
      */
     private inspectVariable(varName: string, value: string) {
         this.unstableVarValues.set(varName, value);
@@ -578,8 +578,8 @@ export class VariablesStore {
 
     /**
      * 用于解析变量的类型。它根据给定的类型标记将变量的类型合并，并在类型发生改变时进行处理。
-     * @param varName 
-     * @param typeNum 
+     * @param varName
+     * @param typeNum
      */
     private resolveVariableType(varName: string, typeNum: number) {
         const initialType = this.initialVarTypes.get(varName) || 0;
@@ -610,8 +610,8 @@ export class VariablesStore {
 
     /**
      * 用于处理给定的变量依赖项及其值
-     * @param property 
-     * @param value 
+     * @param property
+     * @param value
      */
     private inspectVarDependant(property: string, value: string) {
         if (isVariable(property)) {
@@ -670,8 +670,8 @@ export class VariablesStore {
 
     /**
      * 用于遍历给定变量的依赖项，并对每个依赖项调用给定的迭代器函数。
-     * @param value 
-     * @param iterator 
+     * @param value
+     * @param iterator
      */
     private iterateVarDeps(value: string, iterator: (varDep: string) => void) {
         const varDeps = new Set<string>();
@@ -681,10 +681,10 @@ export class VariablesStore {
 
     /**
      * 用于递归查找给定变量的引用。它会避免处理循环引用，并在找到引用时调用给定的迭代器函数。
-     * @param varName 
-     * @param iterator 
-     * @param stack 
-     * @returns 
+     * @param varName
+     * @param iterator
+     * @param stack
+     * @returns
      */
     private findVarRef(
         varName: string,
@@ -714,8 +714,8 @@ export class VariablesStore {
 
     /**
      * 用于迭代给定变量的引用。
-     * @param varName 
-     * @param iterator 
+     * @param varName
+     * @param iterator
      */
     private itarateVarRefs(varName: string, iterator: (v: string) => void) {
         this.findVarRef(varName, (ref) => {
@@ -726,7 +726,7 @@ export class VariablesStore {
 
     /**
      * 用于设置当根变量定义时的回调函数。
-     * @param callback 
+     * @param callback
      */
     public setOnRootVariableChange(callback: () => void): void {
         this.onRootVariableDefined = callback;
@@ -734,8 +734,8 @@ export class VariablesStore {
 
     /**
      * 将根变量应用到给定的HTML样式元素。该方法将根变量的值修改后应用到样式元素上。
-     * @param styleElement 
-     * @param theme 
+     * @param styleElement
+     * @param theme
      */
     public putRootVars(styleElement: HTMLStyleElement, theme: Theme): void {
         const sheet = styleElement.sheet!;

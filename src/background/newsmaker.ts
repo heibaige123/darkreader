@@ -231,5 +231,4 @@ export default class Newsmaker {
     }
 }
 
-export function setNewsForTesting(news: News[]): void {
-}
+export function setNewsForTesting(news: News[]): void {}

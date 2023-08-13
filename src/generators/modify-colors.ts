@@ -19,8 +19,8 @@ interface ColorFunction {
 
 /**
  * 根据主题是暗模式还是亮模式来确定主题的基本背景和前景颜色。
- * @param theme 
- * @returns 
+ * @param theme
+ * @returns
  */
 function getBgPole(theme: Theme) {
     const isDarkScheme = theme.mode === 1;
@@ -32,8 +32,8 @@ function getBgPole(theme: Theme) {
 
 /**
  * 根据主题是暗模式还是亮模式来确定主题的基本背景和前景颜色。
- * @param theme 
- * @returns 
+ * @param theme
+ * @returns
  */
 function getFgPole(theme: Theme) {
     const isDarkScheme = theme.mode === 1;
@@ -50,7 +50,7 @@ function getFgPole(theme: Theme) {
 const colorModificationCache = new Map<ColorFunction, Map<string, string>>();
 
 /**
- * 
+ *
  */
 export function clearColorModificationCache(): void {
     colorModificationCache.clear();
@@ -193,7 +193,7 @@ function modifyLightModeHSL(
 const MAX_BG_LIGHTNESS = 0.4;
 
 /**
- * 
+ *
  */
 function modifyBgHSL({ h, s, l, a }: HSLA, pole: HSLA): HSLA {
     const isDark = l < 0.5;

@@ -56,7 +56,7 @@ interface StyleSheetModifier {
 
 /**
  * 用于修改CSS样式表
- * @returns 
+ * @returns
  */
 export function createStyleSheetModifier(): StyleSheetModifier {
     let renderId = 0;
@@ -72,8 +72,8 @@ export function createStyleSheetModifier(): StyleSheetModifier {
 
     /**
      * 修改给定的CSS规则列表，以适应指定的主题。这个函数处理异步和CSS变量，并确保CSS规则以最优化的方式被修改。
-     * @param options 
-     * @returns 
+     * @param options
+     * @returns
      */
     function modifySheet(options: ModifySheetOptions) {
         const rules = options.sourceCSSRules;
@@ -473,7 +473,7 @@ export function createStyleSheetModifier(): StyleSheetModifier {
 
         /**
          * 当有异步声明准备好时，重建与该声明相关的规则。
-         * @param key 
+         * @param key
          */
         function rebuildAsyncRule(key: number) {
             const { rule, target, index } = asyncDeclarations.get(key)!;
@@ -484,7 +484,7 @@ export function createStyleSheetModifier(): StyleSheetModifier {
 
         /**
          * 当变量类型发生变化时，重建与该变量相关的规则。
-         * @param key 
+         * @param key
          */
         function rebuildVarRule(key: number) {
             const { rule, target, index } = varDeclarations.get(key)!;

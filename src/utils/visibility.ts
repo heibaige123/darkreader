@@ -85,7 +85,7 @@ function stopWatchingForDocumentVisibility(): void {
 /**
  * 允许外部代码设置一个回调函数，当文档从不可见变为可见时，这个回调会被触发。
  * 如果之前没有设置过监听器，那么会开始监视文档的可见性。
- * @param callback 
+ * @param callback
  */
 export function setDocumentVisibilityListener(callback: () => void): void {
     const alreadyWatching = Boolean(documentVisibilityListener);
@@ -111,7 +111,7 @@ export function removeDocumentVisibilityListener(): void {
 
 /**
  * 返回一个布尔值，表示文档是否当前可见。
- * @returns 
+ * @returns
  */
 export function documentIsVisible(): boolean {
     return documentIsVisible_;

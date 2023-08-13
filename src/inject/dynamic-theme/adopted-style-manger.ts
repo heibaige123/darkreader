@@ -28,9 +28,9 @@ export function createAdoptedStyleSheetOverride(
 
     /**
      * 在给定的原始样式表后插入覆盖样式表
-     * @param sheet 
-     * @param override 
-     * @returns 
+     * @param sheet
+     * @param override
+     * @returns
      */
     function injectSheet(sheet: CSSStyleSheet, override: CSSStyleSheet) {
         const newSheets = [...node.adoptedStyleSheets];
@@ -67,8 +67,8 @@ export function createAdoptedStyleSheetOverride(
 
     /**
      * 根据给定的主题和其他参数，对所有在节点上被接受的样式表进行渲染
-     * @param theme 
-     * @param ignoreImageAnalysis 
+     * @param theme
+     * @param ignoreImageAnalysis
      */
     function render(theme: Theme, ignoreImageAnalysis: string[]) {
         node.adoptedStyleSheets.forEach((sheet) => {
@@ -80,7 +80,7 @@ export function createAdoptedStyleSheetOverride(
 
             /**
              * 准备一个覆盖样式表，删除其上的所有规则，并将其插入到对应的原始样式表后面
-             * @returns 
+             * @returns
              */
             function prepareOverridesSheet() {
                 for (let i = override.cssRules.length - 1; i >= 0; i--) {

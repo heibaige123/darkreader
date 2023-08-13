@@ -49,7 +49,7 @@ export default class AsyncQueue {
     // Ensures 60FPS.
     /**
      * 用于开始处理队列中的任务。它使用 requestAnimationFrame 来确保任务在浏览器的帧刷新间隔中执行
-     * 
+     *
      */
     private startQueue(): void {
         if (this.timerId) {

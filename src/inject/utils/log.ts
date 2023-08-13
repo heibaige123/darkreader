@@ -1,4 +1,3 @@
-
 export function logInfo(...args: any[]): void {}
 
 export function logWarn(...args: any[]): void {}

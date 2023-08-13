@@ -93,9 +93,9 @@ let ignoredInlineSelectors: string[] = [];
 
 /**
  * 在给定的DOM根节点中创建或更新一个具有指定类名的样式元素
- * @param className 
- * @param root 
- * @returns 
+ * @param className
+ * @param root
+ * @returns
  */
 function createOrUpdateStyle(
     className: string,
@@ -139,8 +139,8 @@ const nodePositionWatchers = new Map<
 
 /**
  * 用于设置或更新指定节点的位置观察者
- * @param node 
- * @param alias 
+ * @param node
+ * @param alias
  */
 function setupNodePositionWatcher(node: Node, alias: string) {
     nodePositionWatchers.has(alias) && nodePositionWatchers.get(alias)!.stop();
@@ -272,7 +272,7 @@ const shadowRootsWithOverrides = new Set<ShadowRoot>();
 
 /**
  * 为给定的 ShadowRoot 创建或更新一些静态样式覆盖。
- * @param root 
+ * @param root
  */
 function createShadowStaticStyleOverridesInner(root: ShadowRoot) {
     const inlineStyle = createOrUpdateStyle('darkreader--inline', root);
@@ -305,7 +305,7 @@ function createShadowStaticStyleOverridesInner(root: ShadowRoot) {
 
 /**
  * 用于创建一个延迟执行的 MutationObserver，用于监听 ShadowRoot 中的子节点变化
- * @param root 
+ * @param root
  */
 function delayedCreateShadowStaticStyleOverrides(root: ShadowRoot): void {
     const observer = new MutationObserver((mutations, observer) => {
@@ -336,7 +336,7 @@ function delayedCreateShadowStaticStyleOverrides(root: ShadowRoot): void {
 
 /**
  * 用于检查 ShadowRoot 是否已经初始化
- * @param root 
+ * @param root
  */
 function createShadowStaticStyleOverrides(root: ShadowRoot) {
     // The shadow DOM may not be populated yet and the custom element implementation
@@ -351,8 +351,8 @@ function createShadowStaticStyleOverrides(root: ShadowRoot) {
 
 /**
  * 用于替换CSS文本中的模板字符串 ${...}，将其替换为对应的颜色值。
- * @param $cssText 
- * @returns 
+ * @param $cssText
+ * @returns
  */
 function replaceCSSTemplates($cssText: string) {
     return $cssText.replace(/\${(.+?)}/g, (_, $color) => {
@@ -437,8 +437,8 @@ const loadingStyles = new Set<number>();
 
 /**
  * 用于创建一个 Manager 对象来管理指定的样式元素。
- * @param element 
- * @returns 
+ * @param element
+ * @returns
  */
 function createManager(element: StyleElement) {
     const loadingStyleId = ++loadingStylesCounter;
@@ -491,7 +491,7 @@ function createManager(element: StyleElement) {
 
 /**
  * 用于移除已经存在的 Manager 对象，并从 styleManagers 集合中删除该元素的引用。
- * @param element 
+ * @param element
  */
 function removeManager(element: StyleElement) {
     const manager = styleManagers.get(element);
@@ -526,7 +526,7 @@ const cancelRendering = function () {
 /**
  * 用于在 DOM 加载完成后执行一些操作。
  * 如果样式加载已经完成，则清空名为 'darkreader--fallback' 的样式元素的内容。
- * @returns 
+ * @returns
  */
 function onDOMReady() {
     if (loadingStyles.size === 0) {
@@ -561,7 +561,7 @@ function createThemeAndWatchForUpdates() {
 
 /**
  * 用于处理通过 adoptedStyleSheets 方法添加的样式表。
- * @param node 
+ * @param node
  */
 function handleAdoptedStyleSheets(node: ShadowRoot | Document) {
     try {
@@ -703,7 +703,7 @@ function createDarkReaderInstanceMarker() {
 
 /**
  * 用于检查是否有其他 Dark Reader 实例正在运行。
- * @returns 
+ * @returns
  */
 function isAnotherDarkReaderInstanceActive() {
     if (document.querySelector('meta[name="darkreader-lock"]')) {
@@ -726,9 +726,9 @@ function isAnotherDarkReaderInstanceActive() {
 
 /**
  * 用于从动态主题修复列表中选择与当前文档URL匹配的修复。
- * @param documentURL 
- * @param fixes 
- * @returns 
+ * @param documentURL
+ * @param fixes
+ * @returns
  */
 function selectRelevantFix(
     documentURL: string,

@@ -416,7 +416,6 @@ function getSiteFix<T extends SiteProps>(
  * @param index
  */
 function scheduleCacheCleanup<T extends SiteProps>(index: SitePropsIndex<T>) {
- 
     clearTimeout(index.cacheCleanupTimer);
     index.cacheCleanupTimer = setTimeout(() => {
         index.cacheCleanupTimer = null;

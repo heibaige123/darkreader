@@ -12,8 +12,8 @@ import { AutomationMode } from './automation';
 
 /**
  * 检查一个值是否是布尔类型
- * @param x 
- * @returns 
+ * @param x
+ * @returns
  */
 function isBoolean(x: any): x is boolean {
     return typeof x === 'boolean';
@@ -21,16 +21,16 @@ function isBoolean(x: any): x is boolean {
 
 /**
  * 检查一个值是否是纯对象
- * @param x 
- * @returns 
+ * @param x
+ * @returns
  */
 function isPlainObject(x: any): x is Record<string, unknown> {
     return typeof x === 'object' && x != null && !Array.isArray(x);
 }
 /**
  * 检查一个值是否是数组
- * @param x 
- * @returns 
+ * @param x
+ * @returns
  */
 function isArray(x: any) {
     return Array.isArray(x);
@@ -151,7 +151,7 @@ function createValidator() {
     return { validateProperty, validateArray, errors };
 }
 /**
- * 
+ *
  */
 interface SettingValidationResult {
     settings: Partial<UserSettings>;
@@ -366,7 +366,7 @@ export function validateSettings(
     return { errors, settings };
 }
 /**
- * 
+ *
  */
 interface ThemeValidationResult {
     theme: Partial<Theme>;

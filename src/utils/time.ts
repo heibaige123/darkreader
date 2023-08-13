@@ -183,7 +183,7 @@ function getSunsetSunriseUTCTime(
     const lnHour = longitude / 15;
 
     /**
-     * 
+     *
      */
     function getTime(isSunrise: boolean) {
         const t = dayOfYear + ((isSunrise ? 6 : 18) - lnHour) / 24;

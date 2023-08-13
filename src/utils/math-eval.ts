@@ -7,8 +7,8 @@
 /**
  * 使用“调度场算法”（Shunting Yard Algorithm）来处理数学表达式
  * 逆波兰表示法
- * @param expression 
- * @returns 
+ * @param expression
+ * @returns
  */
 export function evalMath(expression: string): number {
     // Stack where operators & numbers are stored in RPN.
@@ -97,9 +97,9 @@ class Operator {
 
     /**
      * 执行操作
-     * @param left 
-     * @param right 
-     * @returns 
+     * @param left
+     * @param right
+     * @returns
      */
     public exec(left: number, right: number): number {
         return this.execMethod(left, right);
@@ -107,8 +107,8 @@ class Operator {
 
     /**
      * 比较两个操作符的优先级
-     * @param op 
-     * @returns 
+     * @param op
+     * @returns
      */
     public lessOrEqualThan(op: Operator) {
         return this.precendce <= op.precendce;

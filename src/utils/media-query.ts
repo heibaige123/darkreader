@@ -18,8 +18,8 @@ const listeners = new Set<(isDark: boolean) => void>();
 
 /**
  * 用于运行颜色模式变化的检测。
- * @param callback 
- * @returns 
+ * @param callback
+ * @returns
  */
 export function runColorSchemeChangeDetector(
     callback: (isDark: boolean) => void,
@@ -35,7 +35,7 @@ export function runColorSchemeChangeDetector(
 
 /**
  * 用于停止颜色模式变化的检测。
- * @returns 
+ * @returns
  */
 export function stopColorSchemeChangeDetector(): void {
     if (!query || !onChange) {
@@ -49,13 +49,13 @@ export function stopColorSchemeChangeDetector(): void {
 
 /**
  * 用于模拟指定的颜色模式（light 或 dark），并触发相应的回调函数通知。
- * @param colorScheme 
+ * @param colorScheme
  */
 export function emulateColorScheme(colorScheme: 'light' | 'dark'): void {}
 
 /**
  * 用于检查系统是否启用了暗色模式。
- * @returns 
+ * @returns
  */
 export const isSystemDarkModeEnabled = (): boolean =>
     (query || matchMedia('(prefers-color-scheme: dark)')).matches;

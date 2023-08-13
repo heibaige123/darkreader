@@ -1,10 +1,9 @@
-
 /**
  * 用于获取网络资源的响应
- * @param url 
- * @param mimeType 
- * @param origin 
- * @returns 
+ * @param url
+ * @param mimeType
+ * @param origin
+ * @returns
  */
 async function getOKResponse(
     url: string,
@@ -37,9 +36,9 @@ async function getOKResponse(
 
 /**
  * 用于将网络资源加载为Data URL格式
- * @param url 
- * @param mimeType 
- * @returns 
+ * @param url
+ * @param mimeType
+ * @returns
  */
 export async function loadAsDataURL(
     url: string,
@@ -52,8 +51,8 @@ export async function loadAsDataURL(
 /**
  * 接受一个Response对象，并将其内容读取为Data URL格式。它先将响应转换为Blob对象，
  * 然后使用FileReader异步地将Blob对象读取为Data URL，并最终将Data URL返回
- * @param response 
- * @returns 
+ * @param response
+ * @returns
  */
 export async function readResponseAsDataURL(
     response: Response,
@@ -69,10 +68,10 @@ export async function readResponseAsDataURL(
 
 /**
  * 将网络资源加载为文本格式
- * @param url 
- * @param mimeType 
- * @param origin 
- * @returns 
+ * @param url
+ * @param mimeType
+ * @param origin
+ * @returns
  */
 export async function loadAsText(
     url: string,

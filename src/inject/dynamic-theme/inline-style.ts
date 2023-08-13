@@ -134,8 +134,8 @@ export function getInlineOverrideStyle(): string {
 
 /**
  * 在节点内获取具有可能需要覆盖的内联样式或某些属性
- * @param root 
- * @returns 
+ * @param root
+ * @returns
  */
 function getInlineStyleElements(root: Node) {
     const results: Element[] = [];
@@ -157,8 +157,8 @@ const attrObservers = new Map<Node, MutationObserver>();
 
 /**
  * 使用mutation观察器来跟踪DOM中的更改
- * @param elementStyleDidChange 
- * @param shadowRootDiscovered 
+ * @param elementStyleDidChange
+ * @param shadowRootDiscovered
  */
 export function watchForInlineStyles(
     elementStyleDidChange: (element: HTMLElement) => void,
@@ -180,9 +180,9 @@ export function watchForInlineStyles(
 
 /**
  * 使用mutation观察器来跟踪DOM中的更改
- * @param root 
- * @param elementStyleDidChange 
- * @param shadowRootDiscovered 
+ * @param root
+ * @param elementStyleDidChange
+ * @param shadowRootDiscovered
  */
 function deepWatchForInlineStyles(
     root: Document | ShadowRoot,
@@ -301,9 +301,9 @@ const filterProps: Array<keyof FilterConfig> = [
 
 /**
  * 为给定的HTML元素和主题生成一个唯一的字符串键
- * @param el 
- * @param theme 
- * @returns 
+ * @param el
+ * @param theme
+ * @returns
  */
 function getInlineStyleCacheKey(el: HTMLElement, theme: FilterConfig): string {
     return INLINE_STYLE_ATTRS.map(
@@ -315,9 +315,9 @@ function getInlineStyleCacheKey(el: HTMLElement, theme: FilterConfig): string {
 
 /**
  * 这个函数决定是否应该忽略一个元素的样式覆盖。它接受一个元素和一个选择器列表作为参数。
- * @param element 
- * @param selectors 
- * @returns 
+ * @param element
+ * @param selectors
+ * @returns
  */
 function shouldIgnoreInlineStyle(
     element: HTMLElement,
@@ -334,11 +334,11 @@ function shouldIgnoreInlineStyle(
 
 /**
  * 处理实际样式覆盖的核心函数。它浏览元素的各种内联样式和属性，并根据给定的主题设置或修改它们
- * @param element 
- * @param theme 
- * @param ignoreInlineSelectors 
- * @param ignoreImageSelectors 
- * @returns 
+ * @param element
+ * @param theme
+ * @param ignoreInlineSelectors
+ * @param ignoreImageSelectors
+ * @returns
  */
 export function overrideInlineStyle(
     element: HTMLElement,

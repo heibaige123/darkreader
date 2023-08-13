@@ -64,8 +64,8 @@ export const STYLE_SELECTOR =
 /**
  * 用于检查给定的 link 元素是否是来自 Google Fonts API 的样式。
  * 它通过解析链接中的主机名来判断是否使用了 Google Fonts API
- * @param element 
- * @returns 
+ * @param element
+ * @returns
  */
 function isFontsGoogleApiStyle(element: HTMLLinkElement): boolean {
     if (!element.href) {
@@ -83,8 +83,8 @@ function isFontsGoogleApiStyle(element: HTMLLinkElement): boolean {
 
 /**
  * 用于检查给定的节点是否应该由样式管理器来管理。
- * @param element 
- * @returns 
+ * @param element
+ * @returns
  */
 export function shouldManageStyle(element: Node | null): boolean {
     return (
@@ -104,10 +104,10 @@ export function shouldManageStyle(element: Node | null): boolean {
 
 /**
  * 用于获取可管理的样式元素。
- * @param node 
- * @param results 
- * @param deep 
- * @returns 
+ * @param node
+ * @param results
+ * @param deep
+ * @returns
  */
 export function getManageableStyles(
     node: Node | null,
@@ -175,9 +175,9 @@ export function cleanLoadingLinks(): void {
 /**
  * 用于管理样式元素。它接受一个样式元素和一个对象，
  * 其中包含 update、loadingStart 和 loadingEnd 函数。这些函数在样式需要更新
- * @param element 
- * @param param1 
- * @returns 
+ * @param element
+ * @param param1
+ * @returns
  */
 export function manageStyle(
     element: StyleElement,
@@ -708,9 +708,9 @@ export function manageStyle(
 
 /**
  * 用于加载链接元素的样式
- * @param link 
- * @param loadingId 
- * @returns 
+ * @param link
+ * @param loadingId
+ * @returns
  */
 async function linkLoading(link: HTMLLinkElement, loadingId: number) {
     return new Promise<void>((resolve, reject) => {
@@ -746,8 +746,8 @@ async function linkLoading(link: HTMLLinkElement, loadingId: number) {
 /**
  * 用于从 @import 语句中获取导入的样式表的 URL。
  * 它从给定的导入声明中提取 URL，并进行处理，去掉可能的空格和分号等。
- * @param importDeclaration 
- * @returns 
+ * @param importDeclaration
+ * @returns
  */
 function getCSSImportURL(importDeclaration: string) {
     // substring(7) is used to remove `@import` from the string.
@@ -765,8 +765,8 @@ function getCSSImportURL(importDeclaration: string) {
  * 用于加载文本资源，包括样式表。它接受一个 URL 字符串，
  * 根据 URL 的类型（以 data: 开头或非 data: 开头）来决定如何加载。
  * 对于非 data: URL，它使用 bgFetch 函数来进行后台加载，返回一个包含加载文本的 Promise
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 async function loadText(url: string) {
     if (url.startsWith('data:')) {
@@ -782,10 +782,10 @@ async function loadText(url: string) {
 
 /**
  * 用于替换样式表中的 @import 语句
- * @param cssText 
- * @param basePath 
- * @param cache 
- * @returns 
+ * @param cssText
+ * @param basePath
+ * @param cache
+ * @returns
  */
 async function replaceCSSImports(
     cssText: string,
@@ -832,9 +832,9 @@ async function replaceCSSImports(
  * 然后将新的样式元素插入到原始样式元素的后面，并返回新的样式元素。
  * 此函数用于处理一些跨域的样式表，因为有时候访问跨域样式表的 sheet 属性会抛出错误。
  * 通过创建 CORS 副本来绕过这个问题，从而可以访问样式表的 cssRules。
- * @param srcElement 
- * @param cssText 
- * @returns 
+ * @param srcElement
+ * @param cssText
+ * @returns
  */
 function createCORSCopy(srcElement: StyleElement, cssText: string) {
     if (!cssText) {

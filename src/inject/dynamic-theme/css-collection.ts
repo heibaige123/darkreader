@@ -6,8 +6,8 @@ const blobRegex = /url\(\"(blob\:.*?)\"\)/g;
 
 /**
  * 用于替换CSS文本中的blob URLs。
- * @param text 
- * @returns 
+ * @param text
+ * @returns
  */
 async function replaceBlobs(text: string) {
     const promises: Array<Promise<string>> = [];
@@ -45,7 +45,7 @@ _______|_______/__/ ____ \\__\\__|___\\__\\__|___\\__\\____
 
 /**
  * 用于收集页面上的不同类型的CSS样式，并返回一个包含完整CSS的字符串数组。
- * @returns 
+ * @returns
  */
 export async function collectCSS(): Promise<string> {
     const css = [banner];

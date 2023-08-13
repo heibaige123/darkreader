@@ -26,7 +26,7 @@ interface NodePosetionWatcher {
 
 /**
  * 用于在尽可能快的时间内创建DOM节点。它根据传入的参数选择目标节点，并根据目标节点的状态执行相应的操作（创建节点或更新节点）
- * @param param0 
+ * @param param0
  */
 export function createNodeAsap({
     selectNode,
@@ -81,7 +81,7 @@ export function createNodeAsap({
 
 /**
  * 用于从DOM中移除给定的节点
- * @param node 
+ * @param node
  */
 export function removeNode(node: Node | null): void {
     node && node.parentNode && node.parentNode.removeChild(node);
@@ -89,10 +89,10 @@ export function removeNode(node: Node | null): void {
 
 /**
  * 用于观察DOM节点的位置变化。它接收一个节点和一个模式（"head"或"prev-sibling"），并在节点的位置发生变化时执行相应的回调函数。
- * @param node 
- * @param mode 
- * @param onRestore 
- * @returns 
+ * @param node
+ * @param mode
+ * @param onRestore
+ * @returns
  */
 export function watchForNodePosition<T extends Node>(
     node: T,
@@ -239,7 +239,7 @@ export function watchForNodePosition<T extends Node>(
 
     /**
      * 更新父元素为新值，并使用新的父元素重新启动 MutationObserver。
-     * @param parentNode 
+     * @param parentNode
      */
     const updateParent = (parentNode: (Node & ParentNode) | null) => {
         parent = parentNode;
@@ -253,9 +253,9 @@ export function watchForNodePosition<T extends Node>(
 
 /**
  * 用于遍历DOM树中的所有Shadow Host节点，并执行指定的回调函数。
- * @param root 
- * @param iterator 
- * @returns 
+ * @param root
+ * @param iterator
+ * @returns
  */
 export function iterateShadowHosts(
     root: Node | null,
@@ -291,7 +291,7 @@ export function iterateShadowHosts(
 
 /**
  * 指示DOM是否已完全加载
- * @returns 
+ * @returns
  */
 export let isDOMReady: () => boolean = () => {
     return (
@@ -302,7 +302,7 @@ export let isDOMReady: () => boolean = () => {
 
 /**
  * 设置自定义的DOM就绪检查函数。
- * @param newFunc 
+ * @param newFunc
  */
 export function setIsDOMReady(newFunc: () => boolean): void {
     isDOMReady = newFunc;
@@ -312,7 +312,7 @@ const readyStateListeners = new Set<() => void>();
 
 /**
  * 用于添加DOM就绪监听器的函数
- * @param listener 
+ * @param listener
  */
 export function addDOMReadyListener(listener: () => void): void {
     isDOMReady() ? listener() : readyStateListeners.add(listener);
@@ -320,7 +320,7 @@ export function addDOMReadyListener(listener: () => void): void {
 
 /**
  * 用于移除DOM就绪监听器的函数
- * @param listener 
+ * @param listener
  */
 export function removeDOMReadyListener(listener: () => void): void {
     readyStateListeners.delete(listener);
@@ -330,7 +330,7 @@ export function removeDOMReadyListener(listener: () => void): void {
 // We use certain actions that can cause a forced layout change, which is bad.
 /**
  * 用于检查文档的readyState是否为"complete"的函数。
- * @returns 
+ * @returns
  */
 export function isReadyStateComplete(): boolean {
     return document.readyState === 'complete';
@@ -340,7 +340,7 @@ const readyStateCompleteListeners = new Set<() => void>();
 
 /**
  * 用于添加文档就绪完成监听器
- * @param listener 
+ * @param listener
  */
 export function addReadyStateCompleteListener(listener: () => void): void {
     isReadyStateComplete()
@@ -385,8 +385,8 @@ const HUGE_MUTATIONS_COUNT = 1000;
 
 /**
  * 根据提供的变异记录判断是否有大量的变异。
- * @param mutations 
- * @returns 
+ * @param mutations
+ * @returns
  */
 function isHugeMutation(mutations: MutationRecord[]) {
     if (mutations.length > HUGE_MUTATIONS_COUNT) {
@@ -415,8 +415,8 @@ export interface ElementsTreeOperations {
 
 /**
  * 根据提供的变异记录返回元素树的操作。它处理添加的节点、删除的节点以及移动的节点，并确保不会有重复的添加和删除操作。
- * @param mutations 
- * @returns 
+ * @param mutations
+ * @returns
  */
 function getElementsTreeOperations(
     mutations: MutationRecord[],
@@ -483,9 +483,9 @@ const optimizedTreeCallbacks = new WeakMap<
 // TODO: Use a single function to observe all shadow roots.
 /**
  * 用于创建优化的DOM树观察器
- * @param root 
- * @param callbacks 
- * @returns 
+ * @param root
+ * @param callbacks
+ * @returns
  */
 export function createOptimizedTreeObserver(
     root: Document | ShadowRoot,

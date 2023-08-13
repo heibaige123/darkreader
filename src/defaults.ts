@@ -21,18 +21,14 @@ export const DEFAULT_THEME: Theme = {
     grayscale: 0,
     sepia: 0,
     useFont: false,
-    fontFamily: false
-        ? 'Helvetica Neue'
-        : false
-            ? 'Segoe UI'
-            : 'Open Sans',
+    fontFamily: false ? 'Helvetica Neue' : false ? 'Segoe UI' : 'Open Sans',
     textStroke: 0,
     engine: ThemeEngine.dynamicTheme,
     stylesheet: '',
-    darkSchemeBackgroundColor: DEFAULT_COLORS.darkScheme.background,
-    darkSchemeTextColor: DEFAULT_COLORS.darkScheme.text,
-    lightSchemeBackgroundColor: DEFAULT_COLORS.lightScheme.background,
-    lightSchemeTextColor: DEFAULT_COLORS.lightScheme.text,
+    darkSchemeBackgroundColor: '#181a1b',
+    darkSchemeTextColor: '#e8e6e3',
+    lightSchemeBackgroundColor: '#dcdad7',
+    lightSchemeTextColor: '#181a1b',
     scrollbarColor: false ? '' : 'auto',
     selectionColor: 'auto',
     styleSystemControls: false,
@@ -44,14 +40,14 @@ export const DEFAULT_THEME: Theme = {
 export const DEFAULT_COLORSCHEME: ParsedColorSchemeConfig = {
     light: {
         Default: {
-            backgroundColor: DEFAULT_COLORS.lightScheme.background,
-            textColor: DEFAULT_COLORS.lightScheme.text,
+            backgroundColor: '#dcdad7',
+            textColor: '#181a1b',
         },
     },
     dark: {
         Default: {
-            backgroundColor: DEFAULT_COLORS.darkScheme.background,
-            textColor: DEFAULT_COLORS.darkScheme.text,
+            backgroundColor: '#181a1b',
+            textColor: '#e8e6e3',
         },
     },
 };

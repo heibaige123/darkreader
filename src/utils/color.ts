@@ -21,8 +21,8 @@ const rgbaParseCache = new Map<string, RGBA>();
 
 /**
  * rgba先检查颜色是否已经被缓存。如果没有，它会尝试解析颜色并将结果存储在缓存中。
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 export function parseColorWithCache($color: string): RGBA | null {
     $color = $color.trim();
@@ -41,8 +41,8 @@ export function parseColorWithCache($color: string): RGBA | null {
 
 /**
  * hsla先检查颜色是否已经被缓存。如果没有，它会尝试解析颜色并将结果存储在缓存中。
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 export function parseToHSLWithCache(color: string): HSLA | null {
     if (hslaParseCache.has(color)) {
@@ -59,8 +59,8 @@ export function parseToHSLWithCache(color: string): HSLA | null {
 
 /**
  * 清除颜色的缓存。
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 export function clearColorCache(): void {
     hslaParseCache.clear();
@@ -69,9 +69,9 @@ export function clearColorCache(): void {
 
 /**
  * 将HSLA格式的颜色转换为RGBA格式
- * @param $color 
- * @returns 
- *///https:en.wikipedia.org/wiki/HSL_and_HSV
+ * @param $color
+ * @returns
+ */ //https:en.wikipedia.org/wiki/HSL_and_HSV
 export function hslToRGB({ h, s, l, a = 1 }: HSLA): RGBA {
     if (s === 0) {
         const [r, b, g] = [l, l, l].map((x) => Math.round(x * 255));
@@ -100,9 +100,9 @@ export function hslToRGB({ h, s, l, a = 1 }: HSLA): RGBA {
 
 /**
  * 将RGBA格式的颜色转换为HSLA格式
- * @param $color 
- * @returns 
- *///https:sen.wikipedia.org/wiki/HSL_and_HSV
+ * @param $color
+ * @returns
+ */ //https:sen.wikipedia.org/wiki/HSL_and_HSV
 export function rgbToHSL({ r: r255, g: g255, b: b255, a = 1 }: RGBA): HSLA {
     const r = r255 / 255;
     const g = g255 / 255;
@@ -134,9 +134,9 @@ export function rgbToHSL({ r: r255, g: g255, b: b255, a = 1 }: RGBA): HSLA {
 }
 
 /**
- * 
- * @param $color 
- * @returns 
+ *
+ * @param $color
+ * @returns
  */
 function toFixed(n: number, digits = 0): string {
     const fixed = n.toFixed(digits);
@@ -158,8 +158,8 @@ function toFixed(n: number, digits = 0): string {
 
 /**
  * 将RGBA或HSLA格式的颜色转换为字符串表示
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 export function rgbToString(rgb: RGBA): string {
     const { r, g, b, a } = rgb;
@@ -174,8 +174,8 @@ export function rgbToString(rgb: RGBA): string {
 
 /**
  * 将RGBA或HSLA格式的颜色转换为字符串表示
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 export function rgbToHexString({ r, g, b, a }: RGBA): string {
     return `#${(a != null && a < 1 ? [r, g, b, Math.round(a * 255)] : [r, g, b])
@@ -187,8 +187,8 @@ export function rgbToHexString({ r, g, b, a }: RGBA): string {
 
 /**
  * 将RGBA或HSLA格式的颜色转换为字符串表示
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 export function hslToString(hsl: HSLA): string {
     const { h, s, l, a } = hsl;
@@ -206,8 +206,8 @@ const hexMatch = /^#[0-9a-f]+$/i;
 
 /**
  * 根据输入的字符串格式（RGB、HSL或十六进制）来解析颜色
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 export function parse($color: string): RGBA | null {
     const c = $color.trim().toLowerCase();
@@ -241,8 +241,8 @@ export function parse($color: string): RGBA | null {
 
 /**
  * 用于从输入的字符串 $color 中提取数字。
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 function getNumbers($color: string) {
     const numbers: string[] = [];
@@ -280,10 +280,10 @@ function getNumbers($color: string) {
 
 /**
  * 调用了 getNumbers 函数来提取字符串 str 中的数字，并对数字进行处理
- * @param str 
- * @param range 
- * @param units 
- * @returns 
+ * @param str
+ * @param range
+ * @param units
+ * @returns
  */
 function getNumbersFromString(
     str: string,
@@ -318,8 +318,8 @@ const rgbUnits = { '%': 100 };
 
 /**
  * 分别解析RGB、HSL和十六进制格式的颜色字符串。
- * @param $rgb 
- * @returns 
+ * @param $rgb
+ * @returns
  */
 function parseRGB($rgb: string): RGBA {
     const [r, g, b, a = 1] = getNumbersFromString($rgb, rgbRange, rgbUnits);
@@ -331,8 +331,8 @@ const hslUnits = { '%': 100, deg: 360, rad: 2 * Math.PI, turn: 1 };
 
 /**
  * 分别解析RGB、HSL和十六进制格式的颜色字符串。
- * @param $hsl 
- * @returns 
+ * @param $hsl
+ * @returns
  */
 function parseHSL($hsl: string): RGBA {
     const [h, s, l, a = 1] = getNumbersFromString($hsl, hslRange, hslUnits);
@@ -341,8 +341,8 @@ function parseHSL($hsl: string): RGBA {
 
 /**
  * 分别解析RGB、HSL和十六进制格式的颜色字符串。
- * @param $hex 
- * @returns 
+ * @param $hex
+ * @returns
  */
 function parseHex($hex: string): RGBA | null {
     const h = $hex.substring(1);
@@ -370,8 +370,8 @@ function parseHex($hex: string): RGBA | null {
 
 /**
  * 根据颜色的名称或系统颜色的名称返回相应的RGBA颜色。
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 function getColorByName($color: string): RGBA {
     const n = knownColors.get($color)!;
@@ -385,8 +385,8 @@ function getColorByName($color: string): RGBA {
 
 /**
  * 根据颜色的名称或系统颜色的名称返回相应的RGBA颜色。
- * @param $color 
- * @returns 
+ * @param $color
+ * @returns
  */
 function getSystemColor($color: string): RGBA {
     const n = systemColors.get($color)!;
@@ -403,8 +403,8 @@ function getSystemColor($color: string): RGBA {
 // degree so we can keep this function easy and simple to understand.
 /**
  * 尝试简化包含calc(...)表达式的字符串
- * @param color 
- * @returns 
+ * @param color
+ * @returns
  */
 export function lowerCalcExpression(color: string): string {
     // searchIndex will be used as searchIndex and as a "cursor" within
@@ -644,10 +644,10 @@ const systemColors: Map<string, number> = new Map(
 // https://en.wikipedia.org/wiki/Relative_luminance
 /**
  * 根据红、绿和蓝的值计算颜色的相对亮度。
- * @param r 
- * @param g 
- * @param b 
- * @returns 
+ * @param r
+ * @param g
+ * @param b
+ * @returns
  */
 export function getSRGBLightness(r: number, g: number, b: number): number {
     return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;

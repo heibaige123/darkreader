@@ -1,7 +1,7 @@
 /**
  * 一个异步函数，用于在访问跨域资源时抛出CORS错误。它会返回一个被拒绝的Promise，并将CORS错误的详细信息封装在Error对象中
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 const throwCORSError = async (url: string) => {
     return Promise.reject(
@@ -41,8 +41,8 @@ export function setFetchMethod(fetch: Fetcher): void {
 
 /**
  * 一个异步函数，用于调用当前的Fetch方法来获取给定URL的资源
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 export async function callFetchMethod(url: string): Promise<Response> {
     return await fetcher(url);
