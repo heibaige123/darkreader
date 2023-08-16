@@ -435,19 +435,18 @@ export function manageStyle(
             }
             isLoadingRules = true;
             loadingStart();
-            getRulesAsync()
-                .then((results) => {
-                    isLoadingRules = false;
-                    loadingEnd();
-                    if (results) {
-                        update();
-                    }
-                })
-                .catch((err) => {
-                    logWarn(err);
-                    isLoadingRules = false;
-                    loadingEnd();
-                });
+            getRulesAsync().then((results) => {
+                //     isLoadingRules = false;
+                //     loadingEnd();
+                //     if (results) {
+                //         update();
+                //     }
+                // })
+                // .catch((err) => {
+                //     logWarn(err);
+                isLoadingRules = false;
+                loadingEnd();
+            });
             return null;
         }
         return { rules };
@@ -804,18 +803,18 @@ async function replaceCSSImports(
         if (cache.has(absoluteURL)) {
             importedCSS = cache.get(absoluteURL)!;
         } else {
-            try {
-                importedCSS = await loadText(absoluteURL);
-                cache.set(absoluteURL, importedCSS);
-                importedCSS = await replaceCSSImports(
-                    importedCSS,
-                    getCSSBaseBath(absoluteURL),
-                    cache,
-                );
-            } catch (err) {
-                logWarn(err);
-                importedCSS = '';
-            }
+            // try {
+            //     importedCSS = await loadText(absoluteURL);
+            //     cache.set(absoluteURL, importedCSS);
+            //     importedCSS = await replaceCSSImports(
+            //         importedCSS,
+            //         getCSSBaseBath(absoluteURL),
+            //         cache,
+            //     );
+            // } catch (err) {
+            //     logWarn(err);
+            importedCSS = '';
+            // }
         }
         cssText = cssText.split(match).join(importedCSS);
     }

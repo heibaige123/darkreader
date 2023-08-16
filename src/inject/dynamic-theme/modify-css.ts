@@ -664,38 +664,38 @@ export function getBgImageModifier(
                 if (imageDetailsCache.has(url)) {
                     imageDetails = imageDetailsCache.get(url)!;
                 } else {
-                    try {
-                        if (awaitingForImageLoading.has(url)) {
-                            const awaiters = awaitingForImageLoading.get(url)!;
-                            imageDetails =
-                                await new Promise<ImageDetails | null>(
-                                    (resolve) => awaiters.push(resolve),
-                                );
-                            if (!imageDetails) {
-                                return null;
-                            }
-                        } else {
-                            awaitingForImageLoading.set(url, []);
-                            imageDetails = await getImageDetails(url);
-                            imageDetailsCache.set(url, imageDetails);
-                            awaitingForImageLoading
-                                .get(url)!
-                                .forEach((resolve) => resolve(imageDetails));
-                            awaitingForImageLoading.delete(url);
-                        }
-                        if (isCancelled()) {
-                            return null;
-                        }
-                    } catch (err) {
-                        logWarn(err);
-                        if (awaitingForImageLoading.has(url)) {
-                            awaitingForImageLoading
-                                .get(url)!
-                                .forEach((resolve) => resolve(null));
-                            awaitingForImageLoading.delete(url);
-                        }
-                        return absoluteValue;
+                    // try {
+                    //     if (awaitingForImageLoading.has(url)) {
+                    //         const awaiters = awaitingForImageLoading.get(url)!;
+                    //         imageDetails =
+                    //             await new Promise<ImageDetails | null>(
+                    //                 (resolve) => awaiters.push(resolve),
+                    //             );
+                    //         if (!imageDetails) {
+                    //             return null;
+                    //         }
+                    //     } else {
+                    //         awaitingForImageLoading.set(url, []);
+                    //         imageDetails = await getImageDetails(url);
+                    //         imageDetailsCache.set(url, imageDetails);
+                    //         awaitingForImageLoading
+                    //             .get(url)!
+                    //             .forEach((resolve) => resolve(imageDetails));
+                    //         awaitingForImageLoading.delete(url);
+                    //     }
+                    //     if (isCancelled()) {
+                    //         return null;
+                    //     }
+                    // } catch (err) {
+                    //     logWarn(err);
+                    if (awaitingForImageLoading.has(url)) {
+                        awaitingForImageLoading
+                            .get(url)!
+                            .forEach((resolve) => resolve(null));
+                        awaitingForImageLoading.delete(url);
                     }
+                    return absoluteValue;
+                    // }
                 }
                 const bgImageValue =
                     getBgImageValue(imageDetails, filter) || absoluteValue;
