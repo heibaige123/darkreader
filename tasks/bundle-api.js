@@ -21,7 +21,7 @@ let watchFiles = [];
 
 async function bundleAPI({debug, watch}) {
     const src = rootPath('src/api/index.ts');
-    const dest = 'darkreader.js';
+    const dest = 'modify-darkreader.js';
     const bundle = await rollup.rollup({
         input: src,
         onwarn: (error) => {

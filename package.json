@@ -1,5 +1,5 @@
 {
-  "name": "darkreader",
+  "name": "modify-darkreader",
   "version": "4.9.64",
   "description": "Dark mode for every website",
   "scripts": {
@@ -31,10 +31,10 @@
     "translate-line": "node ./tasks/translate.js --line",
     "deno:bootstrap": "deno run --allow-read=./ --allow-sys=uid --allow-write=deno.json tasks/deno.js"
   },
-  "main": "darkreader.js",
+  "main": "modify-darkreader.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/darkreader/darkreader.git"
+    "url": "git@github.com:heibaige123/darkreader.git"
   },
   "author": "Alexander Shutau <darkreaderapp@gmail.com> (https://darkreader.org/)",
   "license": "MIT",
@@ -50,7 +50,6 @@
     "accessibility",
     "eye-care"
   ],
-  "homepage": "https://darkreader.org/",
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/darkreader/donate"
