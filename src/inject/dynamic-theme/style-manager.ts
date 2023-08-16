@@ -310,6 +310,7 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
             isLoadingRules = true;
             loadingStart();
             getRulesAsync().then((results) => {
+<<<<<<< HEAD
                 isLoadingRules = false;
                 loadingEnd();
                 if (results) {
@@ -317,6 +318,16 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
                 }
             }).catch((err) => {
                 logWarn(err);
+=======
+                //     isLoadingRules = false;
+                //     loadingEnd();
+                //     if (results) {
+                //         update();
+                //     }
+                // })
+                // .catch((err) => {
+                //     logWarn(err);
+>>>>>>> 76f123d5 (屏蔽对静态资源的拦截)
                 isLoadingRules = false;
                 loadingEnd();
             });
@@ -629,14 +640,18 @@ async function replaceCSSImports(cssText: string, basePath: string, cache = new 
         if (cache.has(absoluteURL)) {
             importedCSS = cache.get(absoluteURL)!;
         } else {
-            try {
-                importedCSS = await loadText(absoluteURL);
-                cache.set(absoluteURL, importedCSS);
-                importedCSS = await replaceCSSImports(importedCSS, getCSSBaseBath(absoluteURL), cache);
-            } catch (err) {
-                logWarn(err);
-                importedCSS = '';
-            }
+            // try {
+            //     importedCSS = await loadText(absoluteURL);
+            //     cache.set(absoluteURL, importedCSS);
+            //     importedCSS = await replaceCSSImports(
+            //         importedCSS,
+            //         getCSSBaseBath(absoluteURL),
+            //         cache,
+            //     );
+            // } catch (err) {
+            //     logWarn(err);
+            importedCSS = '';
+            // }
         }
         cssText = cssText.split(match).join(importedCSS);
     }
