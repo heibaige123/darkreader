@@ -1,6 +1,8 @@
+import {throwError} from './error';
+
 export function getTextPositionMessage(text: string, index: number): string {
     if (!isFinite(index)) {
-        throw new Error(`Wrong char index ${index}`);
+        return throwError({message: `Wrong char index ${index}`}) as any;
     }
     let message = '';
     let line = 0;

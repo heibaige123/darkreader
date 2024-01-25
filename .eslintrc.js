@@ -6,7 +6,7 @@ const config = {overrides: []};
 // Source code (TS, JSX, JS)
 config.overrides.push({
     files: ['{src,tasks,tests}/**/*.{ts,tsx,js,cjs,mjs,jsx}', '.*.js', 'index.d.ts'],
-    excludedFiles: ['darkreader.js'],
+    excludedFiles: ['index.js'],
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint', 'local'],
     parserOptions: {
@@ -206,7 +206,7 @@ config.overrides.push({
 // Bundled JS
 
 config.overrides.push({
-    files: ['darkreader.js', 'build/debug/chrome/**/*.js'],
+    files: ['index.js', 'build/debug/chrome/**/*.js'],
     env: {browser: true},
     extends: ['plugin:compat/recommended'],
     parserOptions: {
@@ -223,7 +223,7 @@ config.overrides.push({
 
         // API (modern clients)
         {
-            files: ['darkreader.js'],
+            files: ['index.js'],
             rules: {
 
                 // Compatibility check

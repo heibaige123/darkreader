@@ -2,12 +2,14 @@ import type {Theme} from '../../definitions';
 import {forEach} from '../../utils/array';
 import {getMatches} from '../../utils/text';
 import {getAbsoluteURL, isRelativeHrefOnAbsolutePath} from '../../utils/url';
-import {watchForNodePosition, removeNode, iterateShadowHosts, addReadyStateCompleteListener} from '../utils/dom';
+import {watchForNodePosition, removeNode, iterateShadowHosts, addReadyStateCompleteListener, isDarkmode, isNode} from '../utils/dom';
 import {logInfo, logWarn} from '../utils/log';
 import {replaceCSSRelativeURLsWithAbsolute, removeCSSComments, replaceCSSFontFace, getCSSURLValue, cssImportRegex, getCSSBaseBath} from './css-rules';
 import {bgFetch} from './network';
 import {createStyleSheetModifier} from './stylesheet-modifier';
 import {isShadowDomSupported, isSafari, isFirefox} from '../../utils/platform';
+// eslint-disable-next-line import/no-restricted-paths
+import {apiStore} from '../../api/store';
 
 declare const __THUNDERBIRD__: boolean;
 
@@ -190,29 +192,33 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
     }
 
     function insertStyle() {
-        if (corsCopy) {
-            if (element.nextSibling !== corsCopy) {
-                element.parentNode!.insertBefore(corsCopy, element.nextSibling);
+        if (isNode(element.parentNode)) {
+            if (corsCopy) {
+                if (element.nextSibling !== corsCopy && isNode(corsCopy) && isNode(element.nextSibling)) {
+                    element.parentNode?.insertBefore(corsCopy, element.nextSibling);
+                }
+                if (corsCopy.nextSibling !== syncStyle && isNode(syncStyle) && isNode(corsCopy.nextSibling)) {
+                    element.parentNode?.insertBefore(syncStyle!, corsCopy.nextSibling);
+                }
+            } else if (element.nextSibling !== syncStyle && isNode(syncStyle) && isNode(element.nextSibling)) {
+                element.parentNode?.insertBefore(syncStyle!, element.nextSibling);
             }
-            if (corsCopy.nextSibling !== syncStyle) {
-                element.parentNode!.insertBefore(syncStyle!, corsCopy.nextSibling);
-            }
-        } else if (element.nextSibling !== syncStyle) {
-            element.parentNode!.insertBefore(syncStyle!, element.nextSibling);
         }
     }
 
     function createSyncStyle() {
-        syncStyle = element instanceof SVGStyleElement ?
-            document.createElementNS('http://www.w3.org/2000/svg', 'style') :
-            document.createElement('style');
-        syncStyle.classList.add('darkreader');
-        syncStyle.classList.add('darkreader--sync');
-        syncStyle.media = 'screen';
-        if (element.title) {
-            syncStyle.title = element.title;
+        if (!isDarkmode() || apiStore.isDarkReaderEnabled) {
+            syncStyle = element instanceof SVGStyleElement ?
+                document.createElementNS('http://www.w3.org/2000/svg', 'style') :
+                document.createElement('style');
+            syncStyle.classList.add('darkreader');
+            syncStyle.classList.add('darkreader--sync');
+            syncStyle.media = 'screen';
+            if (element.title) {
+                syncStyle.title = element.title;
+            }
+            syncStyleSet.add(syncStyle);
         }
-        syncStyleSet.add(syncStyle);
     }
 
     let isLoadingRules = false;
@@ -310,13 +316,14 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
             isLoadingRules = true;
             loadingStart();
             getRulesAsync().then((results) => {
-                isLoadingRules = false;
-                loadingEnd();
-                if (results) {
-                    update();
-                }
-            }).catch((err) => {
-                logWarn(err);
+                //     isLoadingRules = false;
+                //     loadingEnd();
+                //     if (results) {
+                //         update();
+                //     }
+                // })
+                // .catch((err) => {
+                //     logWarn(err);
                 isLoadingRules = false;
                 loadingEnd();
             });
@@ -388,7 +395,7 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
                 force,
                 isAsyncCancelled: () => cancelAsyncOperations,
             });
-            isOverrideEmpty = syncStyle!.sheet!.cssRules.length === 0;
+            isOverrideEmpty = syncStyle?.sheet?.cssRules?.length === 0;
             if (sheetModifier.shouldRebuildStyle()) {
                 // "update" function schedules rebuilding the style
                 // ideally to wait for link loading, because some sites put links any time,
@@ -629,14 +636,18 @@ async function replaceCSSImports(cssText: string, basePath: string, cache = new 
         if (cache.has(absoluteURL)) {
             importedCSS = cache.get(absoluteURL)!;
         } else {
-            try {
-                importedCSS = await loadText(absoluteURL);
-                cache.set(absoluteURL, importedCSS);
-                importedCSS = await replaceCSSImports(importedCSS, getCSSBaseBath(absoluteURL), cache);
-            } catch (err) {
-                logWarn(err);
-                importedCSS = '';
-            }
+            // try {
+            //     importedCSS = await loadText(absoluteURL);
+            //     cache.set(absoluteURL, importedCSS);
+            //     importedCSS = await replaceCSSImports(
+            //         importedCSS,
+            //         getCSSBaseBath(absoluteURL),
+            //         cache,
+            //     );
+            // } catch (err) {
+            //     logWarn(err);
+            importedCSS = '';
+            // }
         }
         cssText = cssText.split(match).join(importedCSS);
     }
@@ -656,7 +667,7 @@ function createCORSCopy(srcElement: StyleElement, cssText: string) {
     cors.classList.add('darkreader--cors');
     cors.media = 'screen';
     cors.textContent = cssText;
-    srcElement.parentNode!.insertBefore(cors, srcElement.nextSibling);
+    srcElement.parentNode?.insertBefore(cors, srcElement.nextSibling);
     cors.sheet!.disabled = true;
     corsStyleSet.add(cors);
     return cors;

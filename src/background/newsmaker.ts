@@ -5,6 +5,7 @@ import {readSyncStorage, readLocalStorage, writeSyncStorage, writeLocalStorage} 
 import {StateManager} from '../utils/state-manager';
 import {logWarn} from './utils/log';
 import IconManager from './icon-manager';
+import {throwError} from '../utils/error';
 
 declare const __TEST__: boolean;
 
@@ -142,7 +143,7 @@ export default class Newsmaker {
             for (let i = 0; i < news.length; i++) {
                 const date = new Date(news[i].date);
                 if (isNaN(date.getTime())) {
-                    throw new Error(`Unable to parse date ${date}`);
+                    return throwError({message: `Unable to parse date ${date}`}) as any;
                 }
             }
             return news;

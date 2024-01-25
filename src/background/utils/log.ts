@@ -1,3 +1,4 @@
+import {throwError} from '../../utils/error';
 import {sendLog} from './sendLog';
 
 declare const __DEBUG__: boolean;
@@ -37,7 +38,7 @@ export function ASSERT(description: string, condition: (() => boolean) | any): v
     if ((__TEST__ || __DEBUG__) && (typeof condition === 'function' && !condition()) || !Boolean(condition)) {
         logAssert(description);
         if (__TEST__) {
-            throw new Error(`Assertion failed: ${description}`);
+            return throwError({message: `Assertion failed: ${description}`});
         }
     }
 }

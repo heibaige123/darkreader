@@ -1,4 +1,4 @@
-declare namespace DarkReader {
+declare namespace modifyDarkReader {
     /**
      * Enables dark mode for current web page.
      * @param theme Theme options.
@@ -117,6 +117,8 @@ declare namespace DarkReader {
          * Default true
          */
         styleSystemControls: boolean;
+
+        ignoreSelector: string[];
     }
 
     /**
@@ -160,6 +162,4 @@ declare namespace DarkReader {
     }
 }
 
-declare module 'darkreader' {
-    export = DarkReader;
-}
+export default modifyDarkReader;

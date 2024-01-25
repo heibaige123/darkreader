@@ -1,7 +1,7 @@
 # Build files
 #-----------------------------------
 build/
-darkreader.js
+index.js
 debug.log
 
 # Node.js modules

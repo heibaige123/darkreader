@@ -62,7 +62,7 @@ if (__DEBUG__) {
                 const newLink = document.createElement('link');
                 newLink.rel = 'stylesheet';
                 newLink.href = url.replace(/\?.*$/, `?nocache=${Date.now()}`);
-                link.parentElement!.insertBefore(newLink, link);
+                link.parentElement?.insertBefore(newLink, link);
                 link.remove();
             });
         }

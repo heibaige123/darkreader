@@ -38,6 +38,7 @@ export const DEFAULT_THEME: Theme = {
     lightColorScheme: 'Default',
     darkColorScheme: 'Default',
     immediateModify: false,
+    ignoreSelector: [],
 };
 
 export const DEFAULT_COLORSCHEME: ParsedColorSchemeConfig = {

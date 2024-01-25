@@ -65,7 +65,7 @@ async function main() {
     await buildAll();
     log.ok('Built with old dependencies');
     await command('mv build build-old');
-    await command('mv darkreader.js darkreader-old.js');
+    await command('mv index.js index-old.js');
     log.ok('Moved built output');
 
     const patched = await patchPackage(outdated);
@@ -88,7 +88,7 @@ async function main() {
     await command('diff -r build-old/release/chrome-mv3 build/release/chrome-mv3');
     await command('diff -r build-old/release/firefox build/release/firefox');
     await command('diff -r build-old/release/thunderbird build/release/thunderbird');
-    await command('diff darkreader-old.js darkreader.js');
+    await command('diff index-old.js index.js');
     log.ok('Dependency upgrade does not result in change to built output');
 
     // TODO: when moving this to CI, provide branch name in CI config, along with

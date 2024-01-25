@@ -1,3 +1,4 @@
+import {throwError} from './error';
 import {HOMEPAGE_URL, BLOG_URL, DEVTOOLS_DOCS_URL, DONATE_URL, GITHUB_URL, PRIVACY_URL, TWITTER_URL, UNINSTALL_URL, HELP_URL} from './links';
 
 enum CSP {
@@ -8,7 +9,7 @@ enum CSP {
 function check() {
     const prefixed = [BLOG_URL, PRIVACY_URL, UNINSTALL_URL, HELP_URL];
     if (prefixed.some((url) => !url.startsWith(HOMEPAGE_URL))) {
-        throw new Error('Some navigation URL is not within main site!');
+        return throwError({message: 'Some navigation URL is not within main site!'});
     }
 }
 

@@ -50,7 +50,7 @@ export function createOrUpdateSVGFilter(svgMatrix: string, svgReverseMatrix: str
         selectTarget: () => document.head,
         createTarget: () => {
             const head = document.createElement('head');
-            document.documentElement.insertBefore(head, document.documentElement.firstElementChild);
+            document.documentElement?.insertBefore(head, document.documentElement.firstElementChild);
             return head;
         },
         isTargetMutation: (mutation) => mutation.target.nodeName.toLowerCase() === 'head',

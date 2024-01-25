@@ -6,8 +6,9 @@ import {ThemeEngine} from '../generators/theme-engines';
 import {createOrUpdateDynamicThemeInternal, removeDynamicTheme} from '../inject/dynamic-theme';
 import {collectCSS} from '../inject/dynamic-theme/css-collection';
 import {isMatchMediaChangeEventListenerSupported} from '../utils/platform';
+import {apiStore} from './store';
+import {throwError} from '../utils/error';
 
-let isDarkReaderEnabled = false;
 const isIFrame = (() => {
     try {
         return window.self !== window.top;
@@ -21,21 +22,23 @@ export function enable(themeOptions: Partial<Theme> | null = {}, fixes: DynamicT
     const theme = {...DEFAULT_THEME, ...themeOptions};
 
     if (theme.engine !== ThemeEngine.dynamicTheme) {
-        throw new Error('Theme engine is not supported.');
+        return throwError({
+            message: 'Theme engine is not supported.',
+        });
     }
     // TODO: repalce with createOrUpdateDynamicTheme() and make fixes signature
     // DynamicThemeFix | DynamicThemeFix[]
     createOrUpdateDynamicThemeInternal(theme, fixes, isIFrame);
-    isDarkReaderEnabled = true;
+    apiStore.isDarkReaderEnabled = true;
 }
 
 export function isEnabled(): boolean {
-    return isDarkReaderEnabled;
+    return apiStore.isDarkReaderEnabled;
 }
 
 export function disable(): void {
     removeDynamicTheme();
-    isDarkReaderEnabled = false;
+    apiStore.isDarkReaderEnabled = false;
 }
 
 const darkScheme = matchMedia('(prefers-color-scheme: dark)');

@@ -69,6 +69,14 @@ export function createStyleSheetModifier(): StyleSheetModifier {
 
         const modRules: ModifiableCSSRule[] = [];
         iterateCSSRules(rules, (rule) => {
+            if (Array.isArray(theme.ignoreSelector)) {
+                for (let i = 0, len = theme.ignoreSelector.length; i < len; i++) {
+                    if (rule?.selectorText.includes(theme.ignoreSelector[i])) {
+                        return null;
+                    }
+                }
+            }
+
             let cssText = rule.cssText;
             let textDiffersFromPrev = false;
 
@@ -304,6 +312,9 @@ export function createStyleSheetModifier(): StyleSheetModifier {
             }
 
             iterateReadyRules(rootReadyGroup, sheet, (rule, target) => {
+                if (!(target && target.cssRules)) {
+                    return;
+                }
                 const index = target.cssRules.length;
                 rule.declarations.forEach(({asyncKey, varKey}) => {
                     if (asyncKey != null) {
@@ -318,6 +329,10 @@ export function createStyleSheetModifier(): StyleSheetModifier {
         }
 
         function rebuildAsyncRule(key: number) {
+            if (!asyncDeclarations.has(key)) {
+                return;
+            }
+
             const {rule, target, index} = asyncDeclarations.get(key)!;
             target.deleteRule(index);
             setRule(target, index, rule);

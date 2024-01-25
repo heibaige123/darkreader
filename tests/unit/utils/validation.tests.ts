@@ -42,6 +42,7 @@ test('Settings Validation', () => {
         lightColorScheme: '',
         darkColorScheme: false,
         immediateModify: 1,
+        ignoreSelector: [],
     };
     themeValidation = validateTheme(wonkyTheme as any);
     expect(themeValidation.errors.length).toBeGreaterThan(0);
@@ -76,6 +77,7 @@ test('Settings Validation', () => {
             lightColorScheme: '',
             darkColorScheme: false,
             immediateModify: 1,
+            ignoreSelector: [],
         },
         presets: [
             {id: '', name: 'P1', urls: ['a.com'], theme: {brightness: 100}},
@@ -171,6 +173,7 @@ test('Settings Validation', () => {
             lightColorScheme: 'Lightness',
             darkColorScheme: 'Darkness',
             immediateModify: true,
+            ignoreSelector: [],
         },
         presets: [
             {id: 'p5', name: 'P5', urls: ['a.com'], theme: {brightness: 100} as Theme},

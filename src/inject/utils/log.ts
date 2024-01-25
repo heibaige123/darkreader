@@ -1,5 +1,6 @@
 import {DebugMessageTypeCStoBG} from '../../utils/message';
 import type {DebugMessageCStoBG} from '../../definitions';
+import {throwError} from '../../utils/error';
 
 declare const __DEBUG__: boolean;
 declare const __TEST__: boolean;
@@ -46,7 +47,7 @@ export function ASSERT(description: string, condition: (() => boolean) | any): v
     if ((__TEST__ || __DEBUG__) && (typeof condition === 'function' && !condition()) || !Boolean(condition)) {
         logAssert(description);
         if (__TEST__) {
-            throw new Error(`Assertion failed: ${description}`);
+            return throwError({message: `Assertion failed: ${description}`});
         }
     }
 }

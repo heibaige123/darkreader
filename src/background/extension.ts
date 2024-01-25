@@ -27,6 +27,7 @@ import ContentScriptManager from './content-script-manager';
 import {AutomationMode} from '../utils/automation';
 import UIHighlights from './ui-highlights';
 import {getActiveTab} from '../utils/tabs';
+import {throwError} from '../utils/error';
 
 type AutomationState = 'turn-on' | 'turn-off' | 'scheme-dark' | 'scheme-light' | '';
 
@@ -697,7 +698,9 @@ export class Extension {
                     };
                 }
                 default:
-                    throw new Error(`Unknown engine ${theme.engine}`);
+                    return throwError({
+                        message: `Unknown engine ${theme.engine}`,
+                    }) as any;
             }
         }
 

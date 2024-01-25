@@ -21,7 +21,7 @@ let watchFiles = [];
 
 async function bundleAPI({debug, watch}) {
     const src = rootPath('src/api/index.ts');
-    const dest = 'darkreader.js';
+    const dest = 'index.js';
     const bundle = await rollup.rollup({
         input: src,
         onwarn: (error) => {
@@ -60,7 +60,7 @@ async function bundleAPI({debug, watch}) {
         file: dest,
         strict: true,
         format: 'umd',
-        name: 'DarkReader',
+        name: 'modifyDarkReader',
         sourcemap: debug ? 'inline' : false,
     });
 }

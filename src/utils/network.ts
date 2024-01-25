@@ -1,3 +1,4 @@
+import {throwError} from './error';
 import {isFirefox} from './platform';
 
 async function getOKResponse(url: string, mimeType?: string, origin?: string): Promise<Response> {
@@ -16,11 +17,11 @@ async function getOKResponse(url: string, mimeType?: string, origin?: string): P
     }
 
     if (mimeType && !response.headers.get('Content-Type')!.startsWith(mimeType)) {
-        throw new Error(`Mime type mismatch when loading ${url}`);
+        return throwError({message: `Mime type mismatch when loading ${url}`}) as any;
     }
 
     if (!response.ok) {
-        throw new Error(`Unable to load ${url} ${response.status} ${response.statusText}`);
+        return throwError({message: `Unable to load ${url} ${response.status} ${response.statusText}`}) as any;
     }
 
     return response;

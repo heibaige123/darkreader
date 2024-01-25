@@ -3,6 +3,7 @@ import type {ExtensionData, FilterConfig, TabInfo, MessageUItoBG, UserSettings, 
 import {MessageTypeBGtoUI, MessageTypeUItoBG} from '../utils/message';
 import {makeFirefoxHappy} from './make-firefox-happy';
 import {ASSERT} from './utils/log';
+import {throwError} from '../utils/error';
 
 export interface ExtensionAdapter {
     collect: () => Promise<ExtensionData>;
@@ -90,7 +91,7 @@ export default class Messenger {
                                 error = Messenger.adapter.applyDevStaticThemes(data);
                                 break;
                             default:
-                                throw new Error(`Unknown port name: ${port.name}`);
+                                return throwError({message: `Unknown port name: ${port.name}`});
                         }
                         if (error) {
                             reject(error);

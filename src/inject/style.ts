@@ -20,7 +20,7 @@ export function createOrUpdateStyle(css: string, type: string): void {
         selectTarget: () => document.head,
         createTarget: () => {
             const head = document.createElement('head');
-            document.documentElement.insertBefore(head, document.documentElement.firstElementChild);
+            document.documentElement?.insertBefore(head, document.documentElement.firstElementChild);
             return head;
         },
         isTargetMutation: (mutation) => mutation.target.nodeName.toLowerCase() === 'head',

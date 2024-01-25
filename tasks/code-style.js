@@ -20,7 +20,7 @@ const options = {
 const extensions = ['html', 'css', 'js'];
 
 async function processAPIBuild() {
-    const filepath = 'darkreader.js';
+    const filepath = 'index.js';
     const code = await readFile(filepath);
     const formatted = await prettier.format(code, {
         ...options,

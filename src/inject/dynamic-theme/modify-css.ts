@@ -5,7 +5,7 @@ import {getAbsoluteURL} from '../../utils/url';
 import {modifyBackgroundColor, modifyBorderColor, modifyForegroundColor, modifyGradientColor, modifyShadowColor, clearColorModificationCache} from '../../generators/modify-colors';
 import {cssURLRegex, getCSSURLValue, getCSSBaseBath} from './css-rules';
 import type {ImageDetails} from './image';
-import {getImageDetails, getFilteredImageDataURL, cleanImageProcessingCache} from './image';
+import {getFilteredImageDataURL, cleanImageProcessingCache} from './image';
 import type {CSSVariableModifier, VariablesStore} from './variables';
 import {logWarn, logInfo} from '../utils/log';
 import type {FilterConfig, Theme} from '../../definitions';
@@ -226,8 +226,8 @@ function getModifiedScrollbarStyle(theme: Theme) {
 export function getModifiedFallbackStyle(filter: FilterConfig, {strict}: {strict: boolean}): string {
     const lines: string[] = [];
     // https://github.com/darkreader/darkreader/issues/3618#issuecomment-895477598
-    const isMicrosoft = ['microsoft.com', 'docs.microsoft.com'].includes(location.hostname);
-    lines.push(`html, body, ${strict ? `body :not(iframe)${isMicrosoft ? ':not(div[style^="position:absolute;top:0;left:-"]' : ''}` : 'body > :not(iframe)'} {`);
+    // const isMicrosoft = ['microsoft.com', 'docs.microsoft.com'].includes(location.hostname);
+    // lines.push(`html, body, ${strict ? `body :not(iframe)${isMicrosoft ? ':not(div[style^="position:absolute;top:0;left:-"]' : ''}` : 'body > :not(iframe)'} {`);
     lines.push(`    background-color: ${modifyBackgroundColor({r: 255, g: 255, b: 255}, filter)} !important;`);
     lines.push(`    border-color: ${modifyBorderColor({r: 64, g: 64, b: 64}, filter)} !important;`);
     lines.push(`    color: ${modifyForegroundColor({r: 0, g: 0, b: 0}, filter)} !important;`);
@@ -386,31 +386,38 @@ export function getBgImageModifier(
                 if (imageDetailsCache.has(url)) {
                     imageDetails = imageDetailsCache.get(url)!;
                 } else {
-                    try {
-                        if (awaitingForImageLoading.has(url)) {
-                            const awaiters = awaitingForImageLoading.get(url)!;
-                            imageDetails = await new Promise<ImageDetails | null>((resolve) => awaiters.push(resolve));
-                            if (!imageDetails) {
-                                return null;
-                            }
-                        } else {
-                            awaitingForImageLoading.set(url, []);
-                            imageDetails = await getImageDetails(url);
-                            imageDetailsCache.set(url, imageDetails);
-                            awaitingForImageLoading.get(url)!.forEach((resolve) => resolve(imageDetails));
-                            awaitingForImageLoading.delete(url);
-                        }
-                        if (isCancelled()) {
-                            return null;
-                        }
-                    } catch (err) {
-                        logWarn(err);
-                        if (awaitingForImageLoading.has(url)) {
-                            awaitingForImageLoading.get(url)!.forEach((resolve) => resolve(null));
-                            awaitingForImageLoading.delete(url);
-                        }
-                        return absoluteValue;
+                    // try {
+                    //     if (awaitingForImageLoading.has(url)) {
+                    //         const awaiters = awaitingForImageLoading.get(url)!;
+                    //         imageDetails =
+                    //             await new Promise<ImageDetails | null>(
+                    //                 (resolve) => awaiters.push(resolve),
+                    //             );
+                    //         if (!imageDetails) {
+                    //             return null;
+                    //         }
+                    //     } else {
+                    //         awaitingForImageLoading.set(url, []);
+                    //         imageDetails = await getImageDetails(url);
+                    //         imageDetailsCache.set(url, imageDetails);
+                    //         awaitingForImageLoading
+                    //             .get(url)!
+                    //             .forEach((resolve) => resolve(imageDetails));
+                    //         awaitingForImageLoading.delete(url);
+                    //     }
+                    //     if (isCancelled()) {
+                    //         return null;
+                    //     }
+                    // } catch (err) {
+                    //     logWarn(err);
+                    if (awaitingForImageLoading.has(url)) {
+                        awaitingForImageLoading
+                            .get(url)!
+                            .forEach((resolve) => resolve(null));
+                        awaitingForImageLoading.delete(url);
                     }
+                    return absoluteValue;
+                    // }
                 }
                 const bgImageValue = getBgImageValue(imageDetails, filter) || absoluteValue;
                 return bgImageValue;
