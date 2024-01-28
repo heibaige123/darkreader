@@ -200,8 +200,15 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
                 if (corsCopy.nextSibling !== syncStyle && isNode(syncStyle) && isNode(corsCopy.nextSibling)) {
                     element.parentNode?.insertBefore(syncStyle!, corsCopy.nextSibling);
                 }
-            } else if (element.nextSibling !== syncStyle && isNode(syncStyle) && isNode(element.nextSibling)) {
-                element.parentNode?.insertBefore(syncStyle!, element.nextSibling);
+            } else if (
+                element.nextSibling !== syncStyle && isNode(syncStyle)
+            ) {
+                if (isNode(element.nextSibling)) {
+                    element.parentNode?.insertBefore(syncStyle!, element.nextSibling);
+                } else {
+                    element.parentNode?.appendChild(syncStyle!);
+                }
+                // element.parentNode?.insertBefore(syncStyle!, element.nextSibling);
             }
         }
     }
