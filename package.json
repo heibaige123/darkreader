@@ -1,6 +1,6 @@
 {
   "name": "modify-darkreader",
-  "version": "4.9.91",
+  "version": "4.9.92",
   "description": "Dark mode for every website",
   "scripts": {
     "api": "node --max-old-space-size=3072 tasks/cli.js build --api",
@@ -30,7 +30,8 @@
     "test:update-snapshots": "npm run test -- --updateSnapshot && npm run test:project -- --updateSnapshot",
     "translate-line": "node ./tasks/translate.js --line",
     "deno:bootstrap": "deno run --allow-read=./ --allow-sys=uid --allow-write=deno.json tasks/deno.js",
-    "publish": "npm run api && npm publish"
+    "publish": "npm run api && npm publish",
+    "alpha": "npm run api && npm publish --tag=alpha"
   },
   "main": "index.js",
   "repository": {

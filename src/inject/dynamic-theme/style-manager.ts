@@ -10,6 +10,7 @@ import {createStyleSheetModifier} from './stylesheet-modifier';
 import {isShadowDomSupported, isSafari, isFirefox} from '../../utils/platform';
 // eslint-disable-next-line import/no-restricted-paths
 import {apiStore} from '../../api/store';
+import {addElementInfo2Style} from 'inject/utils';
 
 declare const __THUNDERBIRD__: boolean;
 
@@ -27,9 +28,9 @@ declare global {
 
 export type StyleElement = HTMLLinkElement | HTMLStyleElement;
 
-export type detailsArgument = {secondRound: boolean};
+export type detailsArgument = {secondRound: boolean;};
 export interface StyleManager {
-    details(options: detailsArgument): {rules: CSSRuleList} | null;
+    details(options: detailsArgument): {rules: CSSRuleList;} | null;
     render(theme: Theme, ignoreImageAnalysis: string[]): void;
     pause(): void;
     destroy(): void;
@@ -106,7 +107,7 @@ export function cleanLoadingLinks(): void {
     rejectorsForLoadingLinks.clear();
 }
 
-export function manageStyle(element: StyleElement, {update, loadingStart, loadingEnd}: {update: () => void; loadingStart: () => void; loadingEnd: () => void}): StyleManager {
+export function manageStyle(element: StyleElement, {update, loadingStart, loadingEnd}: {update: () => void; loadingStart: () => void; loadingEnd: () => void;}): StyleManager {
     const prevStyles: HTMLStyleElement[] = [];
     let next: Element | null = element;
     while ((next = next.nextElementSibling) && next.matches('.darkreader')) {
@@ -200,15 +201,12 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
                 if (corsCopy.nextSibling !== syncStyle && isNode(syncStyle) && isNode(corsCopy.nextSibling)) {
                     element.parentNode?.insertBefore(syncStyle!, corsCopy.nextSibling);
                 }
-            } else if (
-                element.nextSibling !== syncStyle && isNode(syncStyle)
-            ) {
-                if (isNode(element.nextSibling)) {
+            } else if (element.nextSibling !== syncStyle && isNode(syncStyle)) {
+                if (element.nextSibling && isNode(element.nextSibling)) {
                     element.parentNode?.insertBefore(syncStyle!, element.nextSibling);
                 } else {
                     element.parentNode?.appendChild(syncStyle!);
                 }
-                // element.parentNode?.insertBefore(syncStyle!, element.nextSibling);
             }
         }
     }
@@ -233,8 +231,8 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
     const loadingLinkId = ++loadingLinkCounter;
 
     async function getRulesAsync(): Promise<CSSRuleList | null> {
-        let cssText: string;
-        let cssBasePath: string;
+        let cssText: string = '';
+        let cssBasePath: string = '';
 
         if (element instanceof HTMLLinkElement) {
             let [cssRules, accessError] = getRulesOrError();
@@ -275,8 +273,13 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
                 }
             }
 
-            cssText = await loadText(element.href);
-            cssBasePath = getCSSBaseBath(element.href);
+            try {
+                cssText = await loadText(element.href);
+                cssBasePath = getCSSBaseBath(element.href);
+            } catch (err) {
+                console.error(err);
+            }
+
             if (cancelAsyncOperations) {
                 return null;
             }
@@ -323,17 +326,17 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
             isLoadingRules = true;
             loadingStart();
             getRulesAsync().then((results) => {
-                //     isLoadingRules = false;
-                //     loadingEnd();
-                //     if (results) {
-                //         update();
-                //     }
-                // })
-                // .catch((err) => {
-                //     logWarn(err);
                 isLoadingRules = false;
                 loadingEnd();
-            });
+                if (results) {
+                    update();
+                }
+            })
+                .catch((err) => {
+                    logWarn(err);
+                    isLoadingRules = false;
+                    loadingEnd();
+                });
             return null;
         }
         return {rules};
@@ -376,6 +379,8 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
             }
 
             const sheet = syncStyle!.sheet;
+
+            addElementInfo2Style(element, syncStyle as HTMLStyleElement);
 
             removeCSSRulesFromSheet(sheet!);
 
@@ -436,10 +441,12 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
     // without any notice, when accessing <style> CSS rules
     function safeGetSheetRules() {
         const [cssRules, err] = getRulesOrError();
+
         if (err) {
             logWarn(err);
             return null;
         }
+
         return cssRules;
     }
 
@@ -627,6 +634,7 @@ async function loadText(url: string) {
     if (url.startsWith('data:')) {
         return await (await fetch(url)).text();
     }
+
     return await bgFetch({url, responseType: 'text', mimeType: 'text/css', origin: window.location.origin});
 }
 

@@ -26,6 +26,6 @@ export function setFetchMethod(fetch: Fetcher): void {
 }
 
 export async function callFetchMethod(url: string): Promise<Response> {
-    // return await fetcher(url);
-    return await new Promise(() => {});
+    return await fetcher(url);
+    // return await new Promise(() => {});
 }

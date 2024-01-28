@@ -381,7 +381,7 @@ const optimizedTreeCallbacks = new WeakMap<
 export function createOptimizedTreeObserver(
     root: Document | ShadowRoot,
     callbacks: OptimizedTreeObserverCallbacks
-): {disconnect: () => void} {
+): {disconnect: () => void;} {
     let observer: MutationObserver;
     let observerCallbacks: Set<OptimizedTreeObserverCallbacks>;
     let domReadyListener: () => void;
@@ -446,6 +446,28 @@ export function isDarkmode(): boolean {
     );
 }
 
-export function isNode(node: unknown):boolean {
+export function isNode(node: unknown): boolean {
     return (node instanceof Node);
+}
+
+/**
+ * 给注入的style标签添加原始style属性
+ */
+export function addElementInfo2Style(
+    element: HTMLStyleElement | HTMLLinkElement,
+    style: HTMLStyleElement
+) {
+    if (!(style instanceof HTMLStyleElement)) {
+        return;
+    }
+    let result = '';
+    const attributes = element.attributes;
+
+    for (let el of attributes) {
+        result += `${el.name}:${el.value};`;
+    }
+
+    result = result.replace('"', '').replace("'", '');
+
+    style.setAttribute('el-darkreader-info', result);
 }

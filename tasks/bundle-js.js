@@ -156,7 +156,7 @@ async function bundleJS(/** @type {JSEntry} */entry, platform, debug, watch, log
                     typescript,
                     tsconfig: rootPath('src/tsconfig.json'),
                     compilerOptions: platform === PLATFORM.CHROMIUM_MV3 ? {
-                        target: 'ES2022',
+                        target: 'ESNext',
                     } : undefined,
                     noImplicitAny: debug ? false : true,
                     noUnusedLocals: debug ? false : true,
