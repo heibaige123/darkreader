@@ -10,7 +10,7 @@ import {createStyleSheetModifier} from './stylesheet-modifier';
 import {isShadowDomSupported, isSafari, isFirefox} from '../../utils/platform';
 // eslint-disable-next-line import/no-restricted-paths
 import {apiStore} from '../../api/store';
-import {addElementInfo2Style} from 'inject/utils';
+import {addElementInfo2Style} from '../utils/dom';
 
 declare const __THUNDERBIRD__: boolean;
 

@@ -1,6 +1,6 @@
 import {forEach, push} from '../../utils/array';
 import type {ElementsTreeOperations} from '../utils/dom';
-import {iterateShadowHosts, createOptimizedTreeObserver} from '../utils/dom';
+import {iterateShadowHosts, createOptimizedTreeObserver, isDarkmode} from '../utils/dom';
 import type {StyleElement} from './style-manager';
 import {shouldManageStyle, getManageableStyles} from './style-manager';
 import {isDefinedSelectorSupported} from '../../utils/platform';
@@ -125,7 +125,15 @@ function unsubscribeFromDefineCustomElements(): void {
     document.removeEventListener('__darkreader__isDefined', handleIsDefined);
 }
 
-export function watchForStyleChanges(currentStyles: StyleElement[], update: (styles: ChangedStyles) => void, shadowRootDiscovered: (root: ShadowRoot) => void): void {
+export function watchForStyleChanges(currentStyles: StyleElement[],
+    update: (styles: ChangedStyles) => void,
+shadowRootDiscovered: (root: ShadowRoot) => void): void {
+
+    // 不是暗黑模式, 不监听
+    if (!isDarkmode()) {
+        return;
+    }
+
     stopWatchingForStyleChanges();
 
     const prevStyles = new Set<StyleElement>(currentStyles);
