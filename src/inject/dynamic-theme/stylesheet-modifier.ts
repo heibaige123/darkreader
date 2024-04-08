@@ -28,7 +28,7 @@ function getThemeKey(theme: Theme) {
 
 const asyncQueue = createAsyncTasksQueue();
 
-interface ModifySheetOptions {
+export interface ModifySheetOptions {
     sourceCSSRules: CSSRuleList;
     theme: Theme;
     ignoreImageAnalysis: string[];
@@ -105,7 +105,7 @@ export function createStyleSheetModifier(): StyleSheetModifier {
 
             const modDecs: ModifiableCSSDeclaration[] = [];
             rule.style && iterateCSSDeclarations(rule.style, (property, value) => {
-                const mod = getModifiableCSSDeclaration(property, value, rule, variablesStore, ignoreImageAnalysis, isAsyncCancelled);
+                const mod = getModifiableCSSDeclaration(property, value, rule, variablesStore, ignoreImageAnalysis, isAsyncCancelled, options);
                 if (mod) {
                     modDecs.push(mod);
                 }

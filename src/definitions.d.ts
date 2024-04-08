@@ -81,6 +81,7 @@ export interface Theme {
     darkColorScheme: string;
     immediateModify: boolean;
     ignoreSelector: string[];
+    ignoreVarName: string[];
 }
 
 export type FilterConfig = Theme;

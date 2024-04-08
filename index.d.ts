@@ -117,8 +117,14 @@ declare namespace modifyDarkReader {
          * Default true
          */
         styleSystemControls: boolean;
-
+        /**
+         * 忽略掉的css选择器prefix
+         */
         ignoreSelector: string[];
+        /**
+         * 忽略掉css变量名称prefix
+         */
+        ignoreVarName: string[];
     }
 
     /**

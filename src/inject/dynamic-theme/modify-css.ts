@@ -12,6 +12,7 @@ import type {FilterConfig, Theme} from '../../definitions';
 import {isFirefox, isCSSColorSchemePropSupported} from '../../utils/platform';
 import type {parsedGradient} from '../../utils/parsing';
 import {parseGradient} from '../../utils/parsing';
+import {ModifySheetOptions} from './stylesheet-modifier';
 
 declare const __CHROMIUM_MV3__: boolean;
 
@@ -49,7 +50,22 @@ export function getModifiableCSSDeclaration(
     variablesStore: VariablesStore,
     ignoreImageSelectors: string[],
     isCancelled: (() => boolean) | null,
+    options: ModifySheetOptions
 ): ModifiableCSSDeclaration | null {
+
+    const {
+        theme
+    } = options;
+    const {
+        ignoreVarName = []
+    } = theme || {};
+
+    const hitIgnore = ignoreVarName.filter((ignore: string) => ignore.startsWith(ignore)).length > 0;
+
+    if (hitIgnore) {
+        return null;
+    }
+
     if (property.startsWith('--')) {
         const modifier = getVariableModifier(variablesStore, property, value, rule, ignoreImageSelectors, isCancelled!);
         if (modifier) {
@@ -138,7 +154,7 @@ export function getModifiedUserAgentStyle(theme: Theme, isIFrame: boolean, style
     return lines.join('\n');
 }
 
-export function getSelectionColor(theme: Theme): {backgroundColorSelection: string; foregroundColorSelection: string} {
+export function getSelectionColor(theme: Theme): {backgroundColorSelection: string; foregroundColorSelection: string;} {
     let backgroundColorSelection: string;
     let foregroundColorSelection: string;
     if (theme.selectionColor === 'auto') {
@@ -223,7 +239,7 @@ function getModifiedScrollbarStyle(theme: Theme) {
     return lines.join('\n');
 }
 
-export function getModifiedFallbackStyle(filter: FilterConfig, {strict}: {strict: boolean}): string {
+export function getModifiedFallbackStyle(filter: FilterConfig, {strict}: {strict: boolean;}): string {
     const lines: string[] = [];
     // https://github.com/darkreader/darkreader/issues/3618#issuecomment-895477598
     // const isMicrosoft = ['microsoft.com', 'docs.microsoft.com'].includes(location.hostname);
