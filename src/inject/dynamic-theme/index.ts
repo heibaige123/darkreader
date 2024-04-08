@@ -13,7 +13,7 @@ import {getCSSFilterValue} from '../../generators/css-filter';
 import {modifyBackgroundColor, modifyColor, modifyForegroundColor} from '../../generators/modify-colors';
 import {createTextStyle} from '../../generators/text-style';
 import type {FilterConfig, DynamicThemeFix} from '../../definitions';
-import {generateUID} from '../../utils/uid';
+// import {generateUID} from '../../utils/uid';
 import type {AdoptedStyleSheetManager} from './adopted-style-manger';
 import {createAdoptedStyleSheetOverride} from './adopted-style-manger';
 import {isFirefox} from '../../utils/platform';
@@ -26,7 +26,7 @@ import {combineFixes, findRelevantFix} from './fixes';
 
 declare const __TEST__: boolean;
 declare const __CHROMIUM_MV3__: boolean;
-const INSTANCE_ID = generateUID();
+// const INSTANCE_ID = generateUID();
 const styleManagers = new Map<StyleElement, StyleManager>();
 const adoptedStyleManagers: AdoptedStyleSheetManager[] = [];
 let filter: FilterConfig | null = null;
@@ -354,7 +354,7 @@ function onDOMReady() {
     logWarn(`DOM is ready, but still have styles being loaded.`, loadingStyles);
 }
 
-function runDynamicStyle() {
+export function runDynamicStyle() {
     createDynamicStyleOverrides();
     watchForUpdates();
 }
@@ -449,37 +449,37 @@ function stopWatchingForUpdates() {
 
 let metaObserver: MutationObserver;
 
-function addMetaListener() {
-    metaObserver = new MutationObserver(() => {
-        if (document.querySelector('meta[name="darkreader-lock"]')) {
-            metaObserver.disconnect();
-            removeDynamicTheme();
-        }
-    });
-    metaObserver.observe(document.head, {childList: true, subtree: true});
-}
+// function addMetaListener() {
+//     metaObserver = new MutationObserver(() => {
+//         if (document.querySelector('meta[name="darkreader-lock"]')) {
+//             metaObserver.disconnect();
+//             removeDynamicTheme();
+//         }
+//     });
+//     metaObserver.observe(document.head, {childList: true, subtree: true});
+// }
 
-function createDarkReaderInstanceMarker() {
-    const metaElement: HTMLMetaElement = document.createElement('meta');
-    metaElement.name = 'darkreader';
-    metaElement.content = INSTANCE_ID;
-    document.head.appendChild(metaElement);
-}
+// function createDarkReaderInstanceMarker() {
+//     const metaElement: HTMLMetaElement = document.createElement('meta');
+//     metaElement.name = 'darkreader';
+//     metaElement.content = INSTANCE_ID;
+//     document.head.appendChild(metaElement);
+// }
 
 function isAnotherDarkReaderInstanceActive() {
-    if (document.querySelector('meta[name="darkreader-lock"]')) {
-        return true;
-    }
+    // if (document.querySelector('meta[name="darkreader-lock"]')) {
+    //     return true;
+    // }
 
-    const meta: HTMLMetaElement | null = document.querySelector('meta[name="darkreader"]');
-    if (meta) {
-        if (meta.content !== INSTANCE_ID) {
-            return true;
-        }
-        return false;
-    }
-    createDarkReaderInstanceMarker();
-    addMetaListener();
+    // const meta: HTMLMetaElement | null = document.querySelector('meta[name="darkreader"]');
+    // if (meta) {
+    //     if (meta.content !== INSTANCE_ID) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+    // createDarkReaderInstanceMarker();
+    // addMetaListener();
     return false;
 }
 

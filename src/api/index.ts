@@ -8,6 +8,7 @@ import {collectCSS} from '../inject/dynamic-theme/css-collection';
 import {isMatchMediaChangeEventListenerSupported} from '../utils/platform';
 import {apiStore} from './store';
 import {throwError} from '../utils/error';
+export {runDynamicStyle} from '../inject/dynamic-theme';
 
 const isIFrame = (() => {
     try {

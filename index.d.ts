@@ -160,6 +160,8 @@ declare namespace modifyDarkReader {
          */
         disableStyleSheetsProxy: boolean;
     }
+
+    function runDynamicStyle(): void;
 }
 
 export default modifyDarkReader;
