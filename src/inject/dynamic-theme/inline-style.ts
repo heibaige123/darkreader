@@ -261,7 +261,7 @@ export function overrideInlineStyle(element: HTMLElement, theme: FilterConfig, i
             {style: element.style} as CSSStyleRule,
             variablesStore,
             ignoreImageSelectors,
-            null,
+            null
         );
         if (!mod) {
             return;

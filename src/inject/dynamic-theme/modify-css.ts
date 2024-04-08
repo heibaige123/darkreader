@@ -50,12 +50,12 @@ export function getModifiableCSSDeclaration(
     variablesStore: VariablesStore,
     ignoreImageSelectors: string[],
     isCancelled: (() => boolean) | null,
-    options: ModifySheetOptions
+    options?: ModifySheetOptions
 ): ModifiableCSSDeclaration | null {
 
     const {
         theme
-    } = options;
+    } = options || {};
     const {
         ignoreVarName = []
     } = theme || {};

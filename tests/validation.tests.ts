@@ -1,8 +1,8 @@
-import {validateSettings, validateTheme} from './src/utils/validation';
-import {DEFAULT_SETTINGS, DEFAULT_THEME} from './src/defaults';
-import type {Theme, UserSettings} from './src/definitions';
-import {AutomationMode} from './src/utils/automation';
-import {ThemeEngine} from './src/generators/theme-engines';
+import {validateSettings, validateTheme} from '../src/utils/validation';
+import {DEFAULT_SETTINGS, DEFAULT_THEME} from '../src/defaults';
+import type {Theme, UserSettings} from '../src/definitions';
+import {AutomationMode} from '../src/utils/automation';
+import {ThemeEngine} from '../src/generators/theme-engines';
 
 test('Settings Validation', () => {
     const defaultTheme = JSON.parse(JSON.stringify(DEFAULT_THEME));
