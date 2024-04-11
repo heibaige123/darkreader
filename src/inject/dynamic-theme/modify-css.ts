@@ -60,7 +60,7 @@ export function getModifiableCSSDeclaration(
         ignoreVarName = []
     } = theme || {};
 
-    const hitIgnore = ignoreVarName.filter((ignore: string) => ignore.startsWith(ignore)).length > 0;
+    const hitIgnore = ignoreVarName.filter((ignore: string) => property.startsWith(ignore)).length > 0;
 
     if (hitIgnore) {
         return null;
