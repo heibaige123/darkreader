@@ -380,7 +380,8 @@ const optimizedTreeCallbacks = new WeakMap<
 // TODO: Use a single function to observe all shadow roots.
 export function createOptimizedTreeObserver(
     root: Document | ShadowRoot,
-    callbacks: OptimizedTreeObserverCallbacks
+    callbacks: OptimizedTreeObserverCallbacks,
+    onAddStyles?: (element: HTMLElement) => void
 ): {disconnect: () => void;} {
     let observer: MutationObserver;
     let observerCallbacks: Set<OptimizedTreeObserverCallbacks>;
@@ -410,6 +411,16 @@ export function createOptimizedTreeObserver(
                 hadHugeMutationsBefore = true;
             } else {
                 const elementsOperations = getElementsTreeOperations(mutations);
+                const additions = elementsOperations.additions
+
+                if (onAddStyles && additions && additions.size > 0) {
+                  additions.forEach((element) => {
+                    if (element instanceof HTMLElement) {
+                        onAddStyles(element);
+                    }
+                  });
+                }
+
                 observerCallbacks.forEach(({onMinorMutations}) =>
                     onMinorMutations(elementsOperations)
                 );

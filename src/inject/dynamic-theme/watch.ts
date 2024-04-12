@@ -125,9 +125,12 @@ function unsubscribeFromDefineCustomElements(): void {
     document.removeEventListener('__darkreader__isDefined', handleIsDefined);
 }
 
-export function watchForStyleChanges(currentStyles: StyleElement[],
+export function watchForStyleChanges(
+    currentStyles: StyleElement[],
     update: (styles: ChangedStyles) => void,
-shadowRootDiscovered: (root: ShadowRoot) => void): void {
+    shadowRootDiscovered: (root: ShadowRoot) => void,
+    onAddStyles: (element: HTMLElement) => void,
+): void {
 
     // 不是暗黑模式, 不监听
     if (!isDarkmode()) {
@@ -260,7 +263,7 @@ shadowRootDiscovered: (root: ShadowRoot) => void): void {
         const treeObserver = createOptimizedTreeObserver(root, {
             onMinorMutations: handleMinorTreeMutations,
             onHugeMutations: handleHugeTreeMutations,
-        });
+        }, onAddStyles);
         const attrObserver = new MutationObserver(handleAttributeMutations);
         attrObserver.observe(root, {attributeFilter: ['rel', 'disabled', 'media', 'href'], subtree: true});
         observers.push(treeObserver, attrObserver);

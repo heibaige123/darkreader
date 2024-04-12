@@ -241,10 +241,10 @@ function cleanFallbackStyle() {
     }
 }
 
-function createDynamicStyleOverrides() {
+function createDynamicStyleOverrides(root: HTMLElement | Document = document) {
     cancelRendering();
 
-    const allStyles = getManageableStyles(document);
+    const allStyles = getManageableStyles(root);
 
     const newManagers = allStyles
         .filter((style) => !styleManagers.has(style))
@@ -415,7 +415,7 @@ function watchForUpdates() {
     }, (shadowRoot) => {
         createShadowStaticStyleOverrides(shadowRoot);
         handleAdoptedStyleSheets(shadowRoot);
-    });
+    }, createDynamicStyleOverrides);
 
     watchForInlineStyles((element) => {
         overrideInlineStyle(element, filter!, ignoredInlineSelectors, ignoredImageAnalysisSelectors);
@@ -433,7 +433,7 @@ function watchForUpdates() {
         if (inlineStyleElements.length > 0) {
             forEach(inlineStyleElements, (el: HTMLElement) => overrideInlineStyle(el, filter!, ignoredInlineSelectors, ignoredImageAnalysisSelectors));
         }
-    });
+    }, createDynamicStyleOverrides);
 
     addDOMReadyListener(onDOMReady);
 }

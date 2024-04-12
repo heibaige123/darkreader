@@ -119,10 +119,11 @@ const attrObservers = new Map<Node, MutationObserver>();
 export function watchForInlineStyles(
     elementStyleDidChange: (element: HTMLElement) => void,
     shadowRootDiscovered: (root: ShadowRoot) => void,
+    onAddStyles: (element: HTMLElement) => void
 ): void {
-    deepWatchForInlineStyles(document, elementStyleDidChange, shadowRootDiscovered);
+    deepWatchForInlineStyles(document, elementStyleDidChange, shadowRootDiscovered, onAddStyles);
     iterateShadowHosts(document.documentElement, (host) => {
-        deepWatchForInlineStyles(host.shadowRoot!, elementStyleDidChange, shadowRootDiscovered);
+        deepWatchForInlineStyles(host.shadowRoot!, elementStyleDidChange, shadowRootDiscovered, onAddStyles);
     });
 }
 
@@ -130,6 +131,7 @@ function deepWatchForInlineStyles(
     root: Document | ShadowRoot,
     elementStyleDidChange: (element: HTMLElement) => void,
     shadowRootDiscovered: (root: ShadowRoot) => void,
+    onAddStyles: (element: HTMLElement) => void
 ): void {
     if (treeObservers.has(root)) {
         treeObservers.get(root)!.disconnect();
@@ -152,7 +154,7 @@ function deepWatchForInlineStyles(
             }
             discoveredNodes.add(node);
             shadowRootDiscovered(n.shadowRoot!);
-            deepWatchForInlineStyles(n.shadowRoot!, elementStyleDidChange, shadowRootDiscovered);
+            deepWatchForInlineStyles(n.shadowRoot!, elementStyleDidChange, shadowRootDiscovered, onAddStyles);
         });
     }
 
@@ -163,7 +165,7 @@ function deepWatchForInlineStyles(
         onHugeMutations: () => {
             discoverNodes(root);
         },
-    });
+    }, onAddStyles);
     treeObservers.set(root, treeObserver);
 
     let attemptCount = 0;
