@@ -4,45 +4,45 @@ declare namespace modifyDarkReader {
      * @param theme Theme options.
      * @param fixes Fixes for the generated theme.
      */
-    function enable(theme: Partial<Theme>, fixes?: DynamicThemeFix): void;
+    export function enable(theme: Partial<Theme>, fixes?: DynamicThemeFix): void;
 
     /**
      * Disables dark mode for current web page.
      */
-    function disable(): void;
+    export function disable(): void;
 
     /**
      * Enables dark mode when system color scheme is dark.
      * @param theme Theme options.
      * @param fixes Fixes for the generated theme.
      */
-    function auto(theme: Partial<Theme> | false, fixes?: DynamicThemeFix): void;
+    export function auto(theme: Partial<Theme> | false, fixes?: DynamicThemeFix): void;
 
     /**
      * Stops watching for system color scheme.
      * @param isEnabled Boolean `false` value.
      */
-    function auto(isEnabled: false): void;
+    export function auto(isEnabled: false): void;
     /**
      * Returns if darkreader is enabled.
      */
-    function isEnabled(): boolean;
+    export function isEnabled(): boolean;
 
     /**
      * Sets a function for making CORS requests.
      * @param fetch A fetch function.
      */
-    function setFetchMethod(fetch: (url: string) => Promise<Response>): void;
+    export function setFetchMethod(fetch: (url: string) => Promise<Response>): void;
 
     /**
      * Returns the generated CSS by Dark Reader as a string.
      */
-    function exportGeneratedCSS(): Promise<string>;
+    export function exportGeneratedCSS(): Promise<string>;
 
     /**
      * Theme options.
      */
-    interface Theme {
+    export interface Theme {
         /**
          * 1 - dark mode, 0 - dimmed mode.
          * Default 1.
@@ -135,7 +135,7 @@ declare namespace modifyDarkReader {
     /**
      * Contains fixes for the generated theme.
      */
-    interface DynamicThemeFix {
+    export interface DynamicThemeFix {
         /**
          * List of CSS selectors that should be inverted.
          * Usually icons that are contained in sprites.
@@ -172,7 +172,9 @@ declare namespace modifyDarkReader {
         disableStyleSheetsProxy: boolean;
     }
 
-    function runDynamicStyle(): void;
+    export function runDynamicStyle(): void;
 }
 
-export default modifyDarkReader;
+// export default modifyDarkReader;
+export as namespace modifyDarkReader;
+export = modifyDarkReader;

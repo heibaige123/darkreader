@@ -1,6 +1,6 @@
 {
   "name": "modify-darkreader",
-  "version": "4.10.9",
+  "version": "4.10.13",
   "description": "Dark mode for every website",
   "scripts": {
     "api": "node --max-old-space-size=3072 tasks/cli.js build --api",
