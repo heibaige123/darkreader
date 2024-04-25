@@ -163,7 +163,7 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
     }
 
     function getRulesSync(): CSSRuleList | null {
-        if (corsCopy) {
+        if (corsCopy && corsCopy.sheet) {
             logInfo('[getRulesSync] Using cors-copy.');
             return corsCopy.sheet!.cssRules;
         }
@@ -299,7 +299,7 @@ export function manageStyle(element: StyleElement, {update, loadingStart, loadin
             } catch (err) {
                 logWarn(err);
             }
-            if (corsCopy) {
+            if (corsCopy && corsCopy.sheet) {
                 corsCopyPositionWatcher = watchForNodePosition(corsCopy, 'prev-sibling');
                 return corsCopy.sheet!.cssRules;
             }
