@@ -3,6 +3,8 @@ import {throttle} from '../../utils/throttle';
 import {forEach} from '../../utils/array';
 import {getDuration} from '../../utils/time';
 import {throwError} from '../../utils/error';
+import {isIgnoreBoxInner} from './ignore';
+import {apiStore} from '../../api/store';
 
 interface CreateNodeAsapParams {
     selectNode: () => HTMLElement;
@@ -331,7 +333,15 @@ function getElementsTreeOperations(
     const deletions = new Set<Element>();
     const moves = new Set<Element>();
     mutations.forEach((m) => {
+
+        let addFlag = true;
+
         forEach(m.addedNodes, (n) => {
+            if (addFlag && isIgnoreBoxInner(n as Element, apiStore.theme.ignoreSelectorArr)) {
+                addFlag = false;
+                return false;
+            }
+
             if (n instanceof Element && n.isConnected) {
                 additions.add(n);
             }
@@ -411,14 +421,31 @@ export function createOptimizedTreeObserver(
                 hadHugeMutationsBefore = true;
             } else {
                 const elementsOperations = getElementsTreeOperations(mutations);
-                const additions = elementsOperations.additions
+                const additions = elementsOperations.additions;
+
+                console.log({
+                    additions,
+                    elementsOperations,
+                });
 
                 if (onAddStyles && additions && additions.size > 0) {
-                  additions.forEach((element) => {
-                    if (element instanceof HTMLElement) {
-                        onAddStyles(element);
-                    }
-                  });
+                    additions.forEach((element) => {
+                        if (element instanceof HTMLStyleElement
+                            || element instanceof HTMLLinkElement
+                            || element instanceof HTMLScriptElement
+                            || element instanceof HTMLImageElement
+                            || element instanceof HTMLVideoElement
+                            || element instanceof HTMLAudioElement
+                            || element instanceof SVGElement
+                            || element instanceof HTMLIFrameElement
+                        ) {
+                            return;
+                        }
+
+                        if (element instanceof HTMLElement) {
+                            onAddStyles(element);
+                        }
+                    });
                 }
 
                 observerCallbacks.forEach(({onMinorMutations}) =>

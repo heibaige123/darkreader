@@ -82,6 +82,7 @@ export interface Theme {
     immediateModify: boolean;
     ignoreSelector: string[];
     ignoreVarName: string[];
+    ignoreSelectorArr: string[];
 }
 
 export type FilterConfig = Theme;

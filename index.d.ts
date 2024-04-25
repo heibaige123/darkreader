@@ -125,6 +125,11 @@ declare namespace modifyDarkReader {
          * 忽略掉css变量名称prefix
          */
         ignoreVarName: string[];
+
+        /**
+         * 要忽略变更的节点
+         */
+        ignoreSelectorArr: string[];
     }
 
     /**

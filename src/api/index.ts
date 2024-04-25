@@ -27,6 +27,9 @@ export function enable(themeOptions: Partial<Theme> | null = {}, fixes: DynamicT
             message: 'Theme engine is not supported.',
         });
     }
+
+    apiStore.theme = theme;
+
     // TODO: repalce with createOrUpdateDynamicTheme() and make fixes signature
     // DynamicThemeFix | DynamicThemeFix[]
     createOrUpdateDynamicThemeInternal(theme, fixes, isIFrame);
