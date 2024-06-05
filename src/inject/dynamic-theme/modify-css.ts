@@ -9,7 +9,8 @@ import {getFilteredImageDataURL, cleanImageProcessingCache} from './image';
 import type {CSSVariableModifier, VariablesStore} from './variables';
 import {logWarn, logInfo} from '../utils/log';
 import type {FilterConfig, Theme} from '../../definitions';
-import {isFirefox, isCSSColorSchemePropSupported} from '../../utils/platform';
+// import {isFirefox, isCSSColorSchemePropSupported} from '../../utils/platform';
+import {isFirefox} from '../../utils/platform';
 import type {parsedGradient} from '../../utils/parsing';
 import {parseGradient} from '../../utils/parsing';
 import {ModifySheetOptions} from './stylesheet-modifier';
@@ -115,11 +116,11 @@ export function getModifiedUserAgentStyle(theme: Theme, isIFrame: boolean, style
         lines.push(`    background-color: ${modifyBackgroundColor({r: 255, g: 255, b: 255}, theme)} !important;`);
         lines.push('}');
     }
-    if (__CHROMIUM_MV3__ || isCSSColorSchemePropSupported) {
-        lines.push('html {');
-        lines.push(`    color-scheme: ${theme.mode === 1 ? 'dark' : 'dark light'} !important;`);
-        lines.push('}');
-    }
+    // if (__CHROMIUM_MV3__ || isCSSColorSchemePropSupported) {
+    //     lines.push('html {');
+    //     // lines.push(`    color-scheme: ${theme.mode === 1 ? 'dark' : 'dark light'} !important;`);
+    //     lines.push('}');
+    // }
     const bgSelectors = joinSelectors(isIFrame ? '' : 'html, body', styleSystemControls ? 'input, textarea, select, button, dialog' : '');
     if (bgSelectors) {
         lines.push(`${bgSelectors} {`);
