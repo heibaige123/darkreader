@@ -483,6 +483,11 @@ export class VariablesStore {
 
     public putRootVars(styleElement: HTMLStyleElement, theme: Theme): void {
         const sheet = styleElement.sheet!;
+
+        if (!sheet) {
+            return;
+        }
+
         if (sheet.cssRules.length > 0) {
             sheet.deleteRule(0);
         }
