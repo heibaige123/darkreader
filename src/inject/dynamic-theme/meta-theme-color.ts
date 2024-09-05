@@ -2,6 +2,7 @@ import {parseColorWithCache} from '../../utils/color';
 import {modifyBackgroundColor} from '../../generators/modify-colors';
 import {logWarn} from '../utils/log';
 import type {FilterConfig} from '../../definitions';
+import {isDarkmode} from '../../inject/utils/dom';
 
 const metaThemeColorName = 'theme-color';
 const metaThemeColorSelector = `meta[name="${metaThemeColorName}"]`;
@@ -27,6 +28,10 @@ export function changeMetaThemeColorWhenAvailable(theme: FilterConfig): void {
             observer.disconnect();
         }
         observer = new MutationObserver((mutations) => {
+            if (!isDarkmode()) {
+                return;
+            }
+
             loop: for (let i = 0; i < mutations.length; i++) {
                 const {addedNodes} = mutations[i];
                 for (let j = 0; j < addedNodes.length; j++) {

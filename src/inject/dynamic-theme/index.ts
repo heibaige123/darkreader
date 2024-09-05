@@ -86,7 +86,7 @@ function stopStylePositionWatchers() {
 
 function createStaticStyleOverrides() {
     const fallbackStyle = createOrUpdateStyle('darkreader--fallback', document);
-    fallbackStyle.textContent = getModifiedFallbackStyle(filter!, {strict: true});
+    fallbackStyle.textContent = getModifiedFallbackStyle(filter!);
     document.head?.insertBefore(fallbackStyle, document.head.firstChild);
     setupNodePositionWatcher(fallbackStyle, 'fallback');
 
@@ -295,7 +295,7 @@ function createManager(element: StyleElement) {
 
             const fallbackStyle = document.querySelector('.darkreader--fallback')!;
             if (!fallbackStyle.textContent) {
-                fallbackStyle.textContent = getModifiedFallbackStyle(filter!, {strict: false});
+                fallbackStyle.textContent = getModifiedFallbackStyle(filter!);
             }
         }
     }
@@ -354,7 +354,7 @@ function onDOMReady() {
     logWarn(`DOM is ready, but still have styles being loaded.`, loadingStyles);
 }
 
-export function runDynamicStyle() {
+export function runDynamicStyle(): void {
     createDynamicStyleOverrides();
     watchForUpdates();
 }
@@ -544,7 +544,7 @@ export function createOrUpdateDynamicThemeInternal(filterConfig: FilterConfig, d
         if (!isFirefox) {
             const fallbackStyle = createOrUpdateStyle('darkreader--fallback');
             document.documentElement.appendChild(fallbackStyle);
-            fallbackStyle.textContent = getModifiedFallbackStyle(filter, {strict: true});
+            fallbackStyle.textContent = getModifiedFallbackStyle(filter);
         }
 
         const headObserver = new MutationObserver(() => {

@@ -2,7 +2,7 @@ import type {Theme} from '../../definitions';
 import {forEach} from '../../utils/array';
 import {getMatches} from '../../utils/text';
 import {getAbsoluteURL, isRelativeHrefOnAbsolutePath} from '../../utils/url';
-import {watchForNodePosition, removeNode, iterateShadowHosts, addReadyStateCompleteListener, isDarkmode, isNode} from '../utils/dom';
+import {watchForNodePosition, removeNode, iterateShadowHosts, addReadyStateCompleteListener, isDarkmode, isNode, addElementInfo2Style} from '../utils/dom';
 import {logInfo, logWarn} from '../utils/log';
 import {replaceCSSRelativeURLsWithAbsolute, removeCSSComments, replaceCSSFontFace, getCSSURLValue, cssImportRegex, getCSSBaseBath} from './css-rules';
 import {bgFetch} from './network';
@@ -10,7 +10,6 @@ import {createStyleSheetModifier} from './stylesheet-modifier';
 import {isShadowDomSupported, isSafari, isFirefox} from '../../utils/platform';
 // eslint-disable-next-line import/no-restricted-paths
 import {apiStore} from '../../api/store';
-import {addElementInfo2Style} from '../utils/dom';
 
 declare const __THUNDERBIRD__: boolean;
 
@@ -28,9 +27,9 @@ declare global {
 
 export type StyleElement = HTMLLinkElement | HTMLStyleElement;
 
-export type detailsArgument = {secondRound: boolean;};
+export type detailsArgument = {secondRound: boolean};
 export interface StyleManager {
-    details(options: detailsArgument): {rules: CSSRuleList;} | null;
+    details(options: detailsArgument): {rules: CSSRuleList} | null;
     render(theme: Theme, ignoreImageAnalysis: string[]): void;
     pause(): void;
     destroy(): void;
@@ -107,7 +106,7 @@ export function cleanLoadingLinks(): void {
     rejectorsForLoadingLinks.clear();
 }
 
-export function manageStyle(element: StyleElement, {update, loadingStart, loadingEnd}: {update: () => void; loadingStart: () => void; loadingEnd: () => void;}): StyleManager {
+export function manageStyle(element: StyleElement, {update, loadingStart, loadingEnd}: {update: () => void; loadingStart: () => void; loadingEnd: () => void}): StyleManager {
     const prevStyles: HTMLStyleElement[] = [];
     let next: Element | null = element;
     while ((next = next.nextElementSibling) && next.matches('.darkreader')) {

@@ -4,7 +4,7 @@
  * @param element
  * @returns
  */
-export function isIgnoreBoxInner(element: Element, ignoreSelectArr: string[] = []) {
+export function isIgnoreBoxInner(element: Element, ignoreSelectArr: string[] = []): boolean {
     while (element && element !== document.body) {
         if (!element || !element.matches) {
             return false;

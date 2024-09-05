@@ -40,7 +40,7 @@ export const DEFAULT_THEME: Theme = {
     immediateModify: false,
     ignoreSelector: [],
     ignoreVarName: [],
-    ignoreSelectorArr: []
+    ignoreSelectorArr: [],
 };
 
 export const DEFAULT_COLORSCHEME: ParsedColorSchemeConfig = {

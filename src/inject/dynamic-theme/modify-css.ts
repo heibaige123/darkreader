@@ -13,9 +13,7 @@ import type {FilterConfig, Theme} from '../../definitions';
 import {isFirefox} from '../../utils/platform';
 import type {parsedGradient} from '../../utils/parsing';
 import {parseGradient} from '../../utils/parsing';
-import {ModifySheetOptions} from './stylesheet-modifier';
-
-declare const __CHROMIUM_MV3__: boolean;
+import type {ModifySheetOptions} from './stylesheet-modifier';
 
 export type CSSValueModifier = (theme: Theme) => string | Promise<string | null>;
 
@@ -53,12 +51,11 @@ export function getModifiableCSSDeclaration(
     isCancelled: (() => boolean) | null,
     options?: ModifySheetOptions
 ): ModifiableCSSDeclaration | null {
-
     const {
-        theme
+        theme,
     } = options || {};
     const {
-        ignoreVarName = []
+        ignoreVarName = [],
     } = theme || {};
 
     const hitIgnore = ignoreVarName.filter((ignore: string) => value.includes(ignore)).length > 0;
@@ -92,7 +89,7 @@ export function getModifiableCSSDeclaration(
             return {property, value: modifier, important: getPriority(rule.style, property), sourceValue: value};
         }
     } else if (property === 'background-image' || property === 'list-style-image') {
-        const modifier = getBgImageModifier(value, rule, ignoreImageSelectors, isCancelled!);
+        const modifier = getBgImageModifier(value, rule, ignoreImageSelectors);
         if (modifier) {
             return {property, value: modifier, important: getPriority(rule.style, property), sourceValue: value};
         }
@@ -155,7 +152,7 @@ export function getModifiedUserAgentStyle(theme: Theme, isIFrame: boolean, style
     return lines.join('\n');
 }
 
-export function getSelectionColor(theme: Theme): {backgroundColorSelection: string; foregroundColorSelection: string;} {
+export function getSelectionColor(theme: Theme): {backgroundColorSelection: string; foregroundColorSelection: string} {
     let backgroundColorSelection: string;
     let foregroundColorSelection: string;
     if (theme.selectionColor === 'auto') {
@@ -240,7 +237,7 @@ function getModifiedScrollbarStyle(theme: Theme) {
     return lines.join('\n');
 }
 
-export function getModifiedFallbackStyle(filter: FilterConfig, {strict}: {strict: boolean;}): string {
+export function getModifiedFallbackStyle(filter: FilterConfig): string {
     const lines: string[] = [];
     // https://github.com/darkreader/darkreader/issues/3618#issuecomment-895477598
     // const isMicrosoft = ['microsoft.com', 'docs.microsoft.com'].includes(location.hostname);
@@ -320,8 +317,7 @@ interface bgImageMatches {
 export function getBgImageModifier(
     value: string,
     rule: CSSStyleRule,
-    ignoreImageSelectors: string[],
-    isCancelled: () => boolean,
+    ignoreImageSelectors: string[]
 ): string | CSSValueModifier | null {
     try {
         const gradients = parseGradient(value);

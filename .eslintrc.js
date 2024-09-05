@@ -93,60 +93,6 @@ config.overrides.push({
         'import/no-unresolved': ['error', {
             ignore: ['^malevic\/'],
         }],
-        'import/no-restricted-paths': ['error', {
-            zones: [{
-                target: './src/inject/',
-                from: './src/background/',
-            },
-            {
-                target: './src/inject/',
-                from: './src/ui/',
-            },
-            {
-                target: './src/inject/',
-                from: './src/api/',
-            },
-            {
-                target: './src/inject/',
-                from: './tests/',
-            },
-            {
-                target: './src/background/',
-                from: './src/inject/',
-            },
-            {
-                target: './src/background/',
-                from: './src/ui/',
-            },
-            {
-                target: './src/background/',
-                from: './tests/',
-            },
-            {
-                target: './src/ui/',
-                from: './src/inject/',
-            },
-            {
-                target: './src/ui/',
-                from: './src/background/',
-            },
-            {
-                target: './src/ui/',
-                from: './tests/',
-            },
-            {
-                target: './src/generators/',
-                from: './src/inject/',
-            },
-            {
-                target: './src/generators/',
-                from: './src/background/',
-            },
-            {
-                target: './src/generators/',
-                from: './src/ui/',
-            }],
-        }],
     },
 
     overrides: [
@@ -170,7 +116,7 @@ config.overrides.push({
             files: [
                 'src/ui/controls/**/*.tsx',
                 'src/ui/popup/**/*.tsx',
-                'src/ui/stylesheet-editor/components/body.tsx'
+                'src/ui/stylesheet-editor/components/body.tsx',
             ],
             rules: {
                 '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -198,7 +144,7 @@ config.overrides.push({
             rules: {
                 '@typescript-eslint/no-implied-eval': 'error',
                 '@typescript-eslint/switch-exhaustiveness-check': 'error',
-            }
+            },
         },
     ],
 });
@@ -230,7 +176,7 @@ config.overrides.push({
                 'compat/compat': ['error', [
                     '>0.5% and supports es5 and supports promises and supports url',
                     'not Explorer > 0',
-                ].join(', ')]
+                ].join(', ')],
             },
         },
 
@@ -249,7 +195,7 @@ config.overrides.push({
                     'not iOS > 0',
                     'not ChromeAndroid > 0',
                     'not OperaMini all',
-                ].join(', ')]
+                ].join(', ')],
             },
         },
     ],

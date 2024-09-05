@@ -131,7 +131,6 @@ export function watchForStyleChanges(
     shadowRootDiscovered: (root: ShadowRoot) => void,
     onAddStyles: (element: HTMLElement) => void,
 ): void {
-
     // 不是暗黑模式, 不监听
     if (!isDarkmode()) {
         return;

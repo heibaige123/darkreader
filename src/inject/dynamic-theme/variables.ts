@@ -130,7 +130,7 @@ export class VariablesStore {
         isCancelled: () => boolean;
     }): CSSVariableModifier {
         return (theme) => {
-            const {varName, sourceValue, rule, ignoredImgSelectors, isCancelled} = options;
+            const {varName, sourceValue, rule, ignoredImgSelectors} = options;
 
             const getDeclarations = () => {
                 const declarations: ModifiedVarDeclaration[] = [];
@@ -181,7 +181,7 @@ export class VariablesStore {
                             (fallback) => tryModifyBgColor(fallback, theme),
                         );
                     }
-                    const bgModifier = getBgImageModifier(modifiedValue, rule, ignoredImgSelectors, isCancelled);
+                    const bgModifier = getBgImageModifier(modifiedValue, rule, ignoredImgSelectors);
                     modifiedValue = typeof bgModifier === 'function' ? bgModifier(theme) : bgModifier!;
                     declarations.push({
                         property,

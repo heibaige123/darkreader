@@ -29,11 +29,11 @@ export function enable(themeOptions: Partial<Theme> | null = {}, fixes: DynamicT
     }
 
     apiStore.theme = theme;
+    apiStore.isDarkReaderEnabled = true;
 
     // TODO: repalce with createOrUpdateDynamicTheme() and make fixes signature
     // DynamicThemeFix | DynamicThemeFix[]
     createOrUpdateDynamicThemeInternal(theme, fixes, isIFrame);
-    apiStore.isDarkReaderEnabled = true;
 }
 
 export function isEnabled(): boolean {
@@ -41,8 +41,8 @@ export function isEnabled(): boolean {
 }
 
 export function disable(): void {
-    removeDynamicTheme();
     apiStore.isDarkReaderEnabled = false;
+    removeDynamicTheme();
 }
 
 const darkScheme = matchMedia('(prefers-color-scheme: dark)');
